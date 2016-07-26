@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="id">Kode perawat</label>
 						<div class="col-sm-4">
-							<input type="text" id="id" class="form-control" name="idperawat" value=<?php echo $kodeperawat; ?> readonly required />
+							<input type="text" id="id" class="form-control" name="idperawat" value="<?php echo $kodeperawat; ?>" readonly required />
 						</div>
 					</div>
 
@@ -90,8 +90,9 @@
 	                    	<select id="bagperawat" name="bagperawat" class="form-control">
 	                    		<option></option>
 	                    		<option>Administrasi</option>
-	                    		<option>Apotek</option>
-	                    		<option>Dokter</option>
+	                    		<option>Kasir</option>
+	                    		<option>Kecantikan</option>
+	                    		<option>Umum</option>
                     		</select>
 	                  	</div>
 	               	</div>
@@ -236,8 +237,9 @@
 	                    	<select id="e-bagperawat" name="e-bagperawat" class="form-control">
                         		<option></option>
                         		<option>Administrasi</option>
-	                    		<option>Apotek</option>
-	                    		<option>Dokter</option>
+	                    		<option>Kasir</option>
+	                    		<option>Kecantikan</option>
+	                    		<option>Umum</option>
                     		</select>
 	                  	</div>
 	               	</div>

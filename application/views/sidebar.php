@@ -7,25 +7,31 @@
     </li>
 
     <li class="<?php echo $aktif=='maintenance'?'active':''; ?> treeview" id="scrollspy-components">
-      <a href="javascript::;"><i class="fa fa-check"></i> Maintenance</a>
+      <a href="javascript:;"><i class="fa fa-check"></i> Maintenance</a>
       <ul class="treeview-menu">
         <li><a href="<?php echo base_url().'poli'; ?>">Master Poli</a></li>
         <li><a href="<?php echo base_url().'dokter'; ?>">Master Dokter</a></li>
         <li><a href="<?php echo base_url().'jadwal_dokter'; ?>">Master Jadwal Dokter</a></li>
         <li><a href="<?php echo base_url().'perawat' ?>">Master Perawat</a></li>
-        <li><a href="#">Master Diagnosis ICD 10</a></li>
-        <li><a href="#">Master Tindakan ICD 9</a></li>
-        <li><a href="#">Master Jenis Obat</a></li>
-        <li><a href="#">Master Obat</a></li>
-        <li><a href="#">Master Terapi</a></li>
-        <li><a href="#">Master Pasien</a></li>
-        <li><a href="#">Master Odontogram</a></li>
-        <li><a href="#">Master Pemeriksaan Lab</a></li>
+        <li><a href="<?php echo base_url().'diagnosis_icd_10'; ?>">Master Diagnosis (ICD 10)</a></li>
+        <li><a href="<?php echo base_url().'tindakan_icd_9'; ?>">Master Tindakan (ICD 9)</a></li>
+        <li><a href="<?php echo base_url().'jenis_obat' ?>">Master Jenis Obat</a></li>
+        <li><a href="<?php echo base_url().'obat' ?>">Master Obat</a></li>
+        <li><a href="<?php echo base_url().'terapi' ?>">Master Terapi</a></li>
+        <li><a href="<?php echo base_url().'pemeriksaan_lab' ?>">Master Pemeriksaan Lab</a></li>
+        <li>
+          <a href="javascript:;">Master Odontogram</a>
+          <ul class="treeview-menu">
+            <li><a href="<?php echo base_url().'status_gigi' ?>">Master Status Gigi</a></li>
+            <li><a href="<?php echo base_url().'nomenklatur' ?>">Master Nomenklatur</a></li>
+          </ul>
+        </li>
+        <li><a href="<?php echo base_url().'pasien' ?>">Master Pasien</a></li>
       </ul>
     </li>
 
     <li class="<?php echo $aktif=='transaksi'?'active':''; ?> treeview" id="scrollspy-components">
-      <a href="javascript::;"><i class="fa fa-exchange"></i> Transaksi</a>
+      <a href="javascript:;"><i class="fa fa-exchange"></i> Transaksi</a>
       <ul class="treeview-menu">
         <li><a href="#">Registrasi Pasien Baru</a></li>
         <li><a href="#">Registrasi Pemeriksaan</a></li>
@@ -38,7 +44,7 @@
     </li>
 
     <li class="<?php echo $aktif=='laporan'?'active':''; ?> treeview" id="scrollspy-components">
-      <a href="javascript::;"><i class="fa fa-paste"></i> Laporan</a>
+      <a href="javascript:;"><i class="fa fa-paste"></i> Laporan</a>
       <ul class="treeview-menu">
         <li><a href="#">Laporan Kunjungan Pasien</a></li>
         <li><a href="#">Laporan Registrasi Pasien Baru</a></li>

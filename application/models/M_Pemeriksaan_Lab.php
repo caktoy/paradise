@@ -17,9 +17,9 @@ class M_Pemeriksaan_Lab extends CI_Model
 		return $this->db->insert('pemeriksaan_lab', $value);
 	}
 
-	public function patch($id, array $value)
+	public function patch(array $cond, array $value)
 	{
-		$this->db->where('id_lab', $id);
+		$this->db->where($cond);
 		return $this->db->update('pemeriksaan_lab', $value);
 	}
 

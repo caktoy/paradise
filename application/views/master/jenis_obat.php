@@ -10,21 +10,21 @@
 	<div class="col-xs-12">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Input Data Poli</h3>
+				<h3 class="box-title">Input Data Jenis Obat</h3>
 			</div>
 			<!--Body Content-->
 			<div class="box-body">
-				<form action="<?php echo base_url().'poli/tambah'; ?>" method="POST" class="form-horizontal" style="margin-top:10px">
+				<form action="<?php echo base_url().'jenis_obat/tambah'; ?>" method="POST" class="form-horizontal" style="margin-top:10px">
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="id">Kode Poli</label>
+						<label class="col-sm-2 control-label" for="id">Kode Jenis Obat</label>
 						<div class="col-sm-4">
-							<input type="text" id="id" class="form-control" name="idpoli" value="<?php echo $kodepoli; ?>" readonly required />
+							<input type="text" id="id" class="form-control" name="id_jenis_obat" value="<?php echo $kodejenis_obat; ?>" readonly required />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">Nama Poli</label>
+						<label class="col-sm-2 control-label">Nama Jenis Obat</label>
 						<div class="col-sm-4">
-						    <input type="type" class="form-control" name="namapoli" required>
+						    <input type="type" class="form-control" name="nama_jenis_obat" required autofocus>
 						</div>
 					</div>
 					<div class="col-md-offset-2 col-md-5">
@@ -39,7 +39,7 @@
 	<div class="col-xs-12">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Data Poli</h3>
+				<h3 class="box-title">Data Jenis Obat</h3>
 			</div>
 
 			<div class="box-body">
@@ -49,19 +49,19 @@
 			        	<table id="example1" class="table table-bordered table-striped">
 				            <thead>
 				                <tr>
-					                <th>Kode Poli</th>
-					                <th>Nama Poli</th>
+					                <th>Kode Jenis Obat</th>
+					                <th>Nama Jenis Obat</th>
 					                <th style="width:15%;">Aksi</th>
 					            </tr>
 				            </thead>
 				        	<tbody>
-				        		<?php foreach ($poli as $poli): ?>
+				        		<?php foreach ($jenis_obat as $jo): ?>
                   				<tr>
-                    				<td><?php echo $poli->ID_POLI; ?></td>
-                    				<td><?php echo $poli->NM_POLI; ?></td>
+                    				<td><?php echo $jo->ID_JENIS_OBAT; ?></td>
+                    				<td><?php echo $jo->NM_JENIS_OBAT; ?></td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
-                    						data-target="#myModal" onclick="edit('<?php echo $poli->ID_POLI; ?>', '<?php echo $poli->NM_POLI; ?>')">
+                    						data-target="#myModal" onclick="edit('<?php echo $jo->ID_JENIS_OBAT; ?>', '<?php echo $jo->NM_JENIS_OBAT; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
                 					</td>
@@ -82,19 +82,19 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="exampleModalLabel">Ubah Data Poli</h4>
+				<h4 class="modal-title" id="exampleModalLabel">Ubah Data Jenis Obat</h4>
 			</div>
 			<div class="modal-body">     
-				<form method="POST" action="<?php echo base_url(); ?>poli/edit" class="form-horizontal">
+				<form method="POST" action="<?php echo base_url(); ?>jenis_obat/edit" class="form-horizontal">
 					<div class="form-group">
-	              		<label for="message-text" class="col-sm-3 control-label">Kode Poli</label>
+	              		<label for="message-text" class="col-sm-3 control-label">Kode Jenis Obat</label>
 	              		<div class="col-sm-9">
 	                		<input type="text" class="form-control" name="editkode" id="editkode" readonly required>
 	                    </div>
 	            	</div>
 
 	            	<div class="form-group">
-	              		<label for="message-text" class="col-sm-3 control-label">Nama Poli</label>
+	              		<label for="message-text" class="col-sm-3 control-label">Nama Jenis Obat</label>
 	              		<div class="col-sm-9">
 	                		<input type="text" class="form-control" name="editnama" id="editnama" required>
 	              		</div>

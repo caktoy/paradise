@@ -36,7 +36,7 @@
 				<form action="<?php echo base_url().'auth/login'; ?>" method="post">
 					<i><img src="<?php echo base_url(); ?>assets/images/logo-parisudha.png" style="align:center"></i>
 					<div class="form-group has-feedback" style="margin-top:30px">
-						<input type="username" class="form-control" placeholder="Username" name="username">
+						<input type="username" class="form-control" placeholder="Username" name="username" autofocus>
 							<span class="glyphicon glyphicon-user form-control-feedback"></span>
 					</div>
 					<div class="form-group has-feedback">

@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="id">Kode Dokter</label>
 						<div class="col-sm-4">
-							<input type="text" id="id" class="form-control" name="iddokter" value=<?php echo $kodedokter; ?> readonly required />
+							<input type="text" id="id" class="form-control" name="iddokter" value="<?php echo $kodedokter; ?>" readonly required />
 						</div>
 					</div>
 

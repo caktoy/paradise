@@ -17,9 +17,9 @@ class M_Diagnosa_ICD_10 extends CI_Model
 		return $this->db->insert('diagnosa_icd_10', $value);
 	}
 
-	public function patch($id, array $value)
+	public function patch(array $cond, array $value)
 	{
-		$this->db->where('kode_icd_10', $id);
+		$this->db->where($cond);
 		return $this->db->update('diagnosa_icd_10', $value);
 	}
 
