@@ -5,7 +5,7 @@ class Page extends CI_Controller
 {
 	public function index()
 	{
-		if(isset($_SESSION['username']))
+		if(isset($_SESSION['userid']))
 			redirect('page/beranda');
 		else
 			redirect('auth');

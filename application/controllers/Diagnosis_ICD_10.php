@@ -59,5 +59,13 @@ class Diagnosis_ICD_10 extends CI_Controller
 
         redirect('diagnosis_icd_10');
 	}
+
+	public function get()
+	{
+		$id = $this->input->post('id');
+		$data = $this->m_diagnosa_icd_10->get(array('kode_icd_10' => $id));
+		header("Content-Type: application/json");
+        echo json_encode($data);
+	}
 }
 ?>

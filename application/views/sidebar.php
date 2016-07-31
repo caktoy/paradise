@@ -33,25 +33,24 @@
     <li class="<?php echo $aktif=='transaksi'?'active':''; ?> treeview" id="scrollspy-components">
       <a href="javascript:;"><i class="fa fa-exchange"></i> Transaksi</a>
       <ul class="treeview-menu">
-        <li><a href="#">Registrasi Pasien Baru</a></li>
-        <li><a href="#">Registrasi Pemeriksaan</a></li>
-        <li><a href="#">Display Antrian</a></li>
-        <li><a href="#">Pencatatan Rekam Medis</a></li>
-        <li><a href="#">Resep Obat</a></li>
-        <li><a href="#">Pemeriksaan Lab</a></li>
-        <li><a href="#">Pembayaran</a></li>
+        <li><a href="<?php echo base_url().'registrasi_pemeriksaan' ?>">Registrasi Pemeriksaan</a></li>
+        <li><a href="<?php echo base_url().'antrian/display' ?>" target="_blank">Display Antrian</a></li>
+        <li><a href="<?php echo base_url().'rekam_medis' ?>">Pencatatan Rekam Medis</a></li>
+        <li><a href="<?php echo base_url().'resep_obat' ?>">Resep Obat</a></li>
+        <li><a href="<?php echo base_url().'pemeriksaan_lab/transaksi' ?>">Pemeriksaan Lab</a></li>
+        <li><a href="<?php echo base_url().'pembayaran' ?>">Pembayaran</a></li>
       </ul>
     </li>
 
     <li class="<?php echo $aktif=='laporan'?'active':''; ?> treeview" id="scrollspy-components">
       <a href="javascript:;"><i class="fa fa-paste"></i> Laporan</a>
       <ul class="treeview-menu">
-        <li><a href="#">Laporan Kunjungan Pasien</a></li>
-        <li><a href="#">Laporan Registrasi Pasien Baru</a></li>
-        <li><a href="#">Laporan Penyakit Terbanyak</a></li>
-        <li><a href="#">Laporan Rekam Medis Pasien</a></li>
-        <li><a href="#">Laporan Pengeluaran Obat</a></li>
-        <li><a href="#">Laporan Pendapatan</a></li>
+        <li><a href="<?php echo base_url().'laporan/kunjungan_pasien'; ?>">Laporan Kunjungan Pasien</a></li>
+        <li><a href="<?php echo base_url().'laporan/registrasi_pasien'; ?>">Laporan Registrasi Pasien Baru</a></li>
+        <li><a href="<?php echo base_url().'laporan/penyakit_terbanyak'; ?>">Laporan Penyakit Terbanyak</a></li>
+        <li><a href="<?php echo base_url().'laporan/rekam_medis_pasien'; ?>">Laporan Rekam Medis Pasien</a></li>
+        <li><a href="<?php echo base_url().'laporan/pengeluaran_obat'; ?>">Laporan Pengeluaran Obat</a></li>
+        <li><a href="<?php echo base_url().'laporan/pendapatan'; ?>">Laporan Pendapatan</a></li>
       </ul>
     </li>
   </ul>

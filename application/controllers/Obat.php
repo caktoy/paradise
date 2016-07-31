@@ -78,5 +78,13 @@ class Obat extends CI_Controller
 
         redirect('obat');
 	}
+
+    public function get()
+    {
+        $id = $this->input->post('id');
+        $data = $this->m_obat->get(array('id_obat' => $id));
+        header("Content-Type: application/json");
+        echo json_encode($data);
+    }
 }
 ?>

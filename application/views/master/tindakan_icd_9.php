@@ -16,9 +16,9 @@
 			<div class="box-body">
 				<form action="<?php echo base_url().'tindakan_icd_9/tambah'; ?>" method="POST" class="form-horizontal" style="margin-top:10px">
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="kode_icd_9">Kode Poli</label>
+						<label class="col-sm-2 control-label" for="kode_icd_9">Kode Tindakan</label>
 						<div class="col-sm-4">
-							<input type="text" id="kode_icd_9" class="form-control" name="kode_icd_9" value=<?php echo $kodetindakan_icd_9; ?> readonly required />
+							<input type="text" id="kode_icd_9" class="form-control" name="kode_icd_9" required autofocus />
 						</div>
 					</div>
 					

@@ -18,14 +18,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="nomor">Nomor</label>
 						<div class="col-sm-4">
-							<input type="text" id="nomor" class="form-control" name="nomor" value="<?php echo $kodenomenklatur; ?>" readonly required />
+							<input type="text" id="nomor" class="form-control" name="nomor" required autofocus />
 						</div>
 					</div>
 					
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="nama">Nama</label>
 						<div class="col-sm-4">
-						    <input type="type" id="nama" class="form-control" name="nama" required autofocus>
+						    <input type="type" id="nama" class="form-control" name="nama" required>
 						</div>
 					</div>
 

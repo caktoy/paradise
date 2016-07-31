@@ -43,7 +43,7 @@
     <!-- jQuery 2.1.4 -->
     <script src="<?php echo base_url(); ?>assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
   </head>
-  <body class="skin-green" data-spy="scroll" data-target="#scrollspy">
+  <body class="hold-transition skin-blue layout-top-nav skin-green">
     <div class="wrapper">
 
       <header class="main-header">
@@ -58,9 +58,9 @@
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
-          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+          <!-- <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
-          </a>
+          </a> -->
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
@@ -69,13 +69,7 @@
           </div>
         </nav>
       </header>
-      <!-- Left side column. contains the logo and sidebar -->
-      <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <?php $this->load->view('sidebar'); ?>
-        <!-- /.sidebar -->
-      </aside>
-
+      
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -92,24 +86,25 @@
 
         <!-- Main content -->
         <div class="content">
-        <?php $this->load->view($konten); ?>
+          <?php foreach ($poli as $p): ?>
+          <div class="col-xs-4 col-md-4">
+            <div class="box box-success">
+              <div class="box-header with-border">
+                <h2 class="box-title"><?php echo $p->NM_POLI ?></h2>
+              </div>
+              <!--Body Content-->
+              <div class="box-body">
+                <div style="display: block;text-align: center;font-size: 100pt;font-weight: bold;" id="nomer-<?php echo $p->ID_POLI; ?>">0</div>
+              </div>
+            </div>
+          </div>
+          <?php endforeach ?>
         </div><!-- /.content -->
       </div><!-- /.content-wrapper -->
 
       <footer class="main-footer">
         <center><strong>Copyright &copy; 2016 &bull; <a href="javascript:void(0);">Malina Amaliyah</a>.</strong></center>
       </footer>
-
-      <!-- Control Sidebar -->
-      <aside class="control-sidebar control-sidebar-dark">
-        <!-- Create the tabs -->
-        <div class="pad">
-          This is an example of the control sidebar.
-        </div>
-      </aside><!-- /.control-sidebar -->
-      <!-- Add the sidebar's background. This div must be placed
-           immediately after the control sidebar -->
-      <div class="control-sidebar-bg"></div>
 
     </div><!-- ./wrapper -->
 
@@ -123,7 +118,7 @@
     <script src="<?php echo base_url(); ?>assets/dist/js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="<?php echo base_url(); ?>assets/dist/js/demo.js"></script>
-    <!-- <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script> -->
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
     <script src="<?php echo base_url(); ?>assets/documentation/docs.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/ckeditor/ckeditor.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
@@ -146,111 +141,27 @@
     <script src="<?php echo base_url(); ?>assets/plugins/timepicker/bootstrap-timepicker.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/plugins/jquery.treetable/jquery.treetable.js"></script>
     <!-- Page script -->
-    <script>
-      $(function () {
-        $("#example1").treetable({expandable: true});
-        $("#example1").DataTable({
-          "language": {
-            "lengthMenu": "Menampilkan _MENU_ data per halaman",
-            "zeroRecords": "Maaf, tidak ada data yang ditampilkan.",
-            "info": "Halaman _PAGE_ dari _PAGES_",
-            "infoEmpty": "Tidak ada data yang tersedia",
-            "search": "Cari:",
-            "decimal": ",",
-            "thousands": ".",
-            "paginate": {
-                "previous": "<",
-                "next": ">",
-                "first": "<<",
-                "last": ">>"
-            },
-            "infoFiltered": "(Penyaringan dari _MAX_ total data)"
+    <script type="text/javascript">
+      function getAntrian() {
+        $.ajax({
+          url: '<?php echo base_url()."antrian/get_antrian" ?>',
+          type: 'get',
+          dataType: 'json',
+          success: function(result) {
+            // console.log(result);
+            for (var i = 0; i < result.length; i++) {
+              var antrian = result[i];
+              $("#nomer-" + antrian.ID_POLI).html(antrian.ID_ANTRIAN);
+            };
+          },
+          error: function(xhr, status, error) {
+            console.log(error);
           }
         });
-        $('#example2').DataTable({
-          "paging": true,
-          "lengthChange": false,
-          "searching": false,
-          "ordering": true,
-          "info": true,
-          "autoWidth": false
-        });
-        $('#example3').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false
-        });
-      });
-    </script>
-    <script>
-      $(function () {
-        // date-picker plugin
-        $('.date-picker').datepicker({
-            autoclose: true,
-            todayHighlight: true
-        });
+      }
 
-        //Initialize Select2 Elements
-        $(".select2").select2();
-
-        //Datemask dd/mm/yyyy
-        $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
-        //Datemask2 mm/dd/yyyy
-        $("#datemask2").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
-        //Money Euro
-        $("[data-mask]").inputmask();
-
-        //Date range picker
-        $('#reservation').daterangepicker();
-        //Date range picker with time picker
-        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
-        //Date range as a button
-        $('#daterange-btn').daterangepicker(
-            {
-              ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-              },
-              startDate: moment().subtract(29, 'days'),
-              endDate: moment()
-            },
-        function (start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        }
-        );
-
-        //iCheck for checkbox and radio inputs
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-          checkboxClass: 'icheckbox_minimal-blue',
-          radioClass: 'iradio_minimal-blue'
-        });
-        //Red color scheme for iCheck
-        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-          checkboxClass: 'icheckbox_minimal-red',
-          radioClass: 'iradio_minimal-red'
-        });
-        //Flat red color scheme for iCheck
-        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-          checkboxClass: 'icheckbox_flat-green',
-          radioClass: 'iradio_flat-green'
-        });
-
-        //Colorpicker
-        $(".my-colorpicker1").colorpicker();
-        //color picker with addon
-        $(".my-colorpicker2").colorpicker();
-
-        //Timepicker
-        $(".timepicker").timepicker({
-          showInputs: false
-        });
+      $(document).ready(function() {
+        setInterval(function() {getAntrian()}, 1000);
       });
     </script>
   </body>

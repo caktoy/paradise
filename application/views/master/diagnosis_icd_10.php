@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="kode_icd_10">Kode Diagnosis</label>
 						<div class="col-sm-4">
-							<input type="text" id="kode_icd_10" class="form-control" name="kode_icd_10" readonly required />
+							<input type="text" id="kode_icd_10" class="form-control" name="kode_icd_10" required autofocus />
 						</div>
 					</div>
 					

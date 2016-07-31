@@ -18,14 +18,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="kode_status">Kode Status</label>
 						<div class="col-sm-4">
-							<input type="text" id="kode_status" class="form-control" name="kode_status" value="<?php echo $kodestatus_gigi; ?>" readonly required />
+							<input type="text" id="kode_status" class="form-control" name="kode_status" required autofocus/>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="status">Status</label>
 						<div class="col-sm-4">
-						    <input type="type" id="status" class="form-control" name="status" required autofocus>
+						    <input type="type" id="status" class="form-control" name="status" required>
 						</div>
 					</div>
 

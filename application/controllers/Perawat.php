@@ -79,6 +79,7 @@ class Perawat extends CI_Controller
         $almt_perawat = $this->input->post('e-almtperawat');
         $telp_perawat = $this->input->post('e-telpperawat');
         $pass_perawat = $this->input->post('e-passperawat');
+        $bag_perawat = $this->input->post('e-bagperawat');
 
         // upload foto
         $config['file_name']            = 'foto_'.$id_perawat;

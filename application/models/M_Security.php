@@ -19,6 +19,11 @@ class M_Security extends CI_Model
 		}
 	}
 
+	public function query($query)
+	{
+		return $this->db->query($query)->result();
+	}
+
 	public function gen_ai_id($tabel, $kolom)
 	{
 		$this->db->select_max($kolom, 'id');

@@ -4,13 +4,15 @@
 */
 class M_Antrian extends CI_Model
 {
-	public function get(array $cond)
+	public function get(array $cond, $limit = null)
 	{
 		$this->db->select("*");
 		$this->db->from("antrian");
 		$this->db->join("poli", "antrian.id_poli = poli.id_poli");
 		$this->db->join("pasien", "antrian.id_pasien = pasien.id_pasien");
 		$this->db->where($cond);
+		$this->db->order_by("id_antrian", "asc");
+		$this->db->limit($limit);
 		return $this->db->get()->result();
 	}
 

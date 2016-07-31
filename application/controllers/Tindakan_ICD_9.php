@@ -66,5 +66,13 @@ class Tindakan_ICD_9 extends CI_Controller
 
         redirect('tindakan_icd_9');
 	}
+
+	public function get()
+	{
+		$id = $this->input->post('id');
+		$data = $this->m_tindakan_icd_9->get(array('kode_icd_9' => $id));
+		header("Content-Type: application/json");
+        echo json_encode($data);
+	}
 }
 ?>

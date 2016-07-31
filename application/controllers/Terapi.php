@@ -66,5 +66,13 @@ class Terapi extends CI_Controller
 
         redirect('terapi');
 	}
+
+	public function get()
+	{
+		$id = $this->input->post('id');
+		$data = $this->m_terapi->get(array('id_terapi' => $id));
+		header("Content-Type: application/json");
+        echo json_encode($data);
+	}
 }
 ?>

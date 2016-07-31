@@ -87,12 +87,11 @@
 	                <div class="form-group">
 	                	<label class="col-sm-2 control-label">Poli</label>
 	                  	<div class="col-sm-3">
-	                    	<select id="bagperawat" name="bagperawat" class="form-control">
+	                    	<select id="bagperawat" name="bagperawat" class="form-control" required>
 	                    		<option></option>
 	                    		<option>Administrasi</option>
-	                    		<option>Kasir</option>
-	                    		<option>Kecantikan</option>
-	                    		<option>Umum</option>
+	                    		<option>Kasir/Apotik</option>
+	                    		<option>Laboratorium</option>
                     		</select>
 	                  	</div>
 	               	</div>
@@ -237,9 +236,8 @@
 	                    	<select id="e-bagperawat" name="e-bagperawat" class="form-control">
                         		<option></option>
                         		<option>Administrasi</option>
-	                    		<option>Kasir</option>
-	                    		<option>Kecantikan</option>
-	                    		<option>Umum</option>
+	                    		<option>Kasir/Apotik</option>
+	                    		<option>Laboratorium</option>
                     		</select>
 	                  	</div>
 	               	</div>
