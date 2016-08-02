@@ -21,9 +21,9 @@ class Nomenklatur extends CI_Controller
 		$nomor = $this->input->post('nomor');
         $nama = $this->input->post('nama');
         
-        $check_nomenklatur = $this->m_nomenklatur->get(array('lower(nama)' => strtolower($nama)));
+        $check_nomenklatur = $this->m_nomenklatur->get(array('lower(nomor)' => strtolower($nomor)));
         if(count($check_nomenklatur) > 0) {
-            $this->session->set_flashdata('pesan', '<b>Data Sudah Ada!</b> Data nomenklatur dengan nama \''.$nama.'\' sudah ada.');
+            $this->session->set_flashdata('pesan', '<b>Data Sudah Ada!</b> Data nomenklatur dengan nomor \''.$nomor.'\' sudah ada.');
         } else {
             $act = $this->m_nomenklatur->create(array(
             	'nomor' => $nomor,

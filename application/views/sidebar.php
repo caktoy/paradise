@@ -36,7 +36,8 @@
         <li><a href="<?php echo base_url().'registrasi_pemeriksaan' ?>">Registrasi Pemeriksaan</a></li>
         <li><a href="<?php echo base_url().'antrian/display' ?>" target="_blank">Display Antrian</a></li>
         <li><a href="<?php echo base_url().'rekam_medis' ?>">Pencatatan Rekam Medis</a></li>
-        <li><a href="<?php echo base_url().'resep_obat' ?>">Resep Obat</a></li>
+        <li><a href="<?php echo base_url().'pasien/cari' ?>">Pencarian Data Pasien</a></li>
+        <!-- <li><a href="<?php echo base_url().'resep_obat' ?>">Resep Obat</a></li> -->
         <li><a href="<?php echo base_url().'pemeriksaan_lab/transaksi' ?>">Pemeriksaan Lab</a></li>
         <li><a href="<?php echo base_url().'pembayaran' ?>">Pembayaran</a></li>
       </ul>

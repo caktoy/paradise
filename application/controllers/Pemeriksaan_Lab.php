@@ -62,5 +62,76 @@ class Pemeriksaan_Lab extends CI_Controller
 
         redirect('pemeriksaan_lab');
 	}
+
+	public function transaksi()
+	{
+		date_default_timezone_set("Asia/Jakarta");
+		$data['aktif'] = "transaksi";
+		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Pemeriksaan Lab");
+		$data['judul'] = "Daftar Pemeriksaan Lab";
+		$data['konten'] = "transaksi/daftar_pemeriksaan_lab";
+		$data['pemeriksaan_lab'] = $this->m_hasil_lab->get(array());
+		
+		$this->load->view('layout', $data);
+	}
+
+	public function periksa($rekam_medis, $lab)
+	{
+		date_default_timezone_set("Asia/Jakarta");
+		$data['aktif'] = "transaksi";
+		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Pemeriksaan Lab");
+		$data['judul'] = "Proses Pemeriksaan Lab";
+		$data['konten'] = "transaksi/proses_pemeriksaan_lab";
+
+		$pemeriksaan_lab = $this->m_hasil_lab->get(array(
+			'hasil_lab.id_lab' => $lab,
+			'hasil_lab.id_rekam_medis' => $rekam_medis
+			));
+		if (count($pemeriksaan_lab) > 0) {
+			$data['pemeriksaan_lab'] = $pemeriksaan_lab;
+			
+			$this->load->view('layout', $data);
+		} else {
+			redirect('pemeriksaan_lab/transaksi');
+		}
+	}
+
+	public function simpan()
+	{
+		$rekam_medis = $this->input->post('id_rekam_medis');
+		$lab = $this->input->post('id_lab');
+
+		// upload foto
+        $config['file_name']            = 'HASIL_LAB_'.$rekam_medis.'_'.$lab;
+        $config['upload_path']          = './assets/images/hasil_lab/';
+        $config['allowed_types']        = 'bmp|jpg|png|pdf|docx|doc|xls|xlsx|zip|rar';
+        $config['overwrite']			= true;
+        $config['max_size']             = 5000;
+
+        $this->upload->initialize($config);
+        if (!$this->upload->do_upload('hasil')) {
+            $this->session->set_flashdata('pesan', '<b>Gagal!</b> '.$this->upload->display_errors());
+            redirect('pemeriksaan_lab/periksa/'.$rekam_medis.'/'.$lab);
+        } else {
+            $data_upload = $this->upload->data();
+
+            $act = $this->m_hasil_lab->patch(
+	            	array(
+						'hasil_lab.id_lab' => $lab,
+						'hasil_lab.id_rekam_medis' => $rekam_medis
+					),
+					array(
+						'hasil_lab.file_hasil' => $data_upload['file_name']
+					)
+				);
+
+            if ($act > 0) 
+	            $this->session->set_flashdata('pesan', '<b>Berhasil!</b> Hasil pemeriksaan lab telah disimpan.');
+	        else
+	            $this->session->set_flashdata('pesan', '<b>Gagal!</b> Hasil pemeriksaan lab gagal disimpan.');
+
+	        redirect('pemeriksaan_lab/transaksi');
+        }
+	}
 }
 ?>

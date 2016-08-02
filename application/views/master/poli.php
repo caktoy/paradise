@@ -60,7 +60,7 @@
                     				<td><?php echo $poli->ID_POLI; ?></td>
                     				<td><?php echo $poli->NM_POLI; ?></td>
                     				<td align="center">
-                    					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
+                    					<button type="button" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
                     						data-target="#myModal" onclick="edit('<?php echo $poli->ID_POLI; ?>', '<?php echo $poli->NM_POLI; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>

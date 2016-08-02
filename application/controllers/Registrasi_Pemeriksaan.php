@@ -7,6 +7,7 @@ class Registrasi_Pemeriksaan extends CI_Controller
 
 	public function index()
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$this->m_security->check();
 		$data['aktif'] = "transaksi";
 		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Registrasi Pemeriksaan");
@@ -23,6 +24,7 @@ class Registrasi_Pemeriksaan extends CI_Controller
 
 	public function get_antrian()
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$poli = $this->input->post('poli');
 
 		if($poli != null) {
@@ -38,6 +40,7 @@ class Registrasi_Pemeriksaan extends CI_Controller
 
 	public function pasien_baru()
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$id_pasien = $this->input->post('id_pasien');
         $nm_pasien = $this->input->post('nm_pasien');
         $tmpt_lhr_pasien = $this->input->post('tmpt_lhr_pasien');
@@ -74,7 +77,7 @@ class Registrasi_Pemeriksaan extends CI_Controller
         redirect('registrasi_pemeriksaan');
 	}
 
-	public function new()
+	public function new_order()
 	{
 		date_default_timezone_set("Asia/Jakarta");
 		$nomer = $this->input->post('nomer');

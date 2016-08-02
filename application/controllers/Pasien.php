@@ -91,5 +91,28 @@ class Pasien extends CI_Controller
         header("Content-Type: application/json");
         echo json_encode($pasien);
 	}
+
+    public function cari()
+    {
+        $data['aktif'] = "transaksi";
+        $data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Pencarian Data Pasien");
+        $data['judul'] = "Pencarian Data Pasien";
+        $data['konten'] = "transaksi/cari_pasien";
+        $data['pasien'] = $this->m_pasien->get(array());
+        
+        $this->load->view('layout', $data);
+    }
+
+    public function lihat_riwayat($id_pasien)
+    {
+        $data['aktif'] = "transaksi";
+        $data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Pencarian Data Pasien", "Riwayat Pemeriksaan Pasien");
+        $data['judul'] = "Riwayat Pemeriksaan Pasien";
+        $data['konten'] = "transaksi/riwayat_pemeriksaan_pasien";
+        $data['pasien'] = $this->m_pasien->get(array('pasien.id_pasien' => $id_pasien));
+        $data['rekam_medis'] = $this->m_rekam_medis->get(array('rekam_medis.id_pasien' => $id_pasien));
+        
+        $this->load->view('layout', $data);
+    }
 }
 ?>

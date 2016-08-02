@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Parisudha</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/datatables/dataTables.bootstrap.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/skins/_all-skins.min.css">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/daterangepicker/daterangepicker-bs3.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/iCheck/all.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/colorpicker/bootstrap-colorpicker.min.css">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/timepicker/bootstrap-timepicker.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/select2/select2.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a. skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/skins/_all-skins.min.css">  
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="<?php echo base_url(); ?>assets/plugins/jquery.treetable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
+
+    <!-- jQuery 2.1.4 -->
+    <script src="<?php echo base_url(); ?>assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+
+    <style type="text/css">
+    body {
+    	font-size: 8pt;
+    }
+
+    table{
+    	font-size: 8pt;
+    }
+
+    div{
+    	font-size: 8pt;
+    }
+    form {
+    	font-size: 8pt;
+    }
+    input {
+    	padding: 0px;
+    }
+    </style>
+</head>
+<body onload="javascript:window.print();">
+	<div style="widht: 100%;font-weight: bold;font-size: 16pt;font-weight: bold;text-align: center;"><?php echo $judul ?></div>
+	<?php  
+	$sub_total_tindakan = 0;
+	$sub_total_terapi = 0;
+	$sub_total_resep = 0;
+	?>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box box-success">
+				<!--Body Content-->
+				<div class="box-body">
+					<form class="form-horizontal" style="margin-top:10px;font-size: 8pt;">
+						<div class="col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group">
+								<label class="col-sm-3 col-xs-3 control-label">Pemeriksaan</label>
+								<div class="col-sm-9 col-xs-9">
+									<input type="text" class="form-control" value="<?php echo $rekam_medis[0]->ID_REKAM_MEDIS; ?>" readonly />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 col-xs-3 control-label">Tanggal Periksa</label>
+								<div class="col-sm-9 col-xs-9">
+								    <input type="text" class="form-control" value="<?php echo date('d-m-Y', strtotime($rekam_medis[0]->TGL_PERIKSA)); ?>" readonly />
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group">
+								<label class="col-sm-3 col-xs-3 control-label">Nama Pasien</label>
+								<div class="col-sm-9 col-xs-9">
+									<input type="text" class="form-control" value="<?php echo $rekam_medis[0]->NM_PASIEN; ?>" readonly />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 col-xs-3 control-label">Dokter Referensi</label>
+								<div class="col-sm-9 col-xs-9">
+									<input type="text" class="form-control" value="<?php echo $rekam_medis[0]->NM_DOKTER; ?>" readonly />
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-12">
+			<div class="box box-success">
+				<div class="box-body">
+	        		<?php if (count($detil_diagnosis) > 0): ?>
+					<fieldset>
+						Diagnosa:
+						<table id="tbl-diagnosa" class="table table-bordered table-striped" style="margin-top: 10px;">
+				            <thead>
+				                <tr>
+					                <th style="width: 100px;">Kode</th>
+					                <th>Penyakit</th>
+					                <th>Keterangan</th>
+					            </tr>
+				            </thead>
+				        	<tbody>
+				        		<?php if (count($detil_diagnosis) > 0): ?>
+				        		<?php foreach ($detil_diagnosis as $det_dg): ?>
+				        		<tr>
+				        			<td><?php echo $det_dg->KODE_ICD_10 ?></td>
+				        			<td><?php echo $det_dg->NM_ICD_10 ?></td>
+				        			<td><?php echo $det_dg->KETERANGAN_DG ?></td>
+				        		</tr>
+				        		<?php endforeach ?>
+				        		<?php else: ?>
+				        		<tr><td colspan="3">Tidak ada data yang ditampilkan.</td></tr>
+				        		<?php endif ?>
+		                   	</tbody>
+	            		</table>
+					</fieldset>
+				    <?php endif ?>
+
+
+	        		<?php if (count($detil_tindakan) > 0): ?>
+					<fieldset>
+						Tindakan:
+						<table id="tbl-tindakan" class="table table-bordered table-striped" style="margin-top: 10px;">
+				            <thead>
+				                <tr>
+					                <th>Kode</th>
+					                <th>Tindakan</th>
+					                <th>Keterangan</th>
+					                <th style="width: 200px;">Biaya</th>
+					            </tr>
+				            </thead>
+				        	<tbody>
+				        		<?php if (count($detil_tindakan) > 0): ?>
+				        		<?php foreach ($detil_tindakan as $det_td): ?>
+				        		<tr>
+				        			<td><?php echo $det_td->KODE_ICD_9 ?></td>
+				        			<td><?php echo $det_td->NM_ICD_9 ?></td>
+				        			<td><?php echo $det_td->DETAIL_TINDAKAN ?></td>
+				        			<td style="text-align: right;">Rp<?php echo number_format($det_td->HARGA_TINDAKAN, 2, ",", ".") ?></td>
+				        		</tr>
+				        		<?php $sub_total_tindakan += $det_td->HARGA_TINDAKAN; ?>
+				        		<?php endforeach ?>
+				        		<tr>
+				        			<td style="text-align: right" colspan="3">SUB TOTAL</td>
+				        			<td style="text-align: right"><?php echo 'Rp'.number_format($sub_total_tindakan, 2, ",", "."); ?></td>
+				        		</tr>
+				        		<?php else: ?>
+				        		<tr><td colspan="4">Tidak ada data yang ditampilkan.</td></tr>
+				        		<?php endif ?>
+		                   	</tbody>
+	            		</table>
+					</fieldset>
+	        		<?php endif ?>
+
+	        		<?php if (count($detil_terapi) > 0): ?>
+					<fieldset>
+						Terapi:
+						<table id="tbl-terapi" class="table table-bordered table-striped" style="margin-top: 10px;">
+				            <thead>
+				                <tr>
+					                <th>Kode</th>
+					                <th>Terapi</th>
+					                <th>Perawat</th>
+					                <th>Keterangan</th>
+					                <th style="width: 200px;">Biaya</th>
+					            </tr>
+				            </thead>
+				        	<tbody>
+				        		<?php if (count($detil_terapi) > 0): ?>
+				        		<?php foreach ($detil_terapi as $det_tp): ?>
+				        		<tr>
+				        			<td><?php echo $det_tp->ID_TERAPI ?></td>
+				        			<td><?php echo $det_tp->NM_TERAPI ?></td>
+				        			<td><?php echo $det_tp->NM_PERAWAT ?></td>
+				        			<td><?php echo $det_tp->KETERANGAN_TERAPI ?></td>
+				        			<td style="text-align: right;">Rp<?php echo number_format($det_tp->BAYAR_TERAPI, 2, ",", ".") ?></td>
+				        		</tr>
+				        		<?php $sub_total_terapi += $det_td->BAYAR_TERAPI; ?>
+				        		<?php endforeach ?>
+				        		<tr>
+				        			<td style="text-align: right" colspan="4">SUB TOTAL</td>
+				        			<td style="text-align: right"><?php echo 'Rp'.number_format($sub_total_terapi, 2, ",", "."); ?></td>
+				        		</tr>
+				        		<?php else: ?>
+				        		<tr><td colspan="5">Tidak ada data yang ditampilkan.</td></tr>
+				        		<?php endif ?>
+		                   	</tbody>
+	            		</table>
+					</fieldset>
+	        		<?php endif ?>
+
+
+	        		<?php if (count($resep_obat) > 0): ?>
+					<fieldset>
+						Resep Obat:
+						<table id="tbl-obat" class="table table-bordered table-striped" style="margin-top: 10px;">
+				            <thead>
+				                <tr>
+					                <th>Kode</th>
+					                <th>Obat</th>
+					                <th style="width:200px;">Harga Satuan</th>
+					                <th>Jumlah</th>
+					                <th style="width:200px;">Biaya</th>
+					            </tr>
+				            </thead>
+				        	<tbody>
+				        		<?php if (count($resep_obat) > 0): ?>
+				        		<?php foreach ($resep_obat as $ro): ?>
+				        		<tr>
+				        			<td><?php echo $ro->ID_OBAT ?></td>
+				        			<td><?php echo $ro->NM_OBAT ?></td>
+				        			<td><?php echo 'Rp'.number_format($ro->HRG_OBAT, 2, ",", ".") ?></td>
+				        			<td><?php echo $ro->KUANTITAS_OBAT ?></td>
+				        			<td style="text-align: right;">Rp<?php echo number_format($ro->SUB_TOTAL_RESEP, 2, ",", ".") ?></td>
+				        		</tr>
+				        		<?php $sub_total_resep += $ro->SUB_TOTAL_RESEP; ?>
+				        		<?php endforeach ?>
+				        		<tr>
+				        			<td style="text-align: right" colspan="4">SUB TOTAL</td>
+				        			<td style="text-align: right"><?php echo 'Rp'.number_format($sub_total_resep, 2, ",", "."); ?></td>
+				        		</tr>
+				        		<?php else: ?>
+				        		<tr><td colspan="4">Tidak ada data yang ditampilkan.</td></tr>
+				        		<?php endif ?>
+		                   	</tbody>
+	            		</table>
+					</fieldset>
+	        		<?php endif ?>
+
+					<fieldset>
+						Summary:
+						<form method="post" action="<?php echo base_url().'pembayaran/simpan' ?>">
+							<input type="hidden" name="txt_id_bayar" value="<?php echo $pembayaran[0]->ID_BAYAR; ?>">
+							<input type="hidden" name="txt_rekam_medis" value="<?php echo $pembayaran[0]->ID_REKAM_MEDIS; ?>">
+							<table class="table table-bordered table-striped" style="margin-top: 10px;">
+								<tr>
+									<td style="text-align: right;width: 80%;font-weight: bold;">TOTAL KESELURUHAN</td>
+				        			<td style="text-align: right;width: 20%;font-weight: bold;">
+				        				<?php echo 'Rp'.number_format(($sub_total_tindakan + $sub_total_terapi + $sub_total_resep), 2, ",", "."); ?>
+				        				<input type="hidden" id="txt_total" name="txt_total" value="<?php echo ($sub_total_tindakan + $sub_total_terapi + $sub_total_resep) ?>">
+				        			</td>
+								</tr>
+								<tr>
+									<td style="text-align: right;width: 80%;font-weight: bold;">DISKON (%)</td>
+				        			<td style="text-align: right;width: 20%;font-weight: bold;">
+				        				<input type="hidden" id="txt_diskon" class="form-control col-xs-3" name="txt_diskon" value="" min="0" max="100" style="text-align: right;">
+				        				<?php echo $pembayaran[0]->DISKON!=null?$pembayaran[0]->DISKON:'0'; ?>
+				        			</td>
+								</tr>
+								<tr>
+									<td style="text-align: right;width: 80%;font-weight: bold;">TOTAL BAYAR</td>
+				        			<td style="text-align: right;width: 20%;font-weight: bold;">
+				        				<span id="lbl_total_bayar" style="font-size: 12pt;">Rp0,00</span>
+				        				<input type="hidden" id="txt_total_bayar" name="txt_total_bayar" value="<?php echo $pembayaran[0]->TOTAL_BAYAR!=null?$pembayaran[0]->TOTAL_BAYAR:($sub_total_tindakan + $sub_total_terapi + $sub_total_resep); ?>">
+				        			</td>
+								</tr>
+							</table>
+						</form>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<!-- Bootstrap 3.3.5 -->
+<script src="<?php echo base_url(); ?>assets/bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="<?php echo base_url(); ?>assets/plugins/fastclick/fastclick.min.js"></script>
+<!-- SlimScroll 1.3.0 -->
+<script src="<?php echo base_url(); ?>assets/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- AdminLTE App -->
+<script src="<?php echo base_url(); ?>assets/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="<?php echo base_url(); ?>assets/dist/js/demo.js"></script>
+<!-- <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script> -->
+<script src="<?php echo base_url(); ?>assets/documentation/docs.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/ckeditor/ckeditor.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="<?php echo base_url(); ?>assets/plugins/iCheck/icheck.min.js"></script>
+<!-- Select2 -->
+<script src="<?php echo base_url(); ?>assets/plugins/select2/select2.full.min.js"></script>
+<!-- InputMask -->
+<script src="<?php echo base_url(); ?>assets/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<!-- date-range-picker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap color picker -->
+<script src="<?php echo base_url(); ?>assets/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<!-- bootstrap time picker -->
+<script src="<?php echo base_url(); ?>assets/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/plugins/jquery.treetable/jquery.treetable.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var diskon = $('#txt_diskon').val();
+		var total = $('#txt_total').val();
+		var total_bayar = total - (total * (diskon / 100));
+		$('#lbl_total_bayar').html('Rp' + total_bayar);
+		$('#txt_total_bayar').val(total_bayar);
+		$('#txt_diskon').change(function() {
+			var diskon = $(this).val();
+			var total = $('#txt_total').val();
+			var total_bayar = total - (total * (diskon / 100));
+			$('#lbl_total_bayar').html('Rp' + total_bayar);
+			$('#txt_total_bayar').val(total_bayar);
+		});
+	});
+</script>
+</html>

@@ -7,6 +7,7 @@ class Rekam_Medis extends CI_Controller
 	
 	public function index()
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$this->m_security->check();
 		$data['aktif'] = "transaksi";
 		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Pencatatan Rekam Medis");
@@ -15,16 +16,92 @@ class Rekam_Medis extends CI_Controller
 
 		$dokter = $this->m_dokter->get(array('dokter.id_dokter' => $_SESSION['userid']));
 
-		$data['antrian'] = $this->m_antrian->get(array(
-			'tgl_antrian' => date('Y-m-d'),
-			'antrian.id_poli' => $dokter[0]->ID_POLI
-			));
+		if (count($dokter) > 0) {
+			$data['antrian'] = $this->m_antrian->get(array(
+				'tgl_antrian' => date('Y-m-d'),
+				'antrian.id_poli' => $dokter[0]->ID_POLI
+				));
+		} else {
+			$data['antrian'] = null;
+		}
 		
 		$this->load->view('layout', $data);
 	}
 
+	public function get()
+	{
+		$id_rekam_medis = $this->input->post('id_rekam_medis');
+
+		$rekam_medis = $this->m_rekam_medis->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$diagnosa = $this->m_detail_diagnosa->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$tindakan = $this->m_detail_tindakan->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$terapi = $this->m_detail_terapi->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$resep_obat = $this->m_resep_obat->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$hasil_lab = $this->m_hasil_lab->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+
+		$hasil = "<h3>Hasil Pemeriksaan</h3>";
+		foreach ($rekam_medis as $rm) {
+			$hasil .= "<strong>Tanggal Pemeriksaan:</strong> ".date('d-m-Y', strtotime($rm->TGL_PERIKSA))."<br>";
+			$hasil .= "<strong>Keluhan:</strong> ".$rm->ANAMNESIS."<br><strong>Catatan Fisik:</strong> ".$rm->CATATAN_FISIK."<br><br>";
+		}
+
+		if (count($diagnosa) > 0) {
+			$hasil .= "<h4>Diagnosa:</h4>";
+			foreach ($diagnosa as $dg) {
+				$hasil .= $dg->NM_ICD_10.': '.$dg->KETERANGAN_DG."<br>";
+			}
+		}
+
+		if (count($tindakan) > 0) {
+			$hasil .= "<h4>Tindakan:</h4>";
+			foreach ($tindakan as $td) {
+				$hasil .= $td->NM_ICD_9.': '.$td->DETAIL_TINDAKAN."<br>";
+			}
+		}
+
+		if (count($terapi) > 0) {
+			$hasil .= "<h4>Terapi:</h4>";
+			foreach ($terapi as $ter) {
+				$hasil .= $ter->NM_TERAPI.': '.$ter->KETERANGAN_TERAPI."<br>";
+			}
+		}
+
+		if (count($resep_obat) > 0) {
+			$hasil .= "<h4>Resep Obat:</h4>";
+			foreach ($resep_obat as $ro) {
+				$hasil .= $ro->NM_OBAT.' ('.$ro->KUANTITAS_OBAT.")<br>";
+			}
+		}
+
+		if (count($hasil_lab) > 0) {
+			$hasil .= "<h4>Hasil Lab:</h4>";
+			foreach ($hasil_lab as $hl) {
+				$hasil .= "<a href='".base_url()."/assets/images/hasil_lab/".$hl->FILE_HASIL."' target='_blank'>".$hl->FILE_HASIL."</a><br>";
+			}
+		}
+
+		echo $hasil;
+	}
+
+	public function push($id, $pasien, $poli)
+	{
+		date_default_timezone_set("Asia/Jakarta");
+		$this->m_antrian->patch(
+			array(
+				'antrian.id_antrian' => $id,
+				'antrian.id_pasien' => $pasien,
+				'antrian.id_poli' => $poli,
+				'antrian.tgl_antrian' => date('Y-m-d')
+				), 
+			array('antrian.status_antrian' => 'Sedang Berlangsung'));
+		$_SESSION['antrian_in_proses'] = $id;
+        
+        redirect('rekam_medis');
+	}
+
 	public function pre_proses($id_pasien, $id_poli, $tgl_antri)
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$tgl_periksa = date('Y-m-d', $tgl_antri);
 		$cek_rekam_medis = $this->m_rekam_medis->get(array(
 			'rekam_medis.id_pasien' => $id_pasien,
@@ -57,6 +134,8 @@ class Rekam_Medis extends CI_Controller
 
 		$rekam_medis = $this->m_rekam_medis->get(array('id_rekam_medis' => $id_rekam_medis));
 		$data['rekam_medis'] = $rekam_medis;
+		if (count($rekam_medis) > 0) 
+			$data['history_rekam_medis'] = $this->m_rekam_medis->get(array('rekam_medis.id_pasien' => $rekam_medis[0]->ID_PASIEN));
 
 		$id_dokter = $_SESSION['userid'];
 		$data['is_odontogram'] = false;
@@ -72,14 +151,57 @@ class Rekam_Medis extends CI_Controller
 		$data['detil_tindakan'] = $this->m_detail_tindakan->get(array('detail_tindakan.id_rekam_medis' => $id_rekam_medis));
 		$data['detil_terapi'] = $this->m_detail_terapi->get(array('detail_terapi.id_rekam_medis' => $id_rekam_medis));
 		$data['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
+		$data['hasil_lab'] = $this->m_hasil_lab->get(array('hasil_lab.id_rekam_medis' => $id_rekam_medis));
+		$odontogram = $this->m_odontogram->get(array('odontogram.id_rekam_medis' => $id_rekam_medis));
+		$data_odontogram = array();
+		foreach ($odontogram as $odo) 
+			$data_odontogram[$odo->NOMOR] = $odo->GAMBAR;
+		$data['odontogram'] = $data_odontogram;
 
+		$data['pemeriksaan_lab'] = $this->m_pemeriksaan_lab->get(array());
 		$data['diagnosis'] = $this->m_diagnosa_icd_10->get(array());
 		$data['tindakan'] = $this->m_tindakan_icd_9->get(array());
 		$data['terapi'] = $this->m_terapi->get(array());
 		$data['obat'] = $this->m_obat->get(array());
 		$data['perawat'] = $this->m_perawat->get(array());
+		$data['status_gigi'] = $this->m_status_gigi->get(array());
 
 		$this->load->view('layout', $data);
+	}
+
+	public function cancel_proses($id, $pasien, $poli)
+	{		
+		$this->m_antrian->patch(
+			array(
+				'antrian.id_antrian' => $id,
+				'antrian.id_pasien' => $pasien,
+				'antrian.id_poli' => $poli,
+				'antrian.tgl_antrian' => date('Y-m-d')
+				), 
+			array('antrian.status_antrian' => 'Batal'));
+        unset($_SESSION['antrian_in_proses']);
+
+        redirect('rekam_medis');
+	}
+
+	public function close_proses($id_pasien)
+	{
+		date_default_timezone_set("Asia/Jakarta");
+		$dokter = $this->m_dokter->get(array('dokter.id_dokter' => $_SESSION['userid']));
+
+		if (count($dokter) > 0) {
+			$this->m_antrian->patch(
+				array(
+					'antrian.id_pasien' => $id_pasien,
+					'antrian.id_poli' => $dokter[0]->ID_POLI,
+					'antrian.tgl_antrian' => date('Y-m-d')
+					), 
+				array('antrian.status_antrian' => 'Selesai')
+				);
+	    	unset($_SESSION['antrian_in_proses']);
+		}
+
+        redirect('rekam_medis');
 	}
 
 	public function update($rekam_medis)
@@ -89,8 +211,16 @@ class Rekam_Medis extends CI_Controller
 
 		$this->m_rekam_medis->patch(
 			array('id_rekam_medis' => $rekam_medis), 
-			array('anamnesis' => $anamnesis, 'catatan_fisik' => $catatan_fisik)
+			array('anamnesis' => $anamnesis, 'catatan_fisik' => $catatan)
 			);
+
+		$lab = $this->input->post('lab');
+		if($lab != null) {
+			$this->m_hasil_lab->create(array(
+					'id_rekam_medis' => $rekam_medis,
+					'id_lab' => $lab
+				));
+		}
 
 		redirect('rekam_medis/proses/'.$rekam_medis);
 	}

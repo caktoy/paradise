@@ -12,6 +12,7 @@ class M_Rekam_Medis extends CI_Model
 		$this->db->join("pasien", "rekam_medis.id_pasien = pasien.id_pasien", "left");
 		$this->db->join("poli", "dokter.id_poli = poli.id_poli", "left");
 		$this->db->where($cond);
+		$this->db->order_by("rekam_medis.tgl_periksa", "desc");
 		return $this->db->get()->result();
 	}
 

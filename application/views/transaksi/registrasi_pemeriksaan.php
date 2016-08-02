@@ -111,7 +111,7 @@
 				<div class="alert alert-info" style="text-align: center;font-weight: bold;font-size: 24pt;">
 					<span id="nomer_antrian">Pilih Poli Terlebih Dahulu</span>
               	</div>
-				<form method="POST" action="<?php echo base_url(); ?>registrasi_pemeriksaan/new" class="form-horizontal">
+				<form method="POST" action="<?php echo base_url(); ?>registrasi_pemeriksaan/new_order" class="form-horizontal">
 					<input type="hidden" name="nomer" id="nomer" required>
 					<div class="form-group">
 	              		<label for="message-text" class="col-sm-3 control-label" for="pasien">Cari Pasien</label>

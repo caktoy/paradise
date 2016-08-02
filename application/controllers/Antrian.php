@@ -7,6 +7,7 @@ class Antrian extends CI_Controller
 
 	public function display()
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$data['aktif'] = "transaksi";
 		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Display Antrian");
 		$data['judul'] = "Klinik Paradise";
@@ -17,6 +18,7 @@ class Antrian extends CI_Controller
 
 	public function get_antrian()
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$data_antrian = array();
 		$poli = $this->m_poli->get(array());
 		foreach ($poli as $p) {
@@ -37,6 +39,7 @@ class Antrian extends CI_Controller
 	
 	public function push($id, $pasien, $poli)
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$this->m_antrian->patch(
 			array(
 				'antrian.id_antrian' => $id,
@@ -45,12 +48,14 @@ class Antrian extends CI_Controller
 				'antrian.tgl_antrian' => date('Y-m-d')
 				), 
 			array('antrian.status_antrian' => 'Sedang Berlangsung'));
+		$_SESSION['antrian_in_proses'] = $id;
         
         redirect('registrasi_pemeriksaan');
 	}
 
 	public function cancel($id, $pasien, $poli)
 	{		
+		date_default_timezone_set("Asia/Jakarta");
 		$this->m_antrian->patch(
 			array(
 				'antrian.id_antrian' => $id,
@@ -60,12 +65,14 @@ class Antrian extends CI_Controller
 				), 
 			array('antrian.status_antrian' => 'Batal'));
         // $this->call_next_from($id, $poli);
+        unset($_SESSION['antrian_in_proses']);
 
         redirect('registrasi_pemeriksaan');
 	}
 
 	public function done($id, $pasien, $poli)
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$this->m_antrian->patch(
 			array(
 				'antrian.id_antrian' => $id,
@@ -76,12 +83,14 @@ class Antrian extends CI_Controller
 			array('antrian.status_antrian' => 'Selesai')
 			);
     	$this->call_next_from($id, $poli);
+    	unset($_SESSION['antrian_in_proses']);
 
         redirect('registrasi_pemeriksaan');
 	}
 
 	private function call_next_from($id, $poli)
 	{
+		date_default_timezone_set("Asia/Jakarta");
 		$antrian = $this->m_antrian->get(array('antrian.id_antrian' => $id));
 			
 		$next_antrian = $this->m_security->query("select * 
@@ -95,6 +104,8 @@ class Antrian extends CI_Controller
 			$next_id = $next_antrian[0]->ID_ANTRIAN;
 
 			$this->m_antrian->patch(array('antrian.id_antrian' => $next_id), array('antrian.status_antrian' => 'Sedang Berlangsung'));
+
+			$_SESSION['antrian_in_proses'] = $id;
 		}
 	}
 }
