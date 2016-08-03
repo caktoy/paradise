@@ -5,7 +5,7 @@
     <li class="<?php echo $aktif=='beranda'?'active':''; ?>">
       <a href="<?php echo base_url(); ?>"><i class="fa fa-home"></i> Home</a>
     </li>
-
+    <?php if ($_SESSION['userrole'] == 'Administrasi'): ?>
     <li class="<?php echo $aktif=='maintenance'?'active':''; ?> treeview" id="scrollspy-components">
       <a href="javascript:;"><i class="fa fa-check"></i> Maintenance</a>
       <ul class="treeview-menu">
@@ -29,30 +29,47 @@
         <li><a href="<?php echo base_url().'pasien' ?>">Master Pasien</a></li>
       </ul>
     </li>
+    <?php endif ?>
 
     <li class="<?php echo $aktif=='transaksi'?'active':''; ?> treeview" id="scrollspy-components">
       <a href="javascript:;"><i class="fa fa-exchange"></i> Transaksi</a>
       <ul class="treeview-menu">
+        <?php if ($_SESSION['userrole'] == 'Administrasi'): ?>
         <li><a href="<?php echo base_url().'registrasi_pemeriksaan' ?>">Registrasi Pemeriksaan</a></li>
         <li><a href="<?php echo base_url().'antrian/display' ?>" target="_blank">Display Antrian</a></li>
+        <?php endif ?>
+        <?php if ($_SESSION['userrole'] == 'Dokter'): ?>
         <li><a href="<?php echo base_url().'rekam_medis' ?>">Pencatatan Rekam Medis</a></li>
         <li><a href="<?php echo base_url().'pasien/cari' ?>">Pencarian Data Pasien</a></li>
+        <?php endif ?>
         <!-- <li><a href="<?php echo base_url().'resep_obat' ?>">Resep Obat</a></li> -->
+        <?php if ($_SESSION['userrole'] == 'Laboratorium'): ?>
         <li><a href="<?php echo base_url().'pemeriksaan_lab/transaksi' ?>">Pemeriksaan Lab</a></li>
+        <?php endif ?>
+        <?php if ($_SESSION['userrole'] == 'Kasir/Apotik'): ?>
         <li><a href="<?php echo base_url().'pembayaran' ?>">Pembayaran</a></li>
+        <?php endif ?>
       </ul>
     </li>
 
+    <?php if ($_SESSION['userrole'] != 'Laboratorium'): ?>
     <li class="<?php echo $aktif=='laporan'?'active':''; ?> treeview" id="scrollspy-components">
       <a href="javascript:;"><i class="fa fa-paste"></i> Laporan</a>
       <ul class="treeview-menu">
+        <?php if ($_SESSION['userrole'] == 'Administrasi'): ?>
         <li><a href="<?php echo base_url().'laporan/kunjungan_pasien'; ?>">Laporan Kunjungan Pasien</a></li>
         <li><a href="<?php echo base_url().'laporan/registrasi_pasien'; ?>">Laporan Registrasi Pasien Baru</a></li>
+        <?php endif ?>
+        <?php if ($_SESSION['userrole'] == 'Dokter'): ?>
         <li><a href="<?php echo base_url().'laporan/penyakit_terbanyak'; ?>">Laporan Penyakit Terbanyak</a></li>
-        <li><a href="<?php echo base_url().'laporan/rekam_medis_pasien'; ?>">Laporan Rekam Medis Pasien</a></li>
+        <!--<li><a href="<?php echo base_url().'laporan/rekam_medis_pasien'; ?>">Laporan Rekam Medis Pasien</a></li>-->
+        <?php endif ?>
+        <?php if ($_SESSION['userrole'] == 'Kasir/Apotik'): ?>
         <li><a href="<?php echo base_url().'laporan/pengeluaran_obat'; ?>">Laporan Pengeluaran Obat</a></li>
         <li><a href="<?php echo base_url().'laporan/pendapatan'; ?>">Laporan Pendapatan</a></li>
+        <?php endif ?>
       </ul>
     </li>
+    <?php endif ?>
   </ul>
 </section>

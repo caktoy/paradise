@@ -6,7 +6,7 @@
 			</div>
 			<!--Body Content-->
 			<div class="box-body">
-				<form action="<?php echo base_url().'laporan/kunjungan_pasien'; ?>" method="POST" class="form-horizontal" style="margin-top:10px">
+				<form action="<?php echo base_url().'laporan/pengeluaran_obat/lihat'; ?>" method="POST" class="form-horizontal" style="margin-top:10px">
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="bulan">Bulan</label>
 						<div class="col-sm-4">

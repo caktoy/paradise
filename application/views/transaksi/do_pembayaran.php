@@ -225,7 +225,7 @@ $sub_total_resep = 0;
 							</button>&nbsp;&nbsp;&nbsp;
 							<?php if ($pembayaran[0]->TOTAL_BAYAR != null): ?>
 							<a href="<?php echo base_url().'pembayaran/cetak/'.$pembayaran[0]->ID_REKAM_MEDIS; ?>" class="btn btn-info" target="_blank">
-								<i class="fa fa-file-pdf-o"></i> PDF
+								<i class="fa fa-print"></i> Cetak
 							</a>
 							<?php endif ?>
 						</div>

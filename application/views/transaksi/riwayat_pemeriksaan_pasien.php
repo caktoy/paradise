@@ -87,7 +87,7 @@
 	function load_history(id) {
 		$.ajax({
 			url: '<?php echo base_url()."rekam_medis/get/"; ?>',
-			data: {'id_rekam_medis': id},
+			data: {'id_rekam_medis': id, 'is_cetak': 'tidak'},
 			dataType: 'html',
 			method: 'post',
 			success: function(result) {

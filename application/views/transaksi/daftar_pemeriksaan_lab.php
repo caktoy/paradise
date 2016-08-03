@@ -23,6 +23,7 @@
 					                <tr>
 						                <th width="25px">No.</th>
 						                <th>#Pasien</th>
+						                <th>Nama Pasien</th>
 						                <th>Dokter Referensi</th>
 						                <th>Tanggal Periksa</th>
 						                <th>Lab Periksa</th>
@@ -34,7 +35,8 @@
 					        		<?php $no = 1; foreach ($pemeriksaan_lab as $pl): ?>
 	                  				<tr>
 	                    				<td align="right"><?php echo $no; ?>.</td>
-	                    				<td><?php echo $pl->NM_PASIEN.' ('.$pl->ID_PASIEN.')'; ?></td>
+	                    				<td><?php echo $pl->ID_PASIEN; ?></td>
+	                    				<td><?php echo $pl->NM_PASIEN; ?></td>
 	                    				<td><?php echo $pl->NM_DOKTER; ?></td>
 	                    				<td><?php echo date('d-m-Y', strtotime($pl->TGL_PERIKSA)); ?></td>
 	                    				<td><?php echo $pl->LAB; ?></td>

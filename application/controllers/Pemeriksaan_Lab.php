@@ -104,7 +104,7 @@ class Pemeriksaan_Lab extends CI_Controller
 		// upload foto
         $config['file_name']            = 'HASIL_LAB_'.$rekam_medis.'_'.$lab;
         $config['upload_path']          = './assets/images/hasil_lab/';
-        $config['allowed_types']        = 'bmp|jpg|png|pdf|docx|doc|xls|xlsx|zip|rar';
+        $config['allowed_types']        = 'bmp|jpg|jpeg|png|pdf|docx|doc|xls|xlsx|zip|rar';
         $config['overwrite']			= true;
         $config['max_size']             = 5000;
 

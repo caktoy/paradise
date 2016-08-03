@@ -144,7 +144,12 @@
     <script src="<?php echo base_url(); ?>assets/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
     <!-- bootstrap time picker -->
     <script src="<?php echo base_url(); ?>assets/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
+    <!-- other components -->
     <script src="<?php echo base_url(); ?>assets/plugins/jquery.treetable/jquery.treetable.js"></script>
+    <script src="<?php echo base_url(); ?>assets/highcharts/highcharts.js"></script>
+    <script src="<?php echo base_url(); ?>assets/highcharts/modules/exporting.js"></script>
+
     <!-- Page script -->
     <script>
       $(function () {

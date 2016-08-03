@@ -31,6 +31,7 @@ class Rekam_Medis extends CI_Controller
 	public function get()
 	{
 		$id_rekam_medis = $this->input->post('id_rekam_medis');
+		$is_cetak = $this->input->post('is_cetak');
 
 		$rekam_medis = $this->m_rekam_medis->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$diagnosa = $this->m_detail_diagnosa->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
@@ -38,8 +39,30 @@ class Rekam_Medis extends CI_Controller
 		$terapi = $this->m_detail_terapi->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$resep_obat = $this->m_resep_obat->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$hasil_lab = $this->m_hasil_lab->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$pasien = $this->m_pasien->get(array('pasien.id_pasien' => $rekam_medis[0]->ID_PASIEN));
 
-		$hasil = "<h3>Hasil Pemeriksaan</h3>";
+		echo "<!DOCTYPE html>
+		<html>
+		<head>
+			<title>Rekam Medis Pasien</title>
+		</head>
+		<body ";
+		if ($is_cetak == 'ya') {
+			echo "onload='javascript:window.print();'";
+		}
+		echo ">";
+		
+		$hasil = "<div style='text-align: center;'><h3>Hasil Pemeriksaan</h3></div>";
+
+		$hasil .= "<h4>Biodata Pasien:</h4>";
+		foreach ($pasien as $pas) {
+			$pas_array = get_object_vars($pas);
+			foreach ($pas as $key => $value) {
+				$hasil .= "<strong>".str_replace('_', " ", $key).":</strong> ".$value."<br>";
+			}
+		}
+		
+		$hasil .= "<h4>Pemeriksaan:</h4>";
 		foreach ($rekam_medis as $rm) {
 			$hasil .= "<strong>Tanggal Pemeriksaan:</strong> ".date('d-m-Y', strtotime($rm->TGL_PERIKSA))."<br>";
 			$hasil .= "<strong>Keluhan:</strong> ".$rm->ANAMNESIS."<br><strong>Catatan Fisik:</strong> ".$rm->CATATAN_FISIK."<br><br>";
@@ -73,7 +96,7 @@ class Rekam_Medis extends CI_Controller
 			}
 		}
 
-		if (count($hasil_lab) > 0) {
+		if (count($hasil_lab) > 0 && $is_cetak != "ya") {
 			$hasil .= "<h4>Hasil Lab:</h4>";
 			foreach ($hasil_lab as $hl) {
 				$hasil .= "<a href='".base_url()."/assets/images/hasil_lab/".$hl->FILE_HASIL."' target='_blank'>".$hl->FILE_HASIL."</a><br>";
@@ -81,6 +104,15 @@ class Rekam_Medis extends CI_Controller
 		}
 
 		echo $hasil;
+
+		if($is_cetak != 'tidak') {
+			echo '<br><form method="post" target="_blank" action="'.base_url().'rekam_medis/get">
+        <input type="hidden" name="id_rekam_medis" value="'.$id_rekam_medis.'">
+        <input type="hidden" name="is_cetak" value="ya">
+        <button type="submit" class="btn btn-success"><i class="fa fa-print"></i> Cetak</button>
+    </form>';
+		}
+		echo "</body></html>";
 	}
 
 	public function push($id, $pasien, $poli)
