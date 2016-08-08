@@ -133,6 +133,12 @@
                     						data-target="#myModal" onclick="edit('<?php echo $p->ID_PASIEN; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
+                    					<a href="<?php echo base_url().'pasien/detil/'.$p->ID_PASIEN ?>" class="btn btn-flat btn-info btn-xs">
+                    						<i class="fa fa-user"></i> Detil
+                    					</a>
+                    					<a href="<?php echo base_url().'pasien/cetak_kartu/'.$p->ID_PASIEN ?>" class="btn btn-flat btn-success btn-xs" target="_blank">
+                    						<i class="fa fa-print"></i> Cetak Kartu
+                    					</a>
                 					</td>
                   				</tr>
 				        		<?php endforeach ?>

@@ -64,7 +64,7 @@
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-              <li><a href="<?php echo base_url().'auth/logout'; ?>"><i class="fa fa-logout"></i> Sign Out</a></li>
+              <li><a href="<?php echo base_url().'auth/logout'; ?>"><i class="fa fa-power-off"></i></a></li>
             </ul>
           </div>
         </nav>

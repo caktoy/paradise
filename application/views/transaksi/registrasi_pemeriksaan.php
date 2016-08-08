@@ -56,9 +56,10 @@
 	              		</div>
 	            	</div>
 
-	            	<div class="col-md-offset-2 col-md-10">
+	            	<div class="col-md-offset-2 col-md-4">
 						<button type="submit" class="btn btn-flat btn-success"><i class="fa fa-check"></i> Simpan</button>
 				        <button type="reset" class="btn btn-flat btn-warning"><i class="fa fa-refresh"></i> Reset</button>
+				        <button type="button" class="btn btn-flat btn-info pull-right" id="btn-print-no"><i class="fa fa-print"></i> Cetak No. Antri</button>
 				    </div>
 				</form>
 			</div>
@@ -79,14 +80,17 @@
         		if(result == 0) {
 					$("#nomer_antrian").html("Pilih Poli Terlebih Dahulu");
 					$("#nomer").val(null);
+					$("#btn-print-no").hide();
         		} else {
 					$("#nomer_antrian").html("Nomer Antrian: " + result);
 					$("#nomer").val(result);
+					$("#btn-print-no").show();
         		}
         	},
         	error: function(xhr, status, error) {
         		$("#nomer_antrian").html("Pilih Poli Terlebih Dahulu");
 				$("#nomer").val(null);
+				$("#btn-print-no").hide();
         	}
 		})
 	}
@@ -98,6 +102,13 @@
 		$("#poli").change(function() {
 			var poli = $(this).val();
 			get_antrian(poli);
+		});
+
+		$("#btn-print-no").click(function() {
+			var no = $("#nomer").val();
+			var poli = $("#poli").val();
+			var pasien = $("#pasien").val();
+			window.open("<?php echo base_url().'registrasi_pemeriksaan/cetak_antrian/' ?>" + pasien + "/" + poli + "/" + no, "_blank");
 		});
 
 		$.ajax({

@@ -5,6 +5,20 @@
 class Registrasi_Pemeriksaan extends CI_Controller
 {
 
+	private function dayname($dayname)
+	{
+		switch (strtolower($dayname)) {
+			case 'sun':return 'Minggu';break;
+			case 'mon':return 'Senin';break;
+			case 'tue':return 'Selasa';break;
+			case 'wed':return 'Rabu';break;
+			case 'thu':return 'Kamis';break;
+			case 'fri':return 'Jumat';break;
+			case 'sat':return 'Sabtu';break;
+			default:return 'Minggu';break;
+		}
+	}
+
 	public function index()
 	{
 		date_default_timezone_set("Asia/Jakarta");
@@ -17,7 +31,13 @@ class Registrasi_Pemeriksaan extends CI_Controller
 		$data['kodepasien'] = $this->m_security->gen_ai_id("pasien", "id_pasien");
 		$data['antrian'] = $this->m_antrian->get(array('tgl_antrian' => date('Y-m-d')));
 		$data['pasien'] = $this->m_pasien->get(array());
-		$data['poli'] = $this->m_poli->get(array());
+
+		$hari = $this->dayname(date('D'));
+		$data['poli'] = $this->m_security->query("select distinct dokter.ID_POLI, poli.NM_POLI from dokter 
+			INNER JOIN jadwal_dokter ON jadwal_dokter.ID_DOKTER = dokter.ID_DOKTER 
+			INNER JOIN poli ON dokter.ID_POLI = poli.ID_POLI 
+			WHERE jadwal_dokter.HARI = '".$hari."' AND jadwal_dokter.JADWAL_MULAI <= '".date('H:i:s')."' AND 
+			jadwal_dokter.JADWAL_SELESAI >= '".date('H:i:s')."'");
 		
 		$this->load->view('layout', $data);
 	}
@@ -162,17 +182,17 @@ class Registrasi_Pemeriksaan extends CI_Controller
 				                    				<td align="center">';
 				                    					if ($antri->STATUS_ANTRIAN == "Menunggu") {
 					                    					$hasil .= '<a href="'.base_url().'antrian/push/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-info btn-xs">
-					                    						<i class="fa fa-volume-up"></i> Panggil 
+					                    						<i class="fa fa-volume-up"></i>  
 					                    					</a>
 					                    					<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
-					                    						<i class="fa fa-remove"></i> Batal
+					                    						<i class="fa fa-remove"></i> 
 					                    					</a>';
 					                    				} elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung") {
 					                    					$hasil .= '<a href="'.base_url().'antrian/done/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-success btn-xs" onclick="return confirm(\'Anda yakin?\')">
-					                    						<i class="fa fa-check"></i> Selesai
+					                    						<i class="fa fa-check"></i> 
 					                    					</a>
 					                    					<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
-					                    						<i class="fa fa-remove"></i> Batal
+					                    						<i class="fa fa-remove"></i> 
 					                    					</a>';
 				                    					} else {
 				                    						$hasil .= $antri->STATUS_ANTRIAN;
@@ -210,6 +230,15 @@ class Registrasi_Pemeriksaan extends CI_Controller
 		$data['kota'] = $this->m_kota->get(array());
 		
 		$this->load->view('layout', $data);
+	}
+
+	public function cetak_antrian($id_pasien, $id_poli, $no_antri)
+	{
+		$data['poli'] = $this->m_poli->get(array('poli.id_poli' => $id_poli), 1);
+		$data['pasien'] = $this->m_pasien->get(array('pasien.id_pasien' => $id_pasien), 1);
+		$data['no_antri'] = $no_antri;
+
+		$this->load->view('transaksi/cetak_antrian', $data);
 	}
 }
 ?>

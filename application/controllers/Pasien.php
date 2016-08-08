@@ -90,14 +90,36 @@ class Pasien extends CI_Controller
                 $this->session->set_flashdata('pesan', '<b>Gagal!</b> Data pasien gagal disimpan.');
         }
         
-        redirect('pasien/cetak_kartu/direct/'.$id_pasien);
+        redirect('pasien/detil/'.$id_pasien);
     }
 
-    public function cetak_kartu($tipe, $id_pasien)
+    public function detil($id_pasien)
     {
-        $pasien = $this->m_pasien->get(array('id_pasien' => $id_pasien));
+        $pasien = $this->m_pasien->get(array('id_pasien' => $id_pasien), 1);
+        if (count($pasien) > 0) {
+            $data['aktif'] = "maintenance";
+            $data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Maintenance", "Master Pasien", "Detil Pasien");
+            $data['judul'] = "Detil Pasien";
+            $data['konten'] = "transaksi/detil_pasien";
+            $data['pasien'] = $pasien[0];
+            
+            $this->load->view('layout', $data);
+        } else {
+            redirect('pasien');
+        }
+    }
 
-        print_r($pasien);
+    public function cetak_kartu($id_pasien)
+    {
+        $pasien = $this->m_pasien->get(array('id_pasien' => $id_pasien), 1);
+        if (count($pasien) > 0) {
+            $data['pasien'] = $pasien[0];
+
+            // $this->pdfgenerator->generate('transaksi/kartu_pasien', 'kartu_pasien_'.$id_pasien, 'portrait', 'a4', $data);
+            $this->load->view('transaksi/kartu_pasien', $data);
+        } else {
+            redirect('pasien');
+        }
     }
 
 	public function edit()

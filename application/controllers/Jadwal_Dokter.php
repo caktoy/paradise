@@ -25,13 +25,13 @@ class Jadwal_Dokter extends CI_Controller
         $jadwal_selesai = $this->input->post('jadwal_selesai');
         $hari = $this->input->post('hari');
         
-        $check_jadwal_dokter = $this->m_jadwal_dokter->get(array(
-        	'lower(jadwal_dokter.id_dokter)' => strtolower($id_dokter),
-        	'lower(jadwal_dokter.hari)' => strtolower($hari)
-        	));
-        if(count($check_jadwal_dokter) > 0) {
-            $this->session->set_flashdata('pesan', '<b>Data Sudah Ada!</b> Data jadwal dokter bersangkutan pada hari '.$hari.' sudah ada.');
-        } else {
+        // $check_jadwal_dokter = $this->m_jadwal_dokter->get(array(
+        // 	'lower(jadwal_dokter.id_dokter)' => strtolower($id_dokter),
+        // 	'lower(jadwal_dokter.hari)' => strtolower($hari)
+        // 	));
+        // if(count($check_jadwal_dokter) > 0) {
+        //     $this->session->set_flashdata('pesan', '<b>Data Sudah Ada!</b> Data jadwal dokter bersangkutan pada hari '.$hari.' sudah ada.');
+        // } else {
             $act = $this->m_jadwal_dokter->create(array(
             	'id_jadwal' => $id_jadwal,
             	'id_dokter' => $id_dokter,
@@ -44,7 +44,7 @@ class Jadwal_Dokter extends CI_Controller
 	            $this->session->set_flashdata('pesan', '<b>Berhasil!</b> Data jadwal dokter telah disimpan.');
 	        else
 	            $this->session->set_flashdata('pesan', '<b>Gagal!</b> Data jadwal dokter gagal disimpan.');
-        }
+        // }
         
         redirect('jadwal_dokter');
 	}

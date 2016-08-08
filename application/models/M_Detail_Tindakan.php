@@ -6,7 +6,7 @@ class M_Detail_Tindakan extends CI_Model
 {
 	public function get(array $cond)
 	{
-		$this->db->select("rekam_medis.*, tindakan_icd_9.*, detail_tindakan.BAYAR_TINDAKAN, detail_tindakan.DETAIL_TINDAKAN");
+		$this->db->select("*");
 		$this->db->from("detail_tindakan");
 		$this->db->join("tindakan_icd_9", "detail_tindakan.kode_icd_9 = tindakan_icd_9.kode_icd_9");
 		$this->db->join("rekam_medis", "detail_tindakan.id_rekam_medis = rekam_medis.id_rekam_medis");
