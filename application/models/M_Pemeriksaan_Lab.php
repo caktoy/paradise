@@ -8,6 +8,7 @@ class M_Pemeriksaan_Lab extends CI_Model
 	{
 		$this->db->select("*");
 		$this->db->from("pemeriksaan_lab");
+		$this->db->join("poli", "pemeriksaan_lab.id_poli = poli.id_poli", "left");
 		$this->db->where($cond);
 		return $this->db->get()->result();
 	}

@@ -13,9 +13,6 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- DataTables -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/datatables/dataTables.bootstrap.css">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/skins/_all-skins.min.css">
     <!-- daterange picker -->
     <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/daterangepicker/daterangepicker-bs3.css">
     <!-- iCheck for checkboxes and radio inputs -->
@@ -41,7 +38,7 @@
     <link href="<?php echo base_url(); ?>assets/plugins/jquery.treetable/css/jquery.treetable.css" rel="stylesheet" type="text/css" />
 
     <!-- jQuery 2.1.4 -->
-    <script src="<?php echo base_url(); ?>assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/jQuery/jQuery-2.2.3.min.js"></script>
   </head>
   <body class="skin-green" data-spy="scroll" data-target="#scrollspy">
     <div class="wrapper">
@@ -64,7 +61,48 @@
           <!-- Navbar Right Menu -->
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-              <li><a href="<?php echo base_url().'auth/logout'; ?>"><i class="fa fa-logout"></i> Sign Out</a></li>
+
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="<?php echo base_url().'assets/images/foto/'.$_SESSION['foto'] ?>" class="user-image" alt="User Image">
+                  <span class="hidden-xs"><?php echo $_SESSION['username'] ?></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header">
+                    <img src="<?php echo base_url().'assets/images/foto/'.$_SESSION['foto'] ?>" class="img-circle" alt="User Image">
+
+                    <p><?php echo $_SESSION['username'] ?></p>
+                  </li>
+                  <!-- Menu Body -->
+                  <li class="user-body">
+                    <div class="row">
+                      <div class="col-xs-6 text-center">
+                        <?php echo $_SESSION['userrole'] ?>
+                      </div>
+                      <div class="col-xs-6 text-center">
+                        <?php echo $_SESSION['nmpoli'] ?>
+                      </div>
+                    </div>
+                    <!-- /.row -->
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <!-- <div class="pull-left">
+                      <a href="#" class="btn btn-default btn-flat">Profil</a>
+                    </div> -->
+                    <div>
+                      <a href="<?php echo base_url().'auth/logout'; ?>" class="btn btn-danger btn-flat btn-block" onclick="return confirm('Anda yakin?')">
+                        <i class="fa fa-power-off"></i> Keluar
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <!-- Control Sidebar Toggle Button -->
+
+              <li><a href="<?php echo base_url().'auth/logout'; ?>" onclick="return confirm('Anda yakin?')"><i class="fa fa-power-off"></i></a></li>
             </ul>
           </div>
         </nav>

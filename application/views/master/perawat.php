@@ -32,7 +32,12 @@
 					<div class="form-group">
 	                  	<label class="col-sm-2 control-label" for="tmptlahir">Tempat/Tanggal Lahir</label>
 	                  	<div class="col-sm-3">
-	                    	<input type="text" id="tmptlahir" class="form-control" name="tmptlahir" required>
+	                    	<select id="tmptlahir" class="form-control select2" name="tmptlahir" required>
+	                    		<option></option>
+	                    		<?php foreach ($kota as $k): ?>
+	                    		<option value="<?php echo $k->ID_KOTA ?>"><?php echo $k->NM_KOTA ?></option>
+	                    		<?php endforeach ?>
+	                    	</select>
 	                  	</div>
 	                  	<div class="col-sm-3">
 	                  		<div class="input-group">
@@ -85,9 +90,21 @@
 	                </div>
 
 	                <div class="form-group">
-	                	<label class="col-sm-2 control-label">Poli</label>
+						<label class="col-sm-2 control-label" for="idpoli">Poli</label>
+						<div class="col-sm-4">
+						    <select id="idpoli" class="form-control select2" name="idpoli" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
+	                <div class="form-group">
+	                	<label class="col-sm-2 control-label">Bagian</label>
 	                  	<div class="col-sm-3">
-	                    	<select id="bagperawat" name="bagperawat" class="form-control" required>
+	                    	<select id="bagperawat" name="bagperawat" class="form-control select2" required>
 	                    		<option></option>
 	                    		<option>Administrasi</option>
 	                    		<option>Kasir/Apotik</option>
@@ -119,6 +136,7 @@
 				                <tr>
 					                <th>ID Perawat</th>
 	                        		<th>Nama Perawat</th>
+	                        		<th>Poli</th>
 	                        		<th>Bagian</th>
 	                        		<th>Jenis Kelamin</th>
 	                        		<th>Tempat, Tanggal Lahir</th>
@@ -131,9 +149,10 @@
                   				<tr>
                     				<td><?php echo $p->ID_PERAWAT; ?></td>
                     				<td><?php echo $p->NM_PERAWAT; ?></td>
+                    				<td><?php echo $p->NM_POLI; ?></td>
                     				<td><?php echo $p->BAG_PERAWAT; ?></td>
                     				<td><?php echo $p->JK_PERAWAT; ?></td>
-                    				<td><?php echo $p->TMPT_LHR_PERAWAT.', '.date('d-m-Y', strtotime($p->TGL_LHR_PERAWAT)); ?></td>
+                    				<td><?php echo $p->NM_KOTA.', '.date('d-m-Y', strtotime($p->TGL_LHR_PERAWAT)); ?></td>
                     				<td><?php echo $p->TELP_PERAWAT; ?></td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
@@ -153,7 +172,7 @@
 </div>
 
 <!--MODAL-->
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myModalLabel">
+<div class="modal fade" role="dialog" id="myModal" aria-labelledby="myModalLabel">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -177,8 +196,13 @@
 					
 					<div class="form-group">
 	                  	<label class="col-sm-3 control-label" for="e-tmptlahir">Tempat/Tanggal Lahir</label>
-	                  	<div class="col-sm-3">
-	                    	<input type="text" id="e-tmptlahir" class="form-control" name="e-tmptlahir" required>
+	                  	<div class="col-sm-5">
+	                    	<select id="e-tmptlahir" class="form-control select2" name="e-tmptlahir" style="width: 100%;" required>
+	                    		<option></option>
+	                    		<?php foreach ($kota as $k): ?>
+	                    		<option value="<?php echo $k->ID_KOTA ?>"><?php echo $k->NM_KOTA ?></option>
+	                    		<?php endforeach ?>
+	                    	</select>
 	                  	</div>
 	                  	<div class="col-sm-4">
 	                  		<div class="input-group">
@@ -231,6 +255,18 @@
 	                </div>
 
 	                <div class="form-group">
+						<label class="col-sm-3 control-label" for="e-idpoli">Poli</label>
+						<div class="col-sm-6">
+						    <select id="e-idpoli" class="form-control select2" name="e-idpoli" style="width: 100%;" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
+	                <div class="form-group">
 	                	<label class="col-sm-3 control-label">Bagian</label>
 	                  	<div class="col-sm-6">
 	                    	<select id="e-bagperawat" name="e-bagperawat" class="form-control">
@@ -264,7 +300,7 @@
 			success: function(result) {
 				console.log(result);
 				$('#e-namaperawat').val(result[0].NM_PERAWAT);
-				$('#e-tmptlahir').val(result[0].TMPT_LHR_PERAWAT);
+				$('#e-tmptlahir').val(result[0].ID_KOTA);
 				$('#e-tgllahir').val(result[0].TGL_LHR_PERAWAT);
 
 				// if(result[0].JK_PERAWAT === "Laki-laki")
@@ -274,6 +310,7 @@
 
 				$('#e-almtperawat').val(result[0].ALAMAT_PERAWAT);
 				$('#e-telpperawat').val(result[0].TELP_PERAWAT);
+				$('#e-idpoli').val(result[0].ID_POLI);
 				$('#e-bagperawat').val(result[0].BAG_PERAWAT);
 			},
 			error: function(xhr, status, error) {

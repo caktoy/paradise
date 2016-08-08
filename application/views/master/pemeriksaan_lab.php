@@ -30,6 +30,18 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-2 control-label" for="id_poli">Poli</label>
+						<div class="col-sm-4">
+						    <select id="id_poli" class="form-control select2" name="id_poli" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-2 control-label" for="harga">Harga Pemeriksaan</label>
 						<div class="col-sm-4">
 						    <div class="input-group">
@@ -60,10 +72,11 @@
 				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 		    		<div class="row">
 			    	<div class="col-sm-12">
-			        	<table id="example1" class="table table-bordered table-striped">
+			        	<table id="table1" class="table table-bordered table-striped">
 				            <thead>
 				                <tr>
 					                <th>Kode Lab</th>
+					                <th>Poli</th>
 					                <th>Nama Lab</th>
 					                <th>Harga Pemeriksaan</th>
 					                <th style="width:15%;">Aksi</th>
@@ -73,11 +86,12 @@
 				        		<?php foreach ($pemeriksaan_lab as $pl): ?>
                   				<tr>
                     				<td><?php echo $pl->ID_LAB; ?></td>
+                    				<td><?php echo $pl->NM_POLI; ?></td>
                     				<td><?php echo $pl->LAB; ?></td>
                     				<td><?php echo number_format($pl->HARGA, 2, ",", "."); ?></td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
-                    						data-target="#myModal" onclick="edit('<?php echo $pl->ID_LAB; ?>', 
+                    						data-target="#myModal" onclick="edit('<?php echo $pl->ID_LAB; ?>', '<?php echo $pl->ID_POLI; ?>', 
                     						'<?php echo $pl->LAB; ?>', <?php echo $pl->HARGA; ?>)">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
@@ -104,22 +118,34 @@
 			<div class="modal-body">     
 				<form method="POST" action="<?php echo base_url(); ?>pemeriksaan_lab/edit" class="form-horizontal">
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="e-id_lab">Kode Lab</label>
-						<div class="col-sm-10">
+						<label class="col-sm-3 control-label" for="e-id_lab">Kode Lab</label>
+						<div class="col-sm-9">
 							<input type="text" id="e-id_lab" class="form-control" name="e-id_lab" readonly required />
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="e-lab">Nama Lab</label>
-						<div class="col-sm-10">
+						<label class="col-sm-3 control-label" for="e-lab">Nama Lab</label>
+						<div class="col-sm-9">
 						    <input type="type" id="e-lab" class="form-control" name="e-lab" required>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="e-harga">Harga Pemeriksaan</label>
-						<div class="col-sm-10">
+						<label class="col-sm-3 control-label" for="e-id_poli">Poli</label>
+						<div class="col-sm-9">
+						    <select id="e-id_poli" class="form-control select2" name="e-id_poli" style="width: 100%;" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="e-harga">Harga Pemeriksaan</label>
+						<div class="col-sm-9">
 						    <div class="input-group">
 		                  		<div class="input-group-addon">
 		                    		<i class="">Rp</i>
@@ -141,9 +167,46 @@
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, nama, harga) {
+	function edit(id, poli, nama, harga) {
 		$('#e-id_lab').val(id);
+		$('#e-id_poli').val(poli);
 		$('#e-lab').val(nama);
 		$('#e-harga').val(harga);
 	}
+
+	$(document).ready(function() {
+	    var table = $('#table1').DataTable({
+	        "columnDefs": [
+	            { "visible": false, "targets": 1 }
+	        ],
+	        "order": [[ 1, 'asc' ]],
+	        "displayLength": 25,
+	        "drawCallback": function ( settings ) {
+	            var api = this.api();
+	            var rows = api.rows( {page:'current'} ).nodes();
+	            var last=null;
+	 
+	            api.column(1, {page:'current'} ).data().each( function ( group, i ) {
+	                if ( last !== group ) {
+	                    $(rows).eq( i ).before(
+	                        '<tr class="group" style="background-color: #E0E0E0;font-style: italic;font-weight: bold;"><td colspan="4">'+group+'</td></tr>'
+	                    );
+	 
+	                    last = group;
+	                }
+	            } );
+	        }
+	    } );
+	 
+	    // Order by the grouping
+	    $('#table1 tbody').on( 'click', 'tr.group', function () {
+	        var currentOrder = table.order()[0];
+	        if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
+	            table.order( [ 2, 'desc' ] ).draw();
+	        }
+	        else {
+	            table.order( [ 2, 'asc' ] ).draw();
+	        }
+	    } );
+	} );
 </script>

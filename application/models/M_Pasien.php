@@ -8,6 +8,7 @@ class M_Pasien extends CI_Model
 	{
 		$this->db->select("*");
 		$this->db->from("pasien");
+		$this->db->join("kota", "pasien.id_kota = kota.id_kota", "left");
 		$this->db->where($cond);
 		return $this->db->get()->result();
 	}

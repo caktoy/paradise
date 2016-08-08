@@ -143,6 +143,7 @@ $autoload['model'] = array(
 	'm_hasil_lab',
 	'm_jadwal_dokter',
 	'm_jenis_obat',
+	'm_kota',
 	'm_nomenklatur',
 	'm_obat',
 	'm_odontogram',

@@ -12,6 +12,7 @@ class Tindakan_ICD_9 extends CI_Controller
 		$data['konten'] = "master/tindakan_icd_9";
 		$data['kodetindakan_icd_9'] = $this->m_security->gen_non_ai_id("ICD09", "tindakan_icd_9", "kode_icd_9", 5);
 		$data['tindakan_icd_9'] = $this->m_tindakan_icd_9->get(array());
+		$data['poli'] = $this->m_poli->get(array());
 		
 		$this->load->view('layout', $data);
 	}
@@ -19,6 +20,7 @@ class Tindakan_ICD_9 extends CI_Controller
 	public function tambah()
 	{
 		$kode_icd_9 = $this->input->post('kode_icd_9');
+		$id_poli = $this->input->post('id_poli');
         $nm_icd_9 = $this->input->post('nm_icd_9');
         $ket_icd_9 = $this->input->post('ket_icd_9');
         $harga_tindakan = $this->input->post('harga_tindakan');
@@ -29,6 +31,7 @@ class Tindakan_ICD_9 extends CI_Controller
         } else {
             $act = $this->m_tindakan_icd_9->create(array(
             	'kode_icd_9' => $kode_icd_9,
+            	'id_poli' => $id_poli,
             	'nm_icd_9' => $nm_icd_9,
             	'ket_icd_9' => $ket_icd_9,
             	'harga_tindakan' => $harga_tindakan
@@ -46,6 +49,7 @@ class Tindakan_ICD_9 extends CI_Controller
 	public function edit()
 	{
 		$kode_icd_9 = $this->input->post('e-kode_icd_9');
+		$id_poli = $this->input->post('e-id_poli');
         $nm_icd_9 = $this->input->post('e-nm_icd_9');
         $ket_icd_9 = $this->input->post('e-ket_icd_9');
         $harga_tindakan = $this->input->post('e-harga_tindakan');
@@ -53,6 +57,7 @@ class Tindakan_ICD_9 extends CI_Controller
 		$act = $this->m_tindakan_icd_9->patch(
 			array('kode_icd_9' => $kode_icd_9),
 			array(
+				'id_poli' => $id_poli,
 				'nm_icd_9' => $nm_icd_9,
             	'ket_icd_9' => $ket_icd_9,
             	'harga_tindakan' => $harga_tindakan

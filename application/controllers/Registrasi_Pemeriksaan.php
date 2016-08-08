@@ -109,5 +109,107 @@ class Registrasi_Pemeriksaan extends CI_Controller
 
         redirect('registrasi_pemeriksaan');
 	}
+
+	public function tbl_antrian()
+	{
+		$poli = $this->m_poli->get(array());
+
+		$hasil = "";
+		foreach ($poli as $p) {
+			$hasil .= '<div class="col-xs-4 col-md-4">
+				<div class="box box-success">
+					<div class="box-header with-border">
+						<h3 class="box-title">Antrian '.$p->NM_POLI.'</h3>
+					</div>
+
+					<div class="box-body">
+						<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+				    		<div class="row">
+						    	<div class="col-sm-12">
+						        	<table id="table-'.$p->ID_POLI.'" class="table table-bordered table-striped">
+							            <thead>
+							                <tr>
+								                <th width="25px">No.</th>
+								                <th>#Pasien</th>
+								                <th>Nama</th>
+								                <th>Status</th>
+								                <th style="width:15%;">Aksi</th>
+								            </tr>
+							            </thead>
+							        	<tbody>';
+							        		$antrian = $this->m_antrian->get(
+							        			array('tgl_antrian' => date('Y-m-d'), 'antrian.id_poli' => $p->ID_POLI)
+							        			);
+							        		foreach ($antrian as $antri) {
+				                  				$hasil .= '<tr>
+				                    				<td align="right">'.$antri->ID_ANTRIAN.'.</td>
+				                    				<td>'.$antri->ID_PASIEN.'</td>
+				                    				<td>'.$antri->NM_PASIEN.'</td>';
+
+				                    				$label_type = "label-info";
+				                    				if($antri->STATUS_ANTRIAN == "Menunggu")
+				                    					$label_type = "label-info";
+				                    				elseif($antri->STATUS_ANTRIAN == "Selesai")
+				                    					$label_type = "label-success";
+				                    				elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung")
+				                    					$label_type = "label-warning";
+				                    				elseif($antri->STATUS_ANTRIAN == "Batal")
+				                    					$label_type = "label-danger";
+
+				                    				$hasil .= '<td align="center">
+				                    					<span class="label '.$label_type.'">'.$antri->STATUS_ANTRIAN.'</span>
+			                    					</td>
+				                    				<td align="center">';
+				                    					if ($antri->STATUS_ANTRIAN == "Menunggu") {
+					                    					$hasil .= '<a href="'.base_url().'antrian/push/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-info btn-xs">
+					                    						<i class="fa fa-volume-up"></i> Panggil 
+					                    					</a>
+					                    					<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
+					                    						<i class="fa fa-remove"></i> Batal
+					                    					</a>';
+					                    				} elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung") {
+					                    					$hasil .= '<a href="'.base_url().'antrian/done/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-success btn-xs" onclick="return confirm(\'Anda yakin?\')">
+					                    						<i class="fa fa-check"></i> Selesai
+					                    					</a>
+					                    					<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
+					                    						<i class="fa fa-remove"></i> Batal
+					                    					</a>';
+				                    					} else {
+				                    						$hasil .= $antri->STATUS_ANTRIAN;
+				                    					}
+				                					$hasil .='</td>
+				                  				</tr>';
+			                  				}
+					                   $hasil .= '</tbody>
+			                		</table>
+					       	 	</div>
+				    		</div>
+						</div>
+					</div>
+				</div>
+			</div>';
+		}
+
+		foreach ($poli as $p) {
+			$hasil .= '<script>';
+			$hasil .= '$("#table-'.$p->ID_POLI.'").DataTable();';
+			$hasil .= '</script>';
+		}
+
+		echo $hasil;
+	}
+
+	public function add_pasien_baru()
+	{
+		$data['aktif'] = "transaksi";
+		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Registrasi Pemeriksaan", "Tambah Pasien");
+		$data['judul'] = "Registrasi Pasien Baru";
+		$data['konten'] = "transaksi/pasien_baru";
+		$data['kodepasien'] = $this->m_security->gen_ai_id("pasien", "id_pasien");
+		$data['pasien'] = $this->m_pasien->get(array());
+		$data['kota'] = $this->m_kota->get(array());
+		
+		$this->load->view('layout', $data);
+	}
 }
 ?>

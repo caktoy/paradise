@@ -56,5 +56,12 @@ class Poli extends CI_Controller
 
         redirect('poli');
 	}
+
+	public function get()
+	{
+        $poli = $this->m_poli->get(array());
+        header("Content-Type: application/json");
+        echo json_encode($poli);
+	}
 }
 ?>

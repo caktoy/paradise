@@ -32,7 +32,12 @@
 					<div class="form-group">
 	                  	<label class="col-sm-2 control-label" for="tmpt_lhr_pasien">Tempat/Tanggal Lahir</label>
 	                  	<div class="col-sm-3">
-	                    	<input type="text" id="tmpt_lhr_pasien" class="form-control" name="tmpt_lhr_pasien">
+	                    	<select id="tmpt_lhr_pasien" class="form-control select2" name="tmpt_lhr_pasien" required>
+	                    		<option></option>
+	                    		<?php foreach ($kota as $k): ?>
+	                    		<option value="<?php echo $k->ID_KOTA ?>"><?php echo $k->NM_KOTA ?></option>
+	                    		<?php endforeach ?>
+	                    	</select>
 	                  	</div>
 	                  	<div class="col-sm-3">
 	                  		<div class="input-group">
@@ -116,8 +121,7 @@
                     				<td><?php echo $p->JK_PASIEN; ?></td>
                     				<td>
                     					<?php 
-                    					echo $p->TMPT_LHR_PASIEN==null?'':$p->TMPT_LHR_PASIEN;
-                    					if (!is_null($p->TMPT_LHR_PASIEN) && !is_null($p->TMPT_LHR_PASIEN)) echo ", ";
+                    					echo $p->NM_KOTA.", ";
                     					echo $p->TGL_LHR_PASIEN==null?'':date('d-m-Y', strtotime($p->TGL_LHR_PASIEN)); 
                     					?>
                 					</td>
@@ -167,7 +171,12 @@
 					<div class="form-group">
 	                  	<label class="col-sm-2 control-label" for="e-tmpt_lhr_pasien">Tempat/Tanggal Lahir</label>
 	                  	<div class="col-sm-3">
-	                    	<input type="text" id="e-tmpt_lhr_pasien" class="form-control" name="e-tmpt_lhr_pasien">
+	                    	<select id="e-tmpt_lhr_pasien" class="form-control select2" name="e-tmpt_lhr_pasien" required>
+	                    		<option></option>
+	                    		<?php foreach ($kota as $k): ?>
+	                    		<option value="<?php echo $k->ID_KOTA ?>"><?php echo $k->NM_KOTA ?></option>
+	                    		<?php endforeach ?>
+	                    	</select>
 	                  	</div>
 	                  	<div class="col-sm-3">
 	                  		<div class="input-group">
@@ -234,7 +243,7 @@
 			success: function(result) {
 				console.log(result);
 				$('#e-nm_pasien').val(result[0].NM_PASIEN);
-				$('#e-tmpt_lhr_pasien').val(result[0].TMPT_LHR_PASIEN);
+				$('#e-tmpt_lhr_pasien').val(result[0].ID_KOTA);
 				$('#e-tgl_lhr_pasien').val(result[0].TGL_LHR_PASIEN);
 				$('#e-almt_pasien').val(result[0].ALMT_PASIEN);
 				$('#e-telp_pasien').val(result[0].TELP_PASIEN);

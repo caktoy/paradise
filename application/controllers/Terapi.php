@@ -12,6 +12,7 @@ class Terapi extends CI_Controller
 		$data['konten'] = "master/terapi";
 		$data['kodeterapi'] = $this->m_security->gen_non_ai_id("TR", "terapi", "id_terapi", 3);
 		$data['terapi'] = $this->m_terapi->get(array());
+		$data['poli'] = $this->m_poli->get(array());
 		
 		$this->load->view('layout', $data);
 	}
@@ -19,6 +20,7 @@ class Terapi extends CI_Controller
 	public function tambah()
 	{
 		$id_terapi = $this->input->post('id_terapi');
+		$id_poli = $this->input->post('id_poli');
         $nm_terapi = $this->input->post('nm_terapi');
         $ket_terapi = $this->input->post('ket_terapi');
         $harga_terapi = $this->input->post('harga_terapi');
@@ -29,6 +31,7 @@ class Terapi extends CI_Controller
         } else {
             $act = $this->m_terapi->create(array(
             	'id_terapi' => $id_terapi,
+            	'id_poli' => $id_poli,
             	'nm_terapi' => $nm_terapi,
             	'ket_terapi' => $ket_terapi,
             	'harga_terapi' => $harga_terapi
@@ -46,6 +49,7 @@ class Terapi extends CI_Controller
 	public function edit()
 	{
 		$id_terapi = $this->input->post('e-id_terapi');
+		$id_poli = $this->input->post('e-id_poli');
         $nm_terapi = $this->input->post('e-nm_terapi');
         $ket_terapi = $this->input->post('e-ket_terapi');
         $harga_terapi = $this->input->post('e-harga_terapi');
@@ -53,6 +57,7 @@ class Terapi extends CI_Controller
 		$act = $this->m_terapi->patch(
 			array('id_terapi' => $id_terapi),
 			array(
+				'id_poli' => $id_poli,
 				'nm_terapi' => $nm_terapi,
             	'ket_terapi' => $ket_terapi,
             	'harga_terapi' => $harga_terapi

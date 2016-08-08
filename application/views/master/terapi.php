@@ -37,6 +37,18 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-2 control-label" for="id_poli">Poli</label>
+						<div class="col-sm-4">
+						    <select id="id_poli" class="form-control select2" name="id_poli" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-2 control-label" for="harga_terapi">Harga Terapi</label>
 						<div class="col-sm-4">
 						    <div class="input-group">
@@ -67,10 +79,11 @@
 				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 		    		<div class="row">
 			    	<div class="col-sm-12">
-			        	<table id="example1" class="table table-bordered table-striped">
+			        	<table id="table1" class="table table-bordered table-striped">
 				            <thead>
 				                <tr>
 					                <th>Kode</th>
+					                <th>Poli</th>
 					                <th>Terapi</th>
 					                <th>Keterangan</th>
 					                <th>Harga</th>
@@ -81,14 +94,14 @@
 				        		<?php foreach ($terapi as $t): ?>
                   				<tr>
                     				<td><?php echo $t->ID_TERAPI; ?></td>
+                    				<td><?php echo $t->NM_POLI; ?></td>
                     				<td><?php echo $t->NM_TERAPI; ?></td>
                     				<td><?php echo $t->KET_TERAPI; ?></td>
                     				<td>Rp<?php echo number_format($t->HARGA_TERAPI, 2, ",", "."); ?></td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
-                    						data-target="#myModal" onclick="edit('<?php echo $t->ID_TERAPI; ?>', 
-                    						'<?php echo $t->NM_TERAPI; ?>', '<?php echo $t->KET_TERAPI; ?>', 
-                    						'<?php echo $t->HARGA_TERAPI; ?>')">
+                    						data-target="#myModal" onclick="edit('<?php echo $t->ID_TERAPI; ?>', '<?php echo $t->ID_POLI; ?>', 
+                    						'<?php echo $t->NM_TERAPI; ?>', '<?php echo $t->KET_TERAPI; ?>', '<?php echo $t->HARGA_TERAPI; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
                 					</td>
@@ -135,6 +148,18 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-3 control-label" for="e-id_poli">Poli</label>
+						<div class="col-sm-9">
+						    <select id="e-id_poli" class="form-control select2" name="e-id_poli" style="width: 100%;" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-3 control-label" for="e-harga_terapi">Harga Terapi</label>
 						<div class="col-sm-9">
 						    <div class="input-group">
@@ -158,10 +183,47 @@
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, nama, ket, harga) {
+	function edit(id, poli, nama, ket, harga) {
 		$('#e-id_terapi').val(id);
+		$('#e-id_poli').val(poli);
 		$('#e-nm_terapi').val(nama);
 		$('#e-ket_terapi').val(ket);
 		$('#e-harga_terapi').val(harga);
 	}
+
+	$(document).ready(function() {
+	    var table = $('#table1').DataTable({
+	        "columnDefs": [
+	            { "visible": false, "targets": 1 }
+	        ],
+	        "order": [[ 1, 'asc' ]],
+	        "displayLength": 25,
+	        "drawCallback": function ( settings ) {
+	            var api = this.api();
+	            var rows = api.rows( {page:'current'} ).nodes();
+	            var last=null;
+	 
+	            api.column(1, {page:'current'} ).data().each( function ( group, i ) {
+	                if ( last !== group ) {
+	                    $(rows).eq( i ).before(
+	                        '<tr class="group" style="background-color: #E0E0E0;font-style: italic;font-weight: bold;"><td colspan="5">'+group+'</td></tr>'
+	                    );
+	 
+	                    last = group;
+	                }
+	            } );
+	        }
+	    } );
+	 
+	    // Order by the grouping
+	    $('#table1 tbody').on( 'click', 'tr.group', function () {
+	        var currentOrder = table.order()[0];
+	        if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
+	            table.order( [ 2, 'desc' ] ).draw();
+	        }
+	        else {
+	            table.order( [ 2, 'asc' ] ).draw();
+	        }
+	    } );
+	} );
 </script>

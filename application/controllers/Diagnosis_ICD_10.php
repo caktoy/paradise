@@ -12,6 +12,7 @@ class Diagnosis_ICD_10 extends CI_Controller
 		$data['konten'] = "master/diagnosis_icd_10";
 		$data['kodediagnosis_icd_10'] = $this->m_security->gen_non_ai_id("ICD10", "diagnosa_icd_10", "kode_icd_10", 5);
 		$data['diagnosis_icd_10'] = $this->m_diagnosa_icd_10->get(array());
+		$data['poli'] = $this->m_poli->get(array());
 		
 		$this->load->view('layout', $data);
 	}
@@ -19,6 +20,7 @@ class Diagnosis_ICD_10 extends CI_Controller
 	public function tambah()
 	{
 		$kode_icd_10 = $this->input->post('kode_icd_10');
+        $id_poli = $this->input->post('id_poli');
         $nm_icd_10 = $this->input->post('nm_icd_10');
         $ket_icd_10 = $this->input->post('ket_icd_10');
         
@@ -28,6 +30,7 @@ class Diagnosis_ICD_10 extends CI_Controller
         } else {
             $act = $this->m_diagnosa_icd_10->create(array(
             	'kode_icd_10' => $kode_icd_10,
+            	'id_poli' => $id_poli,
             	'nm_icd_10' => $nm_icd_10,
             	'ket_icd_10' => $ket_icd_10
             	));
@@ -44,12 +47,16 @@ class Diagnosis_ICD_10 extends CI_Controller
 	public function edit()
 	{
 		$kode_icd_10 = $this->input->post('e-kode_icd_10');
+		$id_poli = $this->input->post('e-id_poli');
         $nm_icd_10 = $this->input->post('e-nm_icd_10');
         $ket_icd_10 = $this->input->post('e-ket_icd_10');
 
 		$act = $this->m_diagnosa_icd_10->patch(
 			array('kode_icd_10' => $kode_icd_10),
-			array('nm_icd_10' => $nm_icd_10, 'ket_icd_10' => $ket_icd_10)
+			array(
+				'id_poli' => $id_poli, 
+				'nm_icd_10' => $nm_icd_10, 
+				'ket_icd_10' => $ket_icd_10)
 			);
 
 		if ($act > 0) 

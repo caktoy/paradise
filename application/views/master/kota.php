@@ -10,21 +10,21 @@
 	<div class="col-xs-12">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Input Data Poli</h3>
+				<h3 class="box-title">Input Data Kota</h3>
 			</div>
 			<!--Body Content-->
 			<div class="box-body">
-				<form action="<?php echo base_url().'poli/tambah'; ?>" method="POST" class="form-horizontal" style="margin-top:10px">
+				<form action="<?php echo base_url().'kota/tambah'; ?>" method="POST" class="form-horizontal" style="margin-top:10px">
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="id">Kode Poli</label>
+						<label class="col-sm-2 control-label" for="id">Kode Kota</label>
 						<div class="col-sm-4">
-							<input type="text" id="id" class="form-control" name="idpoli" value="<?php echo $kodepoli; ?>" readonly required />
+							<input type="text" id="id" class="form-control" name="id_kota" value="<?php echo $kodekota; ?>" readonly required />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">Nama Poli</label>
+						<label class="col-sm-2 control-label" for="nama">Nama Kota</label>
 						<div class="col-sm-4">
-						    <input type="type" class="form-control" name="namapoli" required autofocus>
+						    <input type="type" id="nama" class="form-control" name="nm_kota" required autofocus>
 						</div>
 					</div>
 					<div class="col-md-offset-2 col-md-5">
@@ -39,7 +39,7 @@
 	<div class="col-xs-12">
 		<div class="box box-success">
 			<div class="box-header with-border">
-				<h3 class="box-title">Data Poli</h3>
+				<h3 class="box-title">Data Kota</h3>
 			</div>
 
 			<div class="box-body">
@@ -49,19 +49,19 @@
 			        	<table id="example1" class="table table-bordered table-striped">
 				            <thead>
 				                <tr>
-					                <th>Kode Poli</th>
-					                <th>Nama Poli</th>
+					                <th>Kode Kota</th>
+					                <th>Nama Kota</th>
 					                <th style="width:15%;">Aksi</th>
 					            </tr>
 				            </thead>
 				        	<tbody>
-				        		<?php foreach ($poli as $poli): ?>
+				        		<?php foreach ($kota as $k): ?>
                   				<tr>
-                    				<td><?php echo $poli->ID_POLI; ?></td>
-                    				<td><?php echo $poli->NM_POLI; ?></td>
+                    				<td><?php echo $k->ID_KOTA; ?></td>
+                    				<td><?php echo $k->NM_KOTA; ?></td>
                     				<td align="center">
                     					<button type="button" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
-                    						data-target="#myModal" onclick="edit('<?php echo $poli->ID_POLI; ?>', '<?php echo $poli->NM_POLI; ?>')">
+                    						data-target="#myModal" onclick="edit('<?php echo $k->ID_KOTA; ?>', '<?php echo $k->NM_KOTA; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
                 					</td>
@@ -82,19 +82,19 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="exampleModalLabel">Ubah Data Poli</h4>
+				<h4 class="modal-title" id="exampleModalLabel">Ubah Data Kota</h4>
 			</div>
 			<div class="modal-body">     
-				<form method="POST" action="<?php echo base_url(); ?>poli/edit" class="form-horizontal">
+				<form method="POST" action="<?php echo base_url(); ?>kota/edit" class="form-horizontal">
 					<div class="form-group">
-	              		<label for="message-text" class="col-sm-3 control-label">Kode Poli</label>
+	              		<label for="message-text" class="col-sm-3 control-label">Kode Kota</label>
 	              		<div class="col-sm-9">
 	                		<input type="text" class="form-control" name="editkode" id="editkode" readonly required>
 	                    </div>
 	            	</div>
 
 	            	<div class="form-group">
-	              		<label for="message-text" class="col-sm-3 control-label">Nama Poli</label>
+	              		<label for="message-text" class="col-sm-3 control-label">Nama Kota</label>
 	              		<div class="col-sm-9">
 	                		<input type="text" class="form-control" name="editnama" id="editnama" required>
 	              		</div>

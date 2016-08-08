@@ -12,7 +12,8 @@ class M_Antrian extends CI_Model
 		$this->db->join("pasien", "antrian.id_pasien = pasien.id_pasien");
 		$this->db->where($cond);
 		$this->db->order_by("id_antrian", "asc");
-		$this->db->limit($limit);
+		if ($limit != null) 
+			$this->db->limit($limit);
 		return $this->db->get()->result();
 	}
 

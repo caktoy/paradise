@@ -12,6 +12,8 @@ class Perawat extends CI_Controller
 		$data['konten'] = "master/perawat";
 		$data['kodeperawat'] = $this->m_security->gen_non_ai_id("2", "perawat", "id_perawat", 4);
 		$data['perawat'] = $this->m_perawat->get(array());
+		$data['poli'] = $this->m_poli->get(array());
+		$data['kota'] = $this->m_kota->get(array());
 		
 		$this->load->view('layout', $data);
 	}
@@ -19,6 +21,7 @@ class Perawat extends CI_Controller
 	public function tambah()
 	{
 		$id_perawat = $this->input->post('idperawat');
+		$id_poli = $this->input->post('idpoli');
         $nm_perawat = $this->input->post('namaperawat');
         $tmpt_lhr_perawat = $this->input->post('tmptlahir');
         $tgl_lhr_perawat = $this->input->post('tgllahir');
@@ -47,9 +50,10 @@ class Perawat extends CI_Controller
 	        } else {
 	            $act = $this->m_perawat->create(array(
 	            	'id_perawat' => $id_perawat,
+	            	'id_poli' => $id_poli,
+	            	'id_kota' => $tmpt_lhr_perawat,
 	            	'bag_perawat' => $bag_perawat,
 	            	'nm_perawat' => $nm_perawat,
-	            	'tmpt_lhr_perawat' => $tmpt_lhr_perawat,
 	            	'tgl_lhr_perawat' => $tgl_lhr_perawat,
 	            	'jk_perawat' => $jk_perawat,
 	            	'alamat_perawat' => $almt_perawat,
@@ -71,6 +75,7 @@ class Perawat extends CI_Controller
 	public function edit()
 	{
 		$id_perawat = $this->input->post('e-idperawat');
+		$id_poli = $this->input->post('e-idpoli');
 		$id_poli = $this->input->post('e-idpoli');
         $nm_perawat = $this->input->post('e-namaperawat');
         $tmpt_lhr_perawat = $this->input->post('e-tmptlahir');
@@ -100,9 +105,10 @@ class Perawat extends CI_Controller
 		$act = $this->m_perawat->patch(
 			array('id_perawat' => $id_perawat),
 			array(
+				'id_poli' => $id_poli,
+            	'id_kota' => $tmpt_lhr_perawat,
 				'bag_perawat' => $bag_perawat,
             	'nm_perawat' => $nm_perawat,
-            	'tmpt_lhr_perawat' => $tmpt_lhr_perawat,
             	'tgl_lhr_perawat' => $tgl_lhr_perawat,
             	'jk_perawat' => $jk_perawat,
             	'alamat_perawat' => $almt_perawat,

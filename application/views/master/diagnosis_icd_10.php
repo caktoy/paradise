@@ -36,6 +36,18 @@
 						</div>
 					</div>
 
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="id_poli">Poli</label>
+						<div class="col-sm-4">
+						    <select id="id_poli" class="form-control select2" name="id_poli" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
 					<div class="col-md-offset-2 col-md-5">
 				        <button type="submit" class="btn btn-flat btn-success"><i class="fa fa-plus"></i> Insert</button>&nbsp;
 				        <button type="reset" class="btn btn-flat btn-default"><i class="fa fa-refresh"></i> Cancel</button>
@@ -55,10 +67,11 @@
 				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 		    		<div class="row">
 			    	<div class="col-sm-12">
-			        	<table id="example1" class="table table-bordered table-striped">
+			        	<table id="table1" class="table table-bordered table-striped">
 				            <thead>
 				                <tr>
 					                <th>Kode</th>
+					                <th>Poli</th>
 					                <th>Diagnosis</th>
 					                <th>Keterangan</th>
 					                <th style="width:15%;">Aksi</th>
@@ -68,11 +81,12 @@
 				        		<?php foreach ($diagnosis_icd_10 as $icd_10): ?>
                   				<tr>
                     				<td><?php echo $icd_10->KODE_ICD_10; ?></td>
+                    				<td><?php echo $icd_10->NM_POLI; ?></td>
                     				<td><?php echo $icd_10->NM_ICD_10; ?></td>
                     				<td><?php echo $icd_10->KET_ICD_10; ?></td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
-                    						data-target="#myModal" onclick="edit('<?php echo $icd_10->KODE_ICD_10; ?>', 
+                    						data-target="#myModal" onclick="edit('<?php echo $icd_10->KODE_ICD_10; ?>', '<?php echo $icd_10->ID_POLI; ?>', 
                     						'<?php echo $icd_10->NM_ICD_10; ?>', '<?php echo $icd_10->KET_ICD_10; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
@@ -90,7 +104,7 @@
 </div>
 
 <!--MODAL-->
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myModalLabel">
+<div class="modal fade" role="dialog" id="myModal" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -118,6 +132,18 @@
 						    <textarea id="e-ket_icd_10" class="form-control" name="e-ket_icd_10"></textarea>
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="e-id_poli">Poli</label>
+						<div class="col-sm-9">
+						    <select id="e-id_poli" class="form-control select2" name="e-id_poli" style="width: 100%;" required>
+						    	<option></option>
+						    	<?php foreach ($poli as $p): ?>
+						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
 	        
 					<div class="modal-footer">
 						<button type="button" class="btn btn-flat btn-danger" data-dismiss="modal"><i class="fa fa-remove"></i> Close</button>
@@ -131,9 +157,46 @@
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, nama, ket) {
+	function edit(id, poli, nama, ket) {
 		$('#e-kode_icd_10').val(id);
+		$('#e-id_poli').val(poli);
 		$('#e-nm_icd_10').val(nama);
 		$('#e-ket_icd_10').val(ket);
 	}
+
+	$(document).ready(function() {
+	    var table = $('#table1').DataTable({
+	        "columnDefs": [
+	            { "visible": false, "targets": 1 }
+	        ],
+	        "order": [[ 1, 'asc' ]],
+	        "displayLength": 25,
+	        "drawCallback": function ( settings ) {
+	            var api = this.api();
+	            var rows = api.rows( {page:'current'} ).nodes();
+	            var last=null;
+	 
+	            api.column(1, {page:'current'} ).data().each( function ( group, i ) {
+	                if ( last !== group ) {
+	                    $(rows).eq( i ).before(
+	                        '<tr class="group" style="background-color: #E0E0E0;font-style: italic;font-weight: bold;"><td colspan="5">'+group+'</td></tr>'
+	                    );
+	 
+	                    last = group;
+	                }
+	            } );
+	        }
+	    } );
+	 
+	    // Order by the grouping
+	    $('#table1 tbody').on( 'click', 'tr.group', function () {
+	        var currentOrder = table.order()[0];
+	        if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
+	            table.order( [ 2, 'desc' ] ).draw();
+	        }
+	        else {
+	            table.order( [ 2, 'asc' ] ).draw();
+	        }
+	    } );
+	} );
 </script>

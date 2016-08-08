@@ -12,6 +12,7 @@ class Dokter extends CI_Controller
 		$data['konten'] = "master/dokter";
 		$data['kodedokter'] = $this->m_security->gen_non_ai_id("1", "dokter", "id_dokter", 4);
 		$data['poli'] = $this->m_poli->get(array());
+		$data['kota'] = $this->m_kota->get(array());
 		$data['dokter'] = $this->m_dokter->get(array());
 		
 		$this->load->view('layout', $data);
@@ -21,8 +22,8 @@ class Dokter extends CI_Controller
 	{
 		$id_dokter = $this->input->post('iddokter');
 		$id_poli = $this->input->post('idpoli');
+        $id_kota = $this->input->post('tmptlahir');
         $nm_dokter = $this->input->post('namadokter');
-        $tmpt_lhr_dokter = $this->input->post('tmptlahir');
         $tgl_lhr_dokter = $this->input->post('tgllahir');
         $jk_dokter = $this->input->post('jk');
         $almt_dokter = $this->input->post('almtdokter');
@@ -49,8 +50,8 @@ class Dokter extends CI_Controller
 	            $act = $this->m_dokter->create(array(
 	            	'id_dokter' => $id_dokter,
 	            	'id_poli' => $id_poli,
+	            	'id_kota' => $id_kota,
 	            	'nm_dokter' => $nm_dokter,
-	            	'tmpt_lhr_dokter' => $tmpt_lhr_dokter,
 	            	'tgl_lhr_dokter' => $tgl_lhr_dokter,
 	            	'jk_dokter' => $jk_dokter,
 	            	'almt_dokter' => $almt_dokter,
@@ -73,8 +74,8 @@ class Dokter extends CI_Controller
 	{
 		$id_dokter = $this->input->post('e-iddokter');
 		$id_poli = $this->input->post('e-idpoli');
+        $id_kota = $this->input->post('e-tmptlahir');
         $nm_dokter = $this->input->post('e-namadokter');
-        $tmpt_lhr_dokter = $this->input->post('e-tmptlahir');
         $tgl_lhr_dokter = $this->input->post('e-tgllahir');
         $jk_dokter = $this->input->post('e-jk');
         $almt_dokter = $this->input->post('e-almtdokter');
@@ -102,7 +103,7 @@ class Dokter extends CI_Controller
 			array(
 				'id_poli' => $id_poli,
             	'nm_dokter' => $nm_dokter,
-            	'tmpt_lhr_dokter' => $tmpt_lhr_dokter,
+            	'id_kota' => $id_kota,
             	'tgl_lhr_dokter' => $tgl_lhr_dokter,
             	'jk_dokter' => $jk_dokter,
             	'almt_dokter' => $almt_dokter,

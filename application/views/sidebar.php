@@ -9,6 +9,7 @@
     <li class="<?php echo $aktif=='maintenance'?'active':''; ?> treeview" id="scrollspy-components">
       <a href="javascript:;"><i class="fa fa-check"></i> Maintenance</a>
       <ul class="treeview-menu">
+        <li><a href="<?php echo base_url().'kota'; ?>">Master Kota</a></li>
         <li><a href="<?php echo base_url().'poli'; ?>">Master Poli</a></li>
         <li><a href="<?php echo base_url().'dokter'; ?>">Master Dokter</a></li>
         <li><a href="<?php echo base_url().'jadwal_dokter'; ?>">Master Jadwal Dokter</a></li>

@@ -9,6 +9,7 @@ class M_dokter extends CI_Model
 		$this->db->select("*");
 		$this->db->from("dokter");
 		$this->db->join("poli", "dokter.id_poli = poli.id_poli", "left");
+		$this->db->join("kota", "dokter.id_kota = kota.id_kota", "left");
 		$this->db->where($cond);
 		return $this->db->get()->result();
 	}

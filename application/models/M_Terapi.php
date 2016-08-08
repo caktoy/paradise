@@ -8,6 +8,7 @@ class M_Terapi extends CI_Model
 	{
 		$this->db->select("*");
 		$this->db->from("terapi");
+		$this->db->join("poli", "terapi.id_poli = poli.id_poli", "left");
 		$this->db->where($cond);
 		return $this->db->get()->result();
 	}

@@ -32,7 +32,12 @@
 					<div class="form-group">
 	                  	<label class="col-sm-2 control-label" for="tmptlahir">Tempat/Tanggal Lahir</label>
 	                  	<div class="col-sm-3">
-	                    	<input type="text" id="tmptlahir" class="form-control" name="tmptlahir" required>
+	                    	<select id="tmptlahir" class="form-control select2" name="tmptlahir" required>
+	                    		<option></option>
+	                    		<?php foreach ($kota as $k): ?>
+	                    		<option value="<?php echo $k->ID_KOTA ?>"><?php echo $k->NM_KOTA ?></option>
+	                    		<?php endforeach ?>
+	                    	</select>
 	                  	</div>
 	                  	<div class="col-sm-3">
 	                  		<div class="input-group">
@@ -87,7 +92,7 @@
 	                <div class="form-group">
 	                	<label class="col-sm-2 control-label">Poli</label>
 	                  	<div class="col-sm-3">
-	                    	<select id="idpoli" name="idpoli" class="form-control" tabindex="1">
+	                    	<select id="idpoli" name="idpoli" class="form-control select2" tabindex="1">
 	                    		<option></option>
                         		<?php foreach ($poli as $p): ?>
                         		<option value="<?php echo $p->ID_POLI; ?>"><?php echo $p->NM_POLI; ?></option>
@@ -149,7 +154,7 @@
 </div>
 
 <!--MODAL-->
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myModalLabel">
+<div class="modal fade" role="dialog" id="myModal" aria-labelledby="myModalLabel">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -174,7 +179,12 @@
 					<div class="form-group">
 	                  	<label class="col-sm-3 control-label" for="e-tmptlahir">Tempat/Tanggal Lahir</label>
 	                  	<div class="col-sm-3">
-	                    	<input type="text" id="e-tmptlahir" class="form-control" name="e-tmptlahir" required>
+	                    	<select id="e-tmptlahir" class="form-control select2" name="e-tmptlahir" required>
+	                    		<option></option>
+	                    		<?php foreach ($kota as $k): ?>
+	                    		<option value="<?php echo $k->ID_KOTA ?>"><?php echo $k->NM_KOTA ?></option>
+	                    		<?php endforeach ?>
+	                    	</select>
 	                  	</div>
 	                  	<div class="col-sm-4">
 	                  		<div class="input-group">
@@ -259,7 +269,7 @@
 			success: function(result) {
 				console.log(result);
 				$('#e-namadokter').val(result[0].NM_DOKTER);
-				$('#e-tmptlahir').val(result[0].TMPT_LHR_DOKTER);
+				$('#e-tmptlahir').val(result[0].ID_KOTA);
 				$('#e-tgllahir').val(result[0].TGL_LHR_DOKTER);
 
 				// if(result[0].JK_DOKTER === "Laki-laki")

@@ -8,6 +8,7 @@ class M_Tindakan_ICD_9 extends CI_Model
 	{
 		$this->db->select("*");
 		$this->db->from("tindakan_icd_9");
+		$this->db->join("poli", "tindakan_icd_9.id_poli = poli.id_poli", "left");
 		$this->db->where($cond);
 		return $this->db->get()->result();
 	}
