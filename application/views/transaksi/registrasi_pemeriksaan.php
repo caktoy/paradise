@@ -58,7 +58,7 @@
 
 	            	<div class="col-md-offset-2 col-md-4">
 						<button type="submit" class="btn btn-flat btn-success"><i class="fa fa-check"></i> Simpan</button>
-				        <button type="reset" class="btn btn-flat btn-warning"><i class="fa fa-refresh"></i> Reset</button>
+				        <button type="button" class="btn btn-flat btn-warning" onclick="location.reload();"><i class="fa fa-refresh"></i> Refresh</button>
 				        <button type="button" class="btn btn-flat btn-info pull-right" id="btn-print-no"><i class="fa fa-print"></i> Cetak No. Antri</button>
 				    </div>
 				</form>

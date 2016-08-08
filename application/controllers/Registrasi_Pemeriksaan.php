@@ -150,10 +150,9 @@ class Registrasi_Pemeriksaan extends CI_Controller
 							            <thead>
 							                <tr>
 								                <th width="25px">No.</th>
-								                <th>#Pasien</th>
-								                <th>Nama</th>
+								                <th>Pasien</th>
 								                <th>Status</th>
-								                <th style="width:15%;">Aksi</th>
+								                <th style="width:20%;">Aksi</th>
 								            </tr>
 							            </thead>
 							        	<tbody>';
@@ -163,8 +162,7 @@ class Registrasi_Pemeriksaan extends CI_Controller
 							        		foreach ($antrian as $antri) {
 				                  				$hasil .= '<tr>
 				                    				<td align="right">'.$antri->ID_ANTRIAN.'.</td>
-				                    				<td>'.$antri->ID_PASIEN.'</td>
-				                    				<td>'.$antri->NM_PASIEN.'</td>';
+				                    				<td>#'.$antri->ID_PASIEN.' - '.$antri->NM_PASIEN.'</td>';
 
 				                    				$label_type = "label-info";
 				                    				if($antri->STATUS_ANTRIAN == "Menunggu")
@@ -197,6 +195,9 @@ class Registrasi_Pemeriksaan extends CI_Controller
 				                    					} else {
 				                    						$hasil .= $antri->STATUS_ANTRIAN;
 				                    					}
+				                    					$hasil .= ' <a href="'.base_url().'registrasi_pemeriksaan/cetak_antrian/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.$antri->ID_ANTRIAN.'" class="btn btn-flat btn-info btn-xs" target="_blank">
+					                    						<i class="fa fa-print"></i> 
+					                    					</a>';
 				                					$hasil .='</td>
 				                  				</tr>';
 			                  				}
