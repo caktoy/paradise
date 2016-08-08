@@ -184,6 +184,9 @@ class Registrasi_Pemeriksaan extends CI_Controller
 					                    					</a>
 					                    					<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
 					                    						<i class="fa fa-remove"></i> 
+					                    					</a> 
+					                    					<a href="'.base_url().'registrasi_pemeriksaan/cetak_antrian/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.$antri->ID_ANTRIAN.'" class="btn btn-flat btn-info btn-xs" target="_blank">
+					                    						<i class="fa fa-print"></i> 
 					                    					</a>';
 					                    				} elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung") {
 					                    					$hasil .= '<a href="'.base_url().'antrian/done/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-success btn-xs" onclick="return confirm(\'Anda yakin?\')">
@@ -195,9 +198,6 @@ class Registrasi_Pemeriksaan extends CI_Controller
 				                    					} else {
 				                    						$hasil .= $antri->STATUS_ANTRIAN;
 				                    					}
-				                    					$hasil .= ' <a href="'.base_url().'registrasi_pemeriksaan/cetak_antrian/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.$antri->ID_ANTRIAN.'" class="btn btn-flat btn-info btn-xs" target="_blank">
-					                    						<i class="fa fa-print"></i> 
-					                    					</a>';
 				                					$hasil .='</td>
 				                  				</tr>';
 			                  				}
