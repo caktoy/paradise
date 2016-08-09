@@ -25,7 +25,7 @@
 					<div class="form-group">
 	                	<label class="col-sm-2 control-label">Dokter Prakter</label>
 	                  	<div class="col-sm-4">
-	                    	<select name="id_dokter" class="form-control" required>
+	                    	<select name="id_dokter" class="form-control select2" required>
 	                    		<option></option>
 	                    		<?php foreach ($dokter as $d): ?>
 	                    		<option value="<?php echo $d->ID_DOKTER; ?>"><?php echo $d->NM_DOKTER ?></option>

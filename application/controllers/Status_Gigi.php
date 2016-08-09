@@ -20,9 +20,10 @@ class Status_Gigi extends CI_Controller
 	{
 		$kode_status = $this->input->post('kode_status');
         $status = $this->input->post('status');
+        $ket_status = $this->input->post('ket');
         
         // upload foto
-        $config['file_name']            = 'ODONTOGRAM_'.$kode_status;
+        $config['file_name']            = $kode_status;
         $config['upload_path']          = './assets/images/odontogram/';
         $config['allowed_types']        = 'bmp|jpg|png';
         $config['overwrite']			= true;
@@ -41,7 +42,8 @@ class Status_Gigi extends CI_Controller
 	            $act = $this->m_status_gigi->create(array(
 	            	'kode_status' => $kode_status,
 	            	'status' => $status,
-	            	'gambar' => $data_upload['file_name']
+	            	'gambar' => $data_upload['file_name'],
+	            	'ket_status' => $ket_status
 	            	));
 		        
 		        if ($act > 0) 
@@ -58,6 +60,7 @@ class Status_Gigi extends CI_Controller
 	{
 		$kode_status = $this->input->post('e-kode_status');
         $status = $this->input->post('e-status');
+        $ket_status = $this->input->post('e-ket');
 
 		// upload foto
         $config['file_name']            = 'ODONTOGRAM_'.$kode_status;
@@ -77,7 +80,7 @@ class Status_Gigi extends CI_Controller
 
 		$act = $this->m_status_gigi->patch(
 			array('kode_status' => $kode_status),
-			array('status' => $status)
+			array('status' => $status, 'ket_status' => $ket_status)
 			);
 
 		if ($act > 0) 

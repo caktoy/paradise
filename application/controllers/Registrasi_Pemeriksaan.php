@@ -132,6 +132,8 @@ class Registrasi_Pemeriksaan extends CI_Controller
 
 	public function tbl_antrian()
 	{
+		date_default_timezone_set("Asia/Jakarta");
+		
 		$poli = $this->m_poli->get(array());
 
 		$hasil = "";
@@ -185,14 +187,14 @@ class Registrasi_Pemeriksaan extends CI_Controller
 					                    					<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
 					                    						<i class="fa fa-remove"></i> 
 					                    					</a> 
-					                    					<a href="'.base_url().'registrasi_pemeriksaan/cetak_antrian/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.$antri->ID_ANTRIAN.'" class="btn btn-flat btn-info btn-xs" target="_blank">
+					                    					<a href="'.base_url().'registrasi_pemeriksaan/cetak_antrian/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.$antri->ID_ANTRIAN.'" class="btn btn-flat btn-primary btn-xs" target="_blank">
 					                    						<i class="fa fa-print"></i> 
 					                    					</a>';
 					                    				} elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung") {
-					                    					$hasil .= '<a href="'.base_url().'antrian/done/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-success btn-xs" onclick="return confirm(\'Anda yakin?\')">
-					                    						<i class="fa fa-check"></i> 
-					                    					</a>
-					                    					<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
+					                    					// $hasil .= '<a href="'.base_url().'antrian/done/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-success btn-xs" onclick="return confirm(\'Anda yakin?\')">
+					                    					// 	<i class="fa fa-check"></i> 
+					                    					// </a>';
+					                    					$hasil .= '<a href="'.base_url().'antrian/cancel/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-danger btn-xs" onclick="return confirm(\'Anda yakin?\')">
 					                    						<i class="fa fa-remove"></i> 
 					                    					</a>';
 				                    					} else {

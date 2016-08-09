@@ -19,7 +19,7 @@
 
 					<div class="form-group">
 	              		<label for="message-text" class="col-sm-2 control-label" for="pasien">Cari Pasien</label>
-	              		<div class="col-sm-4">
+	              		<div class="col-sm-6">
 	              			<div class="input-group">
 								<select class="form-control select2" name="pasien" id="pasien" style="width: 100%;" required>
 		                			<option></option>
@@ -37,7 +37,7 @@
 
 	            	<div class="form-group">
 	              		<label for="message-text" class="col-sm-2 control-label" for="poli">Poli</label>
-	              		<div class="col-sm-4">
+	              		<div class="col-sm-6">
 	                		<select class="form-control select2" name="poli" id="poli" style="width: 100%;" required>
 	                			<option></option>
 	                			<?php foreach ($poli as $pol): ?>
@@ -49,14 +49,14 @@
 
 	            	<div class="form-group">
 	              		<label for="message-text" class="col-sm-2 control-label" for="antrian">Antrian</label>
-	              		<div class="col-sm-4">
+	              		<div class="col-sm-6">
 							<div class="alert alert-info" style="text-align: center;font-weight: bold;font-size: 24pt;">
 								<span id="nomer_antrian">Pilih Poli Terlebih Dahulu</span>
 			              	</div>
 	              		</div>
 	            	</div>
 
-	            	<div class="col-md-offset-2 col-md-4">
+	            	<div class="col-md-offset-2 col-md-6">
 						<button type="submit" class="btn btn-flat btn-success"><i class="fa fa-check"></i> Simpan</button>
 				        <button type="button" class="btn btn-flat btn-warning" onclick="location.reload();"><i class="fa fa-refresh"></i> Refresh</button>
 				        <button type="button" class="btn btn-flat btn-info pull-right" id="btn-print-no"><i class="fa fa-print"></i> Cetak No. Antri</button>

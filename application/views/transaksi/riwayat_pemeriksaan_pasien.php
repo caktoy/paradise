@@ -36,7 +36,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Tempat, Tanggal Lahir</label>
 						<div class="col-sm-9">
-						    <input type="text" class="form-control" name="ttl" value="<?php echo $pasien[0]->TMPT_LHR_PASIEN.', '.date('d-m-Y', strtotime($pasien[0]->TGL_LHR_PASIEN)); ?>" readonly required>
+						    <input type="text" class="form-control" name="ttl" value="<?php echo $pasien[0]->NM_KOTA.', '.date('d-m-Y', strtotime($pasien[0]->TGL_LHR_PASIEN)); ?>" readonly required>
 						</div>
 					</div>
 					<div class="form-group">

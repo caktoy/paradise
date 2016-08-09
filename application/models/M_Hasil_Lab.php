@@ -28,9 +28,9 @@ class M_Hasil_Lab extends CI_Model
 		return $this->db->update('hasil_lab', $value);
 	}
 
-	public function remove($id)
+	public function remove(array $cond)
 	{	
-		$this->db->where('id_hasil', $id);
+		$this->db->where($cond);
 		return $this->db->delete('hasil_lab');
 	}
 }

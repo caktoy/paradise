@@ -62,7 +62,7 @@
 	                    						<i class="fa fa-remove"></i> Batal
 	                    					</a>
 	                    					<?php elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung"): ?>
-	                    					<a href="<?php echo base_url().'rekam_medis/pre_proses/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.strtotime($antri->TGL_ANTRIAN) ?>" class="btn btn-flat btn-success btn-xs" onclick="return confirm('Anda yakin?')">
+	                    					<a href="<?php echo base_url().'rekam_medis/pre_proses/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.strtotime($antri->TGL_ANTRIAN) ?>" class="btn btn-flat btn-success btn-xs">
 	                    						<i class="fa fa-heartbeat"></i> Proses
 	                    					</a>
 	                    					<a href="<?php echo base_url().'rekam_medis/cancel_proses/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI ?>" class="btn btn-flat btn-danger btn-xs" onclick="return confirm('Anda yakin?')">

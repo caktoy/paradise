@@ -25,7 +25,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="status">Status</label>
 						<div class="col-sm-4">
-						    <input type="type" id="status" class="form-control" name="status" required>
+						    <input type="text" id="status" class="form-control" name="status" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="ket">Keterangan</label>
+						<div class="col-sm-4">
+						    <textarea id="ket" class="form-control" name="ket"></textarea>
 						</div>
 					</div>
 
@@ -60,6 +67,7 @@
 				                <tr>
 					                <th>Kode</th>
 					                <th>Status</th>
+					                <th>Keterangam</th>
 					                <th>Gambar</th>
 					                <th style="width:15%;">Aksi</th>
 					            </tr>
@@ -69,13 +77,14 @@
                   				<tr>
                     				<td><?php echo $sg->KODE_STATUS; ?></td>
                     				<td><?php echo $sg->STATUS; ?></td>
+                    				<td><?php echo $sg->KET_STATUS; ?></td>
                     				<td align="center">
                     					<img src="<?php echo base_url().'assets/images/odontogram/'.$sg->GAMBAR; ?>" height="25px">
                 					</td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
                     						data-target="#myModal" onclick="edit('<?php echo $sg->KODE_STATUS; ?>', 
-                    						'<?php echo $sg->STATUS; ?>', '<?php echo $sg->GAMBAR; ?>')">
+                    						'<?php echo $sg->STATUS; ?>', '<?php echo $sg->GAMBAR; ?>', '<?php echo $sg->KET_STATUS; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
                 					</td>
@@ -122,6 +131,13 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-3 control-label" for="e-ket">Keterangan</label>
+						<div class="col-sm-9">
+						    <textarea id="e-ket" class="form-control" name="e-ket"></textarea>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-3 control-label" for="e-gambar">Ubah Gambar</label>
 						<div class="col-sm-9">
 						    <input type="file" id="e-gambar" class="form-control" name="e-gambar">
@@ -140,9 +156,10 @@
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, nama, gambar) {
+	function edit(id, nama, gambar, ket) {
 		$('#e-kode_status').val(id);
 		$('#e-status').val(nama);
 		$('#e-prev_gambar').prop("src", "<?php echo base_url().'assets/images/odontogram/'; ?>" + gambar);
+		$('#e-ket').val(ket);
 	}
 </script>

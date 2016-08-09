@@ -35,13 +35,7 @@
                     				<td><?php echo $p->ID_PASIEN; ?></td>
                     				<td><?php echo $p->NM_PASIEN; ?></td>
                     				<td><?php echo $p->JK_PASIEN; ?></td>
-                    				<td>
-                    					<?php 
-                    					echo $p->TMPT_LHR_PASIEN==null?'':$p->TMPT_LHR_PASIEN;
-                    					if (!is_null($p->TMPT_LHR_PASIEN) && !is_null($p->TMPT_LHR_PASIEN)) echo ", ";
-                    					echo $p->TGL_LHR_PASIEN==null?'':date('d-m-Y', strtotime($p->TGL_LHR_PASIEN)); 
-                    					?>
-                					</td>
+                    				<td><?php echo $p->NM_KOTA.", ".date('d-m-Y', strtotime($p->TGL_LHR_PASIEN)); ?></td>
                     				<td><?php echo $p->ALMT_PASIEN; ?></td>
                     				<td><?php echo $p->TELP_PASIEN; ?></td>
                     				<td><?php echo date('d-m-Y', strtotime($p->TGL_DAFTAR)); ?></td>
