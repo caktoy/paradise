@@ -177,6 +177,7 @@ class Rekam_Medis extends CI_Controller
 				$data['is_odontogram'] = true;
 		}
 		$data['dokter'] = $dokter;
+		$data['pasien'] = $this->m_pasien->get(array('id_pasien' => $rekam_medis[0]->ID_PASIEN));
 
 		#detil
 		$data['detil_diagnosis'] = $this->m_detail_diagnosa->get(array('detail_diagnosa.id_rekam_medis' => $id_rekam_medis));
@@ -190,12 +191,12 @@ class Rekam_Medis extends CI_Controller
 			$data_odontogram[$odo->NOMOR] = $odo->GAMBAR;
 		$data['odontogram'] = $data_odontogram;
 
-		$data['pemeriksaan_lab'] = $this->m_pemeriksaan_lab->get(array());
-		$data['diagnosis'] = $this->m_diagnosa_icd_10->get(array());
-		$data['tindakan'] = $this->m_tindakan_icd_9->get(array());
-		$data['terapi'] = $this->m_terapi->get(array());
+		$data['pemeriksaan_lab'] = $this->m_pemeriksaan_lab->get(array('pemeriksaan_lab.id_poli' => $dokter[0]->ID_POLI));
+		$data['diagnosis'] = $this->m_diagnosa_icd_10->get(array('diagnosa_icd_10.id_poli' => $dokter[0]->ID_POLI));
+		$data['tindakan'] = $this->m_tindakan_icd_9->get(array('tindakan_icd_9.id_poli' => $dokter[0]->ID_POLI));
+		$data['terapi'] = $this->m_terapi->get(array('terapi.id_poli' => $dokter[0]->ID_POLI));
 		$data['obat'] = $this->m_obat->get(array());
-		$data['perawat'] = $this->m_perawat->get(array());
+		$data['perawat'] = $this->m_perawat->get(array('perawat.id_poli' => $dokter[0]->ID_POLI));
 		$data['status_gigi'] = $this->m_status_gigi->get(array());
 
 		$this->load->view('layout', $data);
