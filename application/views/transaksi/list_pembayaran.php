@@ -40,11 +40,11 @@
 	                    				<td><?php echo date('d-m-Y', strtotime($rm->TGL_PERIKSA)); ?></td>
 	                    				<td align="center">
 	                    					<?php if ($rm->BAYAR == 0): ?>
-	                    						<a href="<?php echo base_url().'pembayaran/create/'.$rm->ID_REKAM_MEDIS ?>" class="btn btn-flat btn-info btn-xs" onclick="return confirm('Anda yakin?')">
+	                    						<a href="<?php echo base_url().'pembayaran/create/'.$rm->ID_REKAM_MEDIS ?>" class="btn btn-flat btn-info btn-xs">
 		                    						<i class="fa fa-dollar"></i> Bayar
 		                    					</a>
 	                    					<?php else: ?>
-		                    					<a href="<?php echo base_url().'pembayaran/edit/'.$rm->ID_REKAM_MEDIS ?>" class="btn btn-flat btn-warning btn-xs" onclick="return confirm('Anda yakin?')">
+		                    					<a href="<?php echo base_url().'pembayaran/edit/'.$rm->ID_REKAM_MEDIS ?>" class="btn btn-flat btn-warning btn-xs">
 		                    						<i class="fa fa-edit"></i> Tinjau ulang
 		                    					</a>
 	                    					<?php endif ?>

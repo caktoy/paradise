@@ -18,16 +18,22 @@
                                 <thead>
                                     <tr style="font-weight: bold;">
                                         <th style="text-align: center;">
-                                            NO
+                                            NO.
                                         </th>
                                         <th style="text-align: center;">
-                                            TANGGAL NOTA
+                                            NO. NOTA
+                                        </th>
+                                        <th style="text-align: center;">
+                                            TANGGAL
                                         </th>
                                         <th style="text-align: center;">
                                             ID OBAT
                                         </th>
                                         <th style="text-align: center;">
                                             NAMA OBAT
+                                        </th>
+                                        <th style="text-align: center;">
+                                            KUANTITAS
                                         </th>
                                         <th style="text-align: center;">
                                             TOTAL BAYAR
@@ -43,6 +49,9 @@
                                             <?php echo $no; ?>.
                                         </td>
                                         <td>
+                                            <?php echo date('ym-d', strtotime($d->TGL_BAYAR))."-".$d->ID_BAYAR; ?>
+                                        </td>
+                                        <td>
                                             <?php echo date('d-m-Y', strtotime($d->TGL_PERIKSA)); ?>
                                         </td>
                                         <td>
@@ -51,6 +60,9 @@
                                         <td>
                                             <?php echo $d->NM_OBAT; ?>
                                         </td>
+                                        <td style="text-align: right">
+                                            <?php echo $d->KUANTITAS_OBAT.' '.$d->SATUAN; ?>
+                                        </td>
                                         <td style="text-align: right;">
                                             <?php echo "Rp".number_format($d->SUB_TOTAL_RESEP, 2, ",", "."); ?>
                                         </td>
@@ -58,7 +70,7 @@
                                     <?php $no++; $total += $d->SUB_TOTAL_RESEP; ?>
                                     <?php endforeach ?>
                                     <tr style="font-weight: bold;font-size: 14pt;">
-                                        <td align="right" colspan="4">TOTAL</td>
+                                        <td align="right" colspan="6">TOTAL</td>
                                         <td align="right"><?php echo "Rp".number_format($total, 2, ",", ".") ?></td>
                                     </tr>
                                     <?php else : ?>

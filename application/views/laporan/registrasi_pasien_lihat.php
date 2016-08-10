@@ -21,11 +21,20 @@
                                         <th style="text-align: center;width: 15px;">
                                             NO
                                         </th>
-                                        <th style="text-align: center;width: 20%;">
+                                        <th style="text-align: center;">
                                             ID PASIEN
                                         </th>
                                         <th style="text-align: center;">
                                             NAMA
+                                        </th>
+                                        <th style="text-align: center;">
+                                            JENIS KELAMIN
+                                        </th>
+                                        <th style="text-align: center;">
+                                            NO. TELP
+                                        </th>
+                                        <th style="text-align: center;">
+                                            TTL
                                         </th>
                                         <th style="text-align: center;">
                                             TANGGAL DAFTAR
@@ -45,6 +54,15 @@
                                         <td>
                                             <?php echo $d->NM_PASIEN; ?>
                                         </td>
+                                        <td>
+                                            <?php echo $d->JK_PASIEN; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $d->TELP_PASIEN; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $d->NM_KOTA.', '.date('d-m-Y', strtotime($d->TGL_LHR_PASIEN)); ?>
+                                        </td>
                                         <td align="center">
                                             <?php echo date('d-m-Y', strtotime($d->TGL_DAFTAR)); ?>
                                         </td>
@@ -53,7 +71,7 @@
                                     <?php endforeach ?>
                                     <?php else : ?>
                                     <tr>
-                                        <td colspan="4" style="text-align: center;">Maaf, tidak ada data yang ditampilkan.</td>
+                                        <td colspan="7" style="text-align: center;">Maaf, tidak ada data yang ditampilkan.</td>
                                     </tr>
                                     <?php endif ?>
                                 </tbody>

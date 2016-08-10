@@ -94,6 +94,7 @@ class Pemeriksaan_Lab extends CI_Controller
 			));
 		if (count($pemeriksaan_lab) > 0) {
 			$data['pemeriksaan_lab'] = $pemeriksaan_lab;
+			$data['pasien'] = $this->m_pasien->get(array('pasien.id_pasien' => $pemeriksaan_lab[0]->ID_PASIEN));
 			
 			$this->load->view('layout', $data);
 		} else {

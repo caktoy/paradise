@@ -11,7 +11,12 @@
 		<div class="box box-success">
 			<div class="box-header with-border">
 				<h3 class="box-title">Antrian Pasien</h3>
-				<span class="pull-right"><?php echo date('d M Y') ?></span>
+				<span class="pull-right">
+					<?php echo date('d M Y') ?> &nbsp;&nbsp;
+					<button type="button" class="btn btn-xs btn-success" onclick="location.reload();">
+						<i class="fa fa-refresh"></i>
+					</button>
+				</span>
 			</div>
 
 			<div class="box-body">
@@ -55,19 +60,20 @@
                     					</td>
 	                    				<td align="center">
 	                    					<?php if ($antri->STATUS_ANTRIAN == "Menunggu"): ?>
-	                    					<a href="<?php echo base_url().'rekam_medis/push/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI ?>" class="btn btn-flat btn-info btn-xs">
+	                    					<!-- <a href="<?php echo base_url().'rekam_medis/push/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI ?>" class="btn btn-flat btn-info btn-xs">
 	                    						<i class="fa fa-volume-up"></i> Panggil 
 	                    					</a>
 	                    					<a href="<?php echo base_url().'rekam_medis/cancel_proses/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI ?>" class="btn btn-flat btn-danger btn-xs" onclick="return confirm('Anda yakin?')">
 	                    						<i class="fa fa-remove"></i> Batal
-	                    					</a>
+	                    					</a> -->
+	                    					<i class="fa fa-circle-o"></i>
 	                    					<?php elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung"): ?>
 	                    					<a href="<?php echo base_url().'rekam_medis/pre_proses/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.strtotime($antri->TGL_ANTRIAN) ?>" class="btn btn-flat btn-success btn-xs">
 	                    						<i class="fa fa-heartbeat"></i> Proses
 	                    					</a>
-	                    					<a href="<?php echo base_url().'rekam_medis/cancel_proses/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI ?>" class="btn btn-flat btn-danger btn-xs" onclick="return confirm('Anda yakin?')">
+	                    					<!-- <a href="<?php echo base_url().'rekam_medis/cancel_proses/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI ?>" class="btn btn-flat btn-danger btn-xs" onclick="return confirm('Anda yakin?')">
 	                    						<i class="fa fa-remove"></i> Batal
-	                    					</a>
+	                    					</a> -->
 	                    					<?php elseif($antri->STATUS_ANTRIAN == "Selesai"): ?>
                     						<a href="<?php echo base_url().'rekam_medis/pre_proses/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.strtotime($antri->TGL_ANTRIAN) ?>" class="btn btn-flat btn-success btn-xs">
 	                    						<i class="fa fa-edit"></i> Ubah

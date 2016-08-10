@@ -61,31 +61,6 @@ $sub_total_resep = 0;
 
 			<div class="box-body">
 				<fieldset>
-					<legend>Diagnosa</legend>
-					<table id="tbl-diagnosa" class="table table-bordered table-striped" style="margin-top: 10px;">
-			            <thead>
-			                <tr>
-				                <th style="width: 100px;">Kode</th>
-				                <th>Penyakit</th>
-				                <th>Keterangan</th>
-				            </tr>
-			            </thead>
-			        	<tbody>
-			        		<?php if (count($detil_diagnosis) > 0): ?>
-			        		<?php foreach ($detil_diagnosis as $det_dg): ?>
-			        		<tr>
-			        			<td><?php echo $det_dg->KODE_ICD_10 ?></td>
-			        			<td><?php echo $det_dg->NM_ICD_10 ?></td>
-			        			<td><?php echo $det_dg->KETERANGAN_DG ?></td>
-			        		</tr>
-			        		<?php endforeach ?>
-			        		<?php else: ?>
-			        		<tr><td colspan="3">Tidak ada data yang ditampilkan.</td></tr>
-			        		<?php endif ?>
-	                   	</tbody>
-            		</table>
-				</fieldset>
-				<fieldset>
 					<legend>Tindakan</legend>
 					<table id="tbl-tindakan" class="table table-bordered table-striped" style="margin-top: 10px;">
 			            <thead>
@@ -102,7 +77,7 @@ $sub_total_resep = 0;
 			        		<tr>
 			        			<td><?php echo $det_td->KODE_ICD_9 ?></td>
 			        			<td><?php echo $det_td->NM_ICD_9 ?></td>
-			        			<td><?php echo $det_td->DETAIL_TINDAKAN ?></td>
+			        			<td><?php echo $det_td->KET_ICD_9 ?></td>
 			        			<td style="text-align: right;">Rp<?php echo number_format($det_td->HARGA_TINDAKAN, 2, ",", ".") ?></td>
 			        		</tr>
 			        		<?php $sub_total_tindakan += $det_td->HARGA_TINDAKAN; ?>
@@ -136,10 +111,10 @@ $sub_total_resep = 0;
 			        			<td><?php echo $det_tp->ID_TERAPI ?></td>
 			        			<td><?php echo $det_tp->NM_TERAPI ?></td>
 			        			<td><?php echo $det_tp->NM_PERAWAT ?></td>
-			        			<td><?php echo $det_tp->KETERANGAN_TERAPI ?></td>
+			        			<td><?php echo $det_tp->KET_TERAPI ?></td>
 			        			<td style="text-align: right;">Rp<?php echo number_format($det_tp->BAYAR_TERAPI, 2, ",", ".") ?></td>
 			        		</tr>
-			        		<?php $sub_total_terapi += $det_td->BAYAR_TERAPI; ?>
+			        		<?php $sub_total_terapi += $det_tp->BAYAR_TERAPI; ?>
 			        		<?php endforeach ?>
 			        		<tr>
 			        			<td style="text-align: right" colspan="4">SUB TOTAL</td>
@@ -204,26 +179,35 @@ $sub_total_resep = 0;
 			        			</td>
 							</tr>
 							<tr>
-								<td style="text-align: right;width: 80%;font-weight: bold;">DISKON (%)</td>
+								<td style="text-align: right;width: 80%;font-weight: bold;">BAYAR (Rp)</td>
 			        			<td style="text-align: right;width: 20%;font-weight: bold;">
-			        				<input type="number" id="txt_diskon" class="form-control col-xs-3" name="txt_diskon" value="<?php echo $pembayaran[0]->DISKON!=null?$pembayaran[0]->DISKON:'0'; ?>" min="0" max="100" style="text-align: right;">
+			        				<input type="number" id="txt_bayar" class="form-control col-xs-3" name="txt_bayar" value="<?php echo $pembayaran[0]->UANG_BAYAR!=null?$pembayaran[0]->UANG_BAYAR:'0'; ?>" min="0" style="text-align: right;">
 			        			</td>
 							</tr>
 							<tr>
-								<td style="text-align: right;width: 80%;font-weight: bold;">TOTAL BAYAR</td>
+								<td style="text-align: right;width: 80%;font-weight: bold;">KEMBALI</td>
 			        			<td style="text-align: right;width: 20%;font-weight: bold;">
-			        				<span id="lbl_total_bayar" style="font-size: 18pt;">Rp0,00</span>
-			        				<input type="hidden" id="txt_total_bayar" name="txt_total_bayar" value="<?php echo $pembayaran[0]->TOTAL_BAYAR!=null?$pembayaran[0]->TOTAL_BAYAR:($sub_total_tindakan + $sub_total_terapi + $sub_total_resep); ?>">
+			        				<span id="lbl_kembali" style="font-size: 18pt;">
+			        					<?php 
+			        					if($pembayaran[0]->UANG_BAYAR!=null || $pembayaran[0]->UANG_BAYAR!=0) {
+			        						$uang_bayar = $pembayaran[0]->UANG_BAYAR; 
+			        						$total_all = $sub_total_tindakan + $sub_total_terapi + $sub_total_resep;
+			        						echo number_format(($uang_bayar - $total_all), 2, ",", ".");
+			        					} else { 
+			        						echo number_format(0, 2, ",", "."); 
+			        					}
+			        					?>
+			        				</span>
 			        			</td>
 							</tr>
 						</table>
 
 						<div align="center" style="margin-top: 10px;padding-top: 10px;border-top: solid #eee 2px;">
-							<button type="button" class="btn btn-danger" onclick="javascript:history.go(-1);"><i class="fa fa-chevron-left"></i> Kembali</button>
+							<a href="<?php echo base_url().'pembayaran' ?>" class="btn btn-danger"><i class="fa fa-chevron-left"></i> Kembali</a>
 							<button type="submit" class="btn btn-success">
 								<i class="fa fa-check"></i> Selesai
 							</button>&nbsp;&nbsp;&nbsp;
-							<?php if ($pembayaran[0]->TOTAL_BAYAR != null): ?>
+							<?php if ($pembayaran[0]->TOTAL_BAYAR != null || $pembayaran[0]->TOTAL_BAYAR != 0): ?>
 							<a href="<?php echo base_url().'pembayaran/cetak/'.$pembayaran[0]->ID_REKAM_MEDIS; ?>" class="btn btn-info" target="_blank">
 								<i class="fa fa-print"></i> Cetak
 							</a>
@@ -286,17 +270,19 @@ $sub_total_resep = 0;
 	}
 
 	$(function() {
-		var diskon = $('#txt_diskon').val();
-		var total = $('#txt_total').val();
-		var total_bayar = total - (total * (diskon / 100));
-		$('#lbl_total_bayar').html('Rp' + total_bayar);
-		$('#txt_total_bayar').val(total_bayar);
-		$('#txt_diskon').change(function() {
-			var diskon = $(this).val();
-			var total = $('#txt_total').val();
-			var total_bayar = total - (total * (diskon / 100));
-			$('#lbl_total_bayar').html('Rp' + total_bayar);
-			$('#txt_total_bayar').val(total_bayar);
+		var bayar = $('#txt_bayar').val();
+		var total_bayar = $('#txt_total').val();
+		var kembalian = bayar - total_bayar;
+		$('#lbl_kembali').html('Rp' + kembalian);
+		$('#txt_bayar').change(function() {
+			var bayar = $(this).val();
+			var total_bayar = $('#txt_total').val();
+			var kembalian = bayar - total_bayar;
+			if (kembalian > 0) {
+				$('#lbl_kembali').html('Rp' + kembalian + ',00');
+			} else {
+				$('#lbl_kembali').html('Rp0,00');
+			}
 		});
 	});
 </script>

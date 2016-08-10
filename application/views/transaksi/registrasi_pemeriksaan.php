@@ -111,17 +111,19 @@
 			window.open("<?php echo base_url().'registrasi_pemeriksaan/cetak_antrian/' ?>" + pasien + "/" + poli + "/" + no, "_blank");
 		});
 
-		$.ajax({
-			url: "<?php echo base_url().'registrasi_pemeriksaan/tbl_antrian' ?>",
-			type: "get",
-			dataType: "html",
-			success: function(result) {
-				$("#div-antrian").html(result);
-			},
-			error: function(xhr, status, error) {
-				console.log(error);
-				$("#div-antrian").html(error);
-			}
-		});
+		setInterval(function() {
+			$.ajax({
+				url: "<?php echo base_url().'registrasi_pemeriksaan/tbl_antrian' ?>",
+				type: "get",
+				dataType: "html",
+				success: function(result) {
+					$("#div-antrian").html(result);
+				},
+				error: function(xhr, status, error) {
+					console.log(error);
+					$("#div-antrian").html(error);
+				}
+			});
+		}, 1000);
 	});
 </script>

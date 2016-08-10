@@ -58,7 +58,8 @@
 						</div>
 					</div>
 					<div class="col-md-offset-2 col-md-5">
-				        <button type="reset" class="btn btn-flat btn-danger" onclick="javascript:history.go(-1);"><i class="fa fa-chevron-left"></i> Kembali</button>
+				        <a href="<?php echo base_url().'pasien/cari' ?>" class="btn btn-flat btn-danger"><i class="fa fa-chevron-left"></i> Kembali</a>
+				        <a href="<?php echo base_url().'laporan/history_rekam_medis/'.$pasien[0]->ID_PASIEN ?>" class="btn btn-flat btn-primary" target="_blank"><i class="fa fa-print"></i> Cetak Riwayat</a>
 				    </div>
 				</form>
 			</div>

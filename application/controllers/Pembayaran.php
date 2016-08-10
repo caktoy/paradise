@@ -24,19 +24,28 @@ class Pembayaran extends CI_Controller
 
 	public function create($id_rekam_medis)
 	{
-		# pre proses, insert into table pembayaran
-		$id_bayar = $this->m_security->gen_ai_id('pembayaran', 'id_bayar');
-		$id_perawat = $_SESSION['userid'];
-		$tgl_bayar = date('Y-m-d');
-		$act = $this->m_pembayaran->create(array(
-			'id_bayar' => $id_bayar,
-			'id_perawat' => $id_perawat,
-			'id_rekam_medis' => $id_rekam_medis,
-			'tgl_bayar' => $tgl_bayar
-			));
-		if ($act > 0) {
-			$this->session->set_flashdata('pesan', '<strong>Gagal!</strong> Proses pembayaran gagal dilakukan.');
-			redirect('pembayaran/edit/'.$id_rekam_medis);
+		$rekam_medis = $this->m_rekam_medis->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis), 1);
+		if (count($rekam_medis) > 0) {
+			# pre proses, insert into table pembayaran
+			$id_bayar = $this->m_security->gen_ai_id('pembayaran', 'id_bayar');
+			$id_perawat = $_SESSION['userid'];
+			$tgl_bayar = date('Y-m-d');
+
+			$act = $this->m_pembayaran->create(array(
+				'id_bayar' => $id_bayar,
+				'id_perawat' => $id_perawat,
+				'id_rekam_medis' => $id_rekam_medis,
+				'id_dokter' => $rekam_medis[0]->ID_DOKTER,
+				'id_pasien' => $rekam_medis[0]->ID_PASIEN,
+				'tgl_bayar' => $tgl_bayar
+				));
+
+			if ($act > 0) {
+				redirect('pembayaran/edit/'.$id_rekam_medis);
+			} else {
+				$this->session->set_flashdata('pesan', '<strong>Gagal!</strong> Proses pembayaran gagal dilakukan.');
+				redirect('pembayaran');
+			}
 		} else {
 			$this->session->set_flashdata('pesan', '<strong>Gagal!</strong> Proses pembayaran gagal dilakukan.');
 			redirect('pembayaran');
@@ -101,14 +110,14 @@ class Pembayaran extends CI_Controller
 	{
 		$id_bayar = $this->input->post('txt_id_bayar');
 		$id_rekam_medis = $this->input->post('txt_rekam_medis');
-		$diskon = $this->input->post('txt_diskon');
-		$total_bayar = $this->input->post('txt_total_bayar');
+		$uang_bayar = $this->input->post('txt_bayar');
+		$total_bayar = $this->input->post('txt_total');
 
 		$act = $this->m_pembayaran->patch(
 			array('pembayaran.id_bayar' => $id_bayar),
 			array(
 				'pembayaran.tgl_bayar' => date('Y-m-d'),
-				'pembayaran.diskon' => $diskon,
+				'pembayaran.uang_bayar' => $uang_bayar,
 				'pembayaran.total_bayar' => $total_bayar
 				)
 			);

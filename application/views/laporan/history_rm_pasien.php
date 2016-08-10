@@ -3,7 +3,7 @@
 <head>
 	<title><?php echo $judul ?></title>
 </head>
-<body <?php if(!isset($cetak)) { echo "onload='javascript:window.print();'"; } ?>>
+<body onload="window.print();">
 	<div style="display: block;width: 100%;text-align: center;font-weigth: bold;font-size: 14pt;padding-bottom: 40px;">
 	    <?php echo $judul; ?><br>
 	    <?php echo $subjudul; ?><br>
@@ -25,16 +25,22 @@
 							                TANGGAL PERIKSA
 							            </th>
 							            <th style="text-align: center;">
-							                ID PASIEN
-							            </th>
-							            <th style="text-align: center;">
-							                NAMA PASIEN
-							            </th>
-							            <th style="text-align: center;">
 							                DOKTER
 							            </th>
 							            <th style="text-align: center;">
-							                POLI
+							                ANAMNESIS
+							            </th>
+							            <th style="text-align: center;">
+							                DIAGNOSA
+							            </th>
+							            <th style="text-align: center;">
+							                TINDAKAN
+							            </th>
+							            <th style="text-align: center;">
+							                TERAPI
+							            </th>
+							            <th style="text-align: center;">
+							                OBAT
 							            </th>
 							        </tr>
 							    </thead>
@@ -46,19 +52,33 @@
 							                <?php echo $no; ?>.
 							            </td>
 							            <td>
-							                <?php echo date('d-m-Y', strtotime($d->TGL_PERIKSA)); ?>
+							                <?php echo date('d-m-Y', strtotime($d['tgl_periksa'])); ?>
 							            </td>
 							            <td>
-							                <?php echo $d->ID_PASIEN; ?>
+							                <?php echo $d['dokter']; ?>
 							            </td>
 							            <td>
-							                <?php echo $d->NM_PASIEN; ?>
+							                <?php echo $d['anamnesis']; ?>
 							            </td>
 							            <td>
-							                <?php echo $d->NM_DOKTER; ?>
+							                <?php foreach ($d['diagnosa'] as $diagnosa): ?>
+							                <?php echo $diagnosa->NM_ICD_10."; "; ?>
+							                <?php endforeach ?>
 							            </td>
 							            <td style="text-align: center;">
-							                <?php echo $d->NM_POLI; ?>
+							                <?php foreach ($d['tindakan'] as $tindakan): ?>
+							                <?php echo $tindakan->NM_ICD_9."; "; ?>
+							                <?php endforeach ?>
+							            </td>
+							            <td style="text-align: center;">
+							                <?php foreach ($d['terapi'] as $terapi): ?>
+							                <?php echo $terapi->NM_TERAPI."; "; ?>
+							                <?php endforeach ?>
+							            </td>
+							            <td style="text-align: center;">
+							                <?php foreach ($d['resep_obat'] as $obat): ?>
+							                <?php echo $obat->NM_OBAT."; "; ?>
+							                <?php endforeach ?>
 							            </td>
 							        </tr>
 							        <?php $no++; ?>

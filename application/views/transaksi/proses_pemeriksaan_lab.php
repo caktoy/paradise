@@ -34,7 +34,7 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label" for="ttl_pasien">Tempat, Tanggal Lahir</label>
 							<div class="col-sm-9">
-								<input type="text" id="ttl_pasien" class="form-control" name="ttl_pasien" value="<?php echo $pemeriksaan_lab[0]->TMPT_LHR_PASIEN.', '.date('d-m-Y', strtotime($pemeriksaan_lab[0]->TGL_LHR_PASIEN)); ?>" readonly />
+								<input type="text" id="ttl_pasien" class="form-control" name="ttl_pasien" value="<?php echo $pasien[0]->NM_KOTA.', '.date('d-m-Y', strtotime($pemeriksaan_lab[0]->TGL_LHR_PASIEN)); ?>" readonly />
 							</div>
 						</div>
 						<div class="form-group">

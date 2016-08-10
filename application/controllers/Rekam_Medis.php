@@ -39,6 +39,7 @@ class Rekam_Medis extends CI_Controller
 		$terapi = $this->m_detail_terapi->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$resep_obat = $this->m_resep_obat->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$hasil_lab = $this->m_hasil_lab->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$odontogram = $this->m_odontogram->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$pasien = $this->m_pasien->get(array('pasien.id_pasien' => $rekam_medis[0]->ID_PASIEN));
 
 		echo "<!DOCTYPE html>
@@ -52,48 +53,132 @@ class Rekam_Medis extends CI_Controller
 		}
 		echo ">";
 		
-		$hasil = "<div style='text-align: center;'><h3>Hasil Pemeriksaan</h3></div>";
+		if ($is_cetak == 'ya') 
+			$hasil = "<div style='text-align: center;'><h3>Laporan Rekam Medis</h3></div>";
+		else 
+			$hasil = "<div style='text-align: center;'><h3>Hasil Pemeriksaan</h3></div>";
 
-		$hasil .= "<h4>Biodata Pasien:</h4>";
-		foreach ($pasien as $pas) {
-			$pas_array = get_object_vars($pas);
-			foreach ($pas as $key => $value) {
-				$hasil .= "<strong>".str_replace('_', " ", $key).":</strong> ".$value."<br>";
-			}
-		}
+		$hasil .= "<br>";
+		$hasil .= "<table width='100%'>
+			<tr>
+				<td>ID Pasien</td>
+				<td>:</td>
+				<td>".$rekam_medis[0]->ID_PASIEN."</td>
+				<td>Tanggal Periksa</td>
+				<td>:</td>
+				<td>".date('d-m-Y', strtotime($rekam_medis[0]->TGL_PERIKSA))."</td>
+			<tr>
+			<tr>
+				<td>Nama Pasien</td>
+				<td>:</td>
+				<td>".$rekam_medis[0]->NM_PASIEN."</td>
+				<td>Tempat, Tanggal Lahir</td>
+				<td>:</td>
+				<td>".$pasien[0]->NM_KOTA.", ".date('d-m-Y', strtotime($pasien[0]->TGL_LHR_PASIEN))."</td>
+			<tr>
+			<tr>
+				<td>Nama Dokter</td>
+				<td>:</td>
+				<td>".$rekam_medis[0]->NM_DOKTER."</td>
+				<td>Umur</td>
+				<td>:</td>
+				<td>".date_diff(date_create($rekam_medis[0]->TGL_LHR_PASIEN), date_create('today'))->y." Tahun</td>
+			<tr>
+		</table>";
 		
-		$hasil .= "<h4>Pemeriksaan:</h4>";
+		$hasil .= "<h4>Pemeriksaan</h4>";
+		// $hasil .= "<br>";
+		$hasil .= "<table border='0' cellspacing='0' cellpadding='5px' width='100%'>";
 		foreach ($rekam_medis as $rm) {
-			$hasil .= "<strong>Tanggal Pemeriksaan:</strong> ".date('d-m-Y', strtotime($rm->TGL_PERIKSA))."<br>";
-			$hasil .= "<strong>Keluhan:</strong> ".$rm->ANAMNESIS."<br><strong>Catatan Fisik:</strong> ".$rm->CTTN_FISIK."<br><br>";
+			$hasil .= "<tr valign='top'>
+				<td width='100px'>Anamnesis</td>
+				<td align='center'>:</td>
+				<td>".$rm->ANAMNESIS."</td></tr>".
+				"<tr valign='top'>
+				<td width='100px'>Catatan Fisik</td>
+				<td align='center'>:</td>
+				<td>".$rm->CTTN_FISIK."</td></tr>";
 		}
 
 		if (count($diagnosa) > 0) {
-			$hasil .= "<h4>Diagnosa:</h4>";
-			foreach ($diagnosa as $dg) {
-				$hasil .= $dg->NM_ICD_10."; ";
-			}
+			$hasil .= "<tr valign='top'>
+				<td width='100px'>Diagnosa</td>
+				<td align='center'>:</td>
+				<td>";
+				foreach ($diagnosa as $dg) {
+					$hasil .= $dg->NM_ICD_10." <i>(".$dg->KET_ICD_10.")</i><br>";
+				}
+			$hasil .= "</td>";
 		}
 
 		if (count($tindakan) > 0) {
-			$hasil .= "<h4>Tindakan:</h4>";
-			foreach ($tindakan as $td) {
-				$hasil .= $td->NM_ICD_9.'; ';
-			}
+			$hasil .= "<tr valign='top'>
+				<td width='100px'>Tindakan</td>
+				<td align='center'>:</td>
+				<td>";
+				foreach ($tindakan as $td) {
+					$hasil .= $td->NM_ICD_9." <i>(".$td->KET_ICD_9.")</i><br>";
+				}
+			$hasil .= "</td>";
 		}
 
 		if (count($terapi) > 0) {
-			$hasil .= "<h4>Terapi:</h4>";
-			foreach ($terapi as $ter) {
-				$hasil .= $ter->NM_TERAPI.'; ';
-			}
+			$hasil .= "<tr valign='top'>
+				<td width='100px'>Terapi</td>
+				<td align='center'>:</td>
+				<td>";
+				foreach ($terapi as $ter) {
+					$hasil .= $ter->NM_TERAPI." <i>(".$ter->KET_TERAPI.")</i><br>";
+				}
+			$hasil .= "</td>";
 		}
 
+		$hasil .= "</table>";
+
 		if (count($resep_obat) > 0) {
-			$hasil .= "<h4>Resep Obat:</h4>";
+			$hasil .= "<h4>Resep Obat</h4>";
+			$hasil .= "<table width='100%' border='1' cellspacing='0'>
+				<thead>
+					<tr>
+						<th style='padding: 2px;'><center>Kode</center></th>
+						<th style='padding: 2px;'><center>Obat</center></th>
+						<th style='padding: 2px;'><center>Dosis</center></th>
+						<th style='padding: 2px;'><center>Jumlah</center></th>
+					</tr>
+				</thead>
+				<tbody>";
 			foreach ($resep_obat as $ro) {
-				$hasil .= $ro->NM_OBAT.' ('.$ro->KUANTITAS_OBAT.")<br>";
+				$hasil .= "<tr>
+					<td style='padding: 2px;'>".$ro->ID_OBAT."</td>
+					<td style='padding: 2px;'>".$ro->NM_OBAT."</td>
+					<td style='padding: 2px;' align='center'>".$ro->PEMAKAIAN."</td>
+					<td style='padding: 2px;' align='right'>".$ro->KUANTITAS_OBAT." ".$ro->SATUAN."</td>
+					</tr>";
 			}
+			$hasil .= "</tbody></table>";
+		}
+
+		if (count($odontogram) > 0) {
+			$hasil .= "<h4>Odontogram</h4>";
+			$hasil .= "<table width='100%' border='1' cellspacing='0'>
+				<thead>
+					<tr>
+						<th style='padding: 2px;'><center>Nomenklatur</center></th>
+						<th style='padding: 2px;'><center>Status</center></th>
+						<th style='padding: 2px;'><center>Simbol</center></th>
+						<th style='padding: 2px;'><center>Catatan</center></th>
+					</tr>
+				</thead>
+				<tbody>";
+			foreach ($odontogram as $odo) {
+				$hasil .= "<tr>
+					<td style='padding: 2px;' align='center'>".$odo->NOMOR."</td>
+					<td style='padding: 2px;'>".$odo->STATUS."</td>
+					<td style='padding: 2px;' align='center'><img src='".base_url()."assets/images/odontogram/".$odo->GAMBAR."' width='25px'></td>
+					<td style='padding: 2px;'>".$odo->CTTN_OD."</td>
+					</tr>";
+			}
+			$hasil .= "</tbody></table>";
 		}
 
 		if (count($hasil_lab) > 0 && $is_cetak != "ya") {

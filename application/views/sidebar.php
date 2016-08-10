@@ -63,7 +63,7 @@
         <?php endif ?>
         <?php if ($_SESSION['userrole'] == 'Dokter'): ?>
         <li><a href="<?php echo base_url().'laporan/penyakit_terbanyak'; ?>">Laporan Penyakit Terbanyak</a></li>
-        <!--<li><a href="<?php echo base_url().'laporan/rekam_medis_pasien'; ?>">Laporan Rekam Medis Pasien</a></li>-->
+        <li><a href="<?php echo base_url().'laporan/kunjungan_per_dokter'; ?>">Laporan Kunjungan per Dokter</a></li>
         <?php endif ?>
         <?php if ($_SESSION['userrole'] == 'Kasir/Apotik'): ?>
         <li><a href="<?php echo base_url().'laporan/pengeluaran_obat'; ?>">Laporan Pengeluaran Obat</a></li>

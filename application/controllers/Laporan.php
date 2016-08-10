@@ -23,10 +23,14 @@ class Laporan extends CI_Controller
 
 		        $data['judul'] = 'Laporan Kunjungan Pasien';
 		        $data['subjudul'] = 'Periode '.$nama_bulan[$bulan - 1].' '.$tahun;
-		        $data['data'] = $this->m_rekam_medis->get(array(
-		        	'month(rekam_medis.tgl_periksa)' => $bulan,
-		        	'year(rekam_medis.tgl_periksa)' => $tahun
-		        	));
+		        $data['data'] = $this->m_security->query("select * 
+		        	from rekam_medis
+		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        		left join poli on dokter.id_poli = poli.id_poli  
+		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien
+		        	where 
+		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
+		        		year(rekam_medis.tgl_periksa) = '".$tahun."'");
 		        
 		        // $this->pdfgenerator->generate('laporan/kunjungan_pasien_lihat', 'kunjungan_pasien_'.$nama_bulan[$$bulan - 1].' '.$tahun, 'portrait', 'a4', $data);
 		        $this->load->view('laporan/kunjungan_pasien_lihat', $data);
@@ -47,10 +51,15 @@ class Laporan extends CI_Controller
 		        $data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Laporan", "Laporan Kunjungan Pasien");
 		        $data['bulan'] = $bulan;
 		        $data['tahun'] = $tahun;
-				$data['data'] = $this->m_rekam_medis->get(array(
-		        	'month(rekam_medis.tgl_periksa)' => $bulan,
-		        	'year(rekam_medis.tgl_periksa)' => $tahun
-		        	));
+				
+		        $data['data'] = $this->m_security->query("select * 
+		        	from rekam_medis
+		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        		left join poli on dokter.id_poli = poli.id_poli  
+		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien
+		        	where 
+		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
+		        		year(rekam_medis.tgl_periksa) = '".$tahun."'");
 		        $data['cetak'] = base_url().'laporan/kunjungan_pasien/cetak';
 
 		        $this->load->view('layout', $data);
@@ -265,10 +274,18 @@ class Laporan extends CI_Controller
 
 		        $data['judul'] = 'Laporan Pengeluaran Obat';
 		        $data['subjudul'] = 'Periode Bulan '.$nama_bulan[$bulan - 1].' '.$tahun;
-		        $data['data'] = $this->m_resep_obat->get(array(
-		        	'month(rekam_medis.tgl_periksa)' => $bulan,
-		        	'year(rekam_medis.tgl_periksa)' => $tahun
-		        	));
+		        
+		        $data['data'] = $this->m_security->query("select *
+		        	from 
+		        		rekam_medis
+		        		left join resep_obat on rekam_medis.id_rekam_medis = resep_obat.id_rekam_medis 
+		        		left join obat on resep_obat.id_obat = obat.id_obat
+		        		left join pembayaran on rekam_medis.id_rekam_medis = pembayaran.id_rekam_medis 
+		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien 
+		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        	where 
+		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
+		        		year(rekam_medis.tgl_periksa) = '".$tahun."'");
 		        
 		        // $this->pdfgenerator->generate('laporan/pengeluaran_obat_lihat', 'pengeluaran_obat_'.$nama_bulan[$bulan - 1].'_'.$tahun, 'portrait', 'a4', $data);
 				$this->load->view('laporan/pengeluaran_obat_lihat', $data);
@@ -290,10 +307,17 @@ class Laporan extends CI_Controller
 		        $data['bulan'] = $bulan;
 		        $data['tahun'] = $tahun;
 
-				$data['data'] = $this->m_resep_obat->get(array(
-		        	'month(rekam_medis.tgl_periksa)' => $bulan,
-		        	'year(rekam_medis.tgl_periksa)' => $tahun
-		        	));
+		        $data['data'] = $this->m_security->query("select *
+		        	from 
+		        		rekam_medis
+		        		left join resep_obat on rekam_medis.id_rekam_medis = resep_obat.id_rekam_medis 
+		        		left join obat on resep_obat.id_obat = obat.id_obat
+		        		left join pembayaran on rekam_medis.id_rekam_medis = pembayaran.id_rekam_medis 
+		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien 
+		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        	where 
+		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
+		        		year(rekam_medis.tgl_periksa) = '".$tahun."'");
 		        $data['cetak'] = base_url().'laporan/pengeluaran_obat/cetak';
 
 		        $this->load->view('layout', $data);
@@ -392,6 +416,98 @@ class Laporan extends CI_Controller
 				$this->load->view('layout', $data);
 				break;
 		}
+	}
+
+	public function kunjungan_per_dokter($act = null)
+	{
+		switch ($act) {
+			case 'cetak':
+				# action untuk cetak jadi pdf
+				$bulan = $this->input->post('bulan');
+				$tahun = $this->input->post('tahun');
+
+				$nama_bulan = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 
+					'Agustus', 'September', 'Oktober', 'November', 'Desember');
+
+		        $data['judul'] = 'Laporan Kunjungan Pasien per Dokter';
+		        $data['subjudul'] = 'Dokter: '.$_SESSION['username'].'<br>Periode '.$nama_bulan[$bulan - 1].' '.$tahun;
+		        $data['data'] = $this->m_security->query("select * 
+		        	from rekam_medis
+		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        		left join poli on dokter.id_poli = poli.id_poli  
+		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien
+		        	where 
+		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
+		        		year(rekam_medis.tgl_periksa) = '".$tahun."' and 
+		        		rekam_medis.id_dokter = '".$_SESSION['userid']."'");
+		        
+		        $this->load->view('laporan/kunjungan_pasien_lihat', $data);
+				break;
+
+			case 'lihat':
+				# menampilkan preview laporan
+				$bulan = $this->input->post('bulan');
+				$tahun = $this->input->post('tahun');
+
+				$nama_bulan = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 
+					'Agustus', 'September', 'Oktober', 'November', 'Desember');
+
+				$data['aktif'] = 'laporan';
+		        $data['judul'] = 'Laporan Kunjungan Pasien per Dokter';
+		        $data['subjudul'] = 'Dokter: '.$_SESSION['username'].'<br>Periode '.$nama_bulan[$bulan - 1].' '.$tahun;
+		        $data['konten'] = 'laporan/kunjungan_pasien_lihat';
+		        $data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Laporan", "Laporan Kunjungan Pasien");
+		        $data['bulan'] = $bulan;
+		        $data['tahun'] = $tahun;
+				
+		        $data['data'] = $this->m_security->query("select * 
+		        	from rekam_medis
+		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        		left join poli on dokter.id_poli = poli.id_poli  
+		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien
+		        	where 
+		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
+		        		year(rekam_medis.tgl_periksa) = '".$tahun."' and 
+		        		rekam_medis.id_dokter = '".$_SESSION['userid']."'");
+		        $data['cetak'] = base_url().'laporan/kunjungan_per_dokter/cetak';
+
+		        $this->load->view('layout', $data);
+				break;
+			
+			default:
+				$data['aktif'] = "laporan";
+				$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Laporan", "Laporan Kunjungan per Dokter");
+				$data['judul'] = "Laporan Kunjungan per Dokter";
+				$data['konten'] = "laporan/kunjungan_per_dokter";
+				
+				$this->load->view('layout', $data);
+				break;
+		}
+	}
+
+	public function history_rekam_medis($id_pasien)
+	{
+		$pasien = $this->m_pasien->get(array('pasien.id_pasien' => $id_pasien));
+        
+        $data['judul'] = 'History Rekam Medis Pasien';
+        $data['subjudul'] = 'Pasien: '.$pasien[0]->NM_PASIEN;
+
+        $arr_data = array();
+        $rekam_medis = $this->m_rekam_medis->get(array('rekam_medis.id_pasien' => $id_pasien));
+        foreach ($rekam_medis as $rm) {
+        	$arr_data1['tgl_periksa'] = $rm->TGL_PERIKSA;
+        	$arr_data1['dokter'] = $rm->NM_DOKTER;
+        	$arr_data1['anamnesis'] = $rm->ANAMNESIS;
+        	$arr_data1['diagnosa'] = $this->m_detail_diagnosa->get(array('detail_diagnosa.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
+        	$arr_data1['tindakan'] = $this->m_detail_tindakan->get(array('detail_tindakan.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
+        	$arr_data1['terapi'] = $this->m_detail_terapi->get(array('detail_terapi.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
+        	$arr_data1['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
+
+        	array_push($arr_data, $arr_data1);
+        }
+        $data['data'] = $arr_data;
+        
+        $this->load->view('laporan/history_rm_pasien', $data);
 	}
 }
 ?>
