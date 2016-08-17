@@ -117,30 +117,15 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="terapi">Terapi</label>
 									<div class="col-sm-10">
-										<div class="row">
-											<div class="col-xs-6">
-												<select id="terapi" name="terapi[]" class="form-control select2" multiple="multiple" data-placeholder="Terapi yang perlu dilakukan" style="width: 100%;">
-													<option></option>
-													<?php foreach ($terapi as $ter): ?>
-													<option value="<?php echo $ter->ID_TERAPI ?>" 
-														<?php echo in_array($ter->ID_TERAPI, $detil_terapi)?"selected":""; ?>>
-														<?php echo $ter->NM_TERAPI ?>
-													</option>
-													<?php endforeach ?>
-												</select>
-											</div>
-											<div class="col-xs-6">
-												<select id="perawat_terapi" name="perawat_terapi" class="form-control select2" data-placeholder="Pendamping terapi" style="width: 100%;">
-													<option></option>
-													<?php foreach ($perawat as $per): ?>
-													<option value="<?php echo $per->ID_PERAWAT ?>" 
-														<?php echo $per->ID_PERAWAT==$perawat_terapi?"selected":""; ?>>
-														<?php echo $per->NM_PERAWAT ?>
-													</option>
-													<?php endforeach ?>
-												</select>
-											</div>
-										</div>
+										<select id="terapi" name="terapi[]" class="form-control select2" multiple="multiple" data-placeholder="Terapi yang perlu dilakukan" style="width: 100%;">
+											<option></option>
+											<?php foreach ($terapi as $ter): ?>
+											<option value="<?php echo $ter->ID_TERAPI ?>" 
+												<?php echo in_array($ter->ID_TERAPI, $detil_terapi)?"selected":""; ?>>
+												<?php echo $ter->NM_TERAPI ?>
+											</option>
+											<?php endforeach ?>
+										</select>
 									</div>
 								</div>
 

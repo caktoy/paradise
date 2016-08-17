@@ -161,4 +161,7 @@ $autoload['model'] = array(
 	'm_obat_diagnosa',
 	'm_terapi_diagnosa',
 	'm_lab_diagnosa',
+	'm_detail_resep_obat',
+	'm_detail_penjualan',
+	'm_penjualan'
 	);
