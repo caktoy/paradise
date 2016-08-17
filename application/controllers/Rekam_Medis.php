@@ -300,12 +300,11 @@ class Rekam_Medis extends CI_Controller
 			$data_odontogram[$odo->NOMOR] = $odo->GAMBAR;
 		$data['odontogram'] = $data_odontogram;
 
-		$data['pemeriksaan_lab'] = $this->m_pemeriksaan_lab->get(array('pemeriksaan_lab.id_poli' => $dokter[0]->ID_POLI));
-		$data['diagnosis'] = $this->m_diagnosa_icd_10->get(array('diagnosa_icd_10.id_poli' => $dokter[0]->ID_POLI));
-		$data['tindakan'] = $this->m_tindakan_icd_9->get(array('tindakan_icd_9.id_poli' => $dokter[0]->ID_POLI));
-		$data['terapi'] = $this->m_terapi->get(array('terapi.id_poli' => $dokter[0]->ID_POLI));
+		$data['pemeriksaan_lab'] = $this->m_pemeriksaan_lab->get(array());
+		$data['diagnosis'] = $this->m_diagnosa_icd_10->get(array());
+		$data['tindakan'] = $this->m_tindakan_icd_9->get(array());
+		$data['terapi'] = $this->m_terapi->get(array());
 		$data['obat'] = $this->m_obat->get(array());
-		$data['perawat'] = $this->m_perawat->get(array('perawat.id_poli' => $dokter[0]->ID_POLI));
 		$data['status_gigi'] = $this->m_status_gigi->get(array());
 
 		$this->load->view('layout', $data);
@@ -481,6 +480,63 @@ class Rekam_Medis extends CI_Controller
 			echo "sukses";
 		else
 			echo "gagal";
+	}
+
+	public function get_tindakan()
+	{
+		$diagnosis = $this->input->post('diagnosis');
+		$arr_detil = array();
+		foreach ($diagnosis as $dg)
+		{
+			$detil = $this->m_tindakan_diagnosa->get(array('tindakan_diagnosa.KODE_ICD_10' => $dg));
+			if (count($detil) > 0) {
+				$obj = (object) [
+					'id' => $detil[0]->KODE_ICD_9,
+					'text' => $detil[0]->NM_ICD_9
+				];
+				array_push($arr_detil, $obj);
+			}
+		}
+		header("Content-Type: application/json");
+		echo json_encode($arr_detil);
+	}
+
+	public function get_terapi()
+	{
+		$diagnosis = $this->input->post('diagnosis');
+		$arr_detil = array();
+		foreach ($diagnosis as $dg)
+		{
+			$detil = $this->m_terapi_diagnosa->get(array('terapi_diagnosa.KODE_ICD_10' => $dg));
+			if (count($detil) > 0) {
+				$obj = (object) [
+					'id' => $detil[0]->ID_TERAPI,
+					'text' => $detil[0]->NM_TERAPI
+				];
+				array_push($arr_detil, $obj);
+			}
+		}
+		header("Content-Type: application/json");
+		echo json_encode($arr_detil);
+	}
+	
+	public function get_pemeriksaan()
+	{
+		$diagnosis = $this->input->post('diagnosis');
+		$arr_detil = array();
+		foreach ($diagnosis as $dg)
+		{
+			$detil = $this->m_lab_diagnosa->get(array('lab_diagnosa.KODE_ICD_10' => $dg));
+			if (count($detil) > 0) {
+				$obj = (object) [
+					'id' => $detil[0]->ID_LAB,
+					'text' => $detil[0]->LAB
+				];
+				array_push($arr_detil, $obj);
+			}
+		}
+		header("Content-Type: application/json");
+		echo json_encode($arr_detil);
 	}
 }
 ?>
