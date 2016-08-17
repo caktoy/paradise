@@ -9,8 +9,7 @@ class M_Resep_Obat extends CI_Model
 		$this->db->select("*");
 		$this->db->from("resep_obat");
 		$this->db->join("rekam_medis", "resep_obat.id_rekam_medis = rekam_medis.id_rekam_medis", "left");
-		$this->db->join("obat", "resep_obat.id_obat = obat.id_obat", "left");
-		$this->db->join("jenis_obat", "obat.id_jenis_obat = jenis_obat.id_jenis_obat", "left");
+		$this->db->join("detail_resep_obat", "resep_obat.no_resep = detail_resep_obat.no_resep", "left");
 		$this->db->where($cond);
 		return $this->db->get()->result();
 	}

@@ -9,7 +9,6 @@ class M_Perawat extends CI_Model
 		$this->db->select("*");
 		$this->db->from("perawat");
 		$this->db->join("kota", "perawat.id_kota = kota.id_kota", "left");
-		$this->db->join("poli", "perawat.id_poli = poli.id_poli", "left");
 		$this->db->where($cond);
 		return $this->db->get()->result();
 	}

@@ -76,7 +76,7 @@
 	                    					</a> -->
 	                    					<?php elseif($antri->STATUS_ANTRIAN == "Selesai"): ?>
                     						<a href="<?php echo base_url().'rekam_medis/pre_proses/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'/'.strtotime($antri->TGL_ANTRIAN) ?>" class="btn btn-flat btn-success btn-xs">
-	                    						<i class="fa fa-edit"></i> Ubah
+	                    						<i class="fa fa-edit"></i> Tinjau Ulang
 	                    					</a>
 	                    					<?php else: ?>
 	                    						<?php echo $antri->STATUS_ANTRIAN ?>

@@ -11,8 +11,22 @@ class Pemeriksaan_Lab extends CI_Controller
 		$data['judul'] = "Maintenance Master Pemeriksaan Lab";
 		$data['konten'] = "master/pemeriksaan_lab";
 		$data['kodepemeriksaan_lab'] = $this->m_security->gen_non_ai_id("LAB", "pemeriksaan_lab", "id_lab", 4);
-		$data['pemeriksaan_lab'] = $this->m_pemeriksaan_lab->get(array());
-		$data['poli'] = $this->m_poli->get(array());
+		$data['diagnosa'] = $this->m_diagnosa_icd_10->get(array());
+
+        $arr_lab = array();
+        $lab = $this->m_pemeriksaan_lab->get(array());
+        foreach ($lab as $l) {
+            $diagnosis = $this->m_lab_diagnosa->get(array('lab_diagnosa.id_lab' => $l->ID_LAB));
+
+            $obj = (object) [
+                'lab' => $l,
+                'diagnosa' => $diagnosis
+            ];
+
+            array_push($arr_lab, $obj);
+        }
+
+		$data['pemeriksaan_lab'] = $arr_lab;
 		
 		$this->load->view('layout', $data);
 	}
@@ -20,7 +34,7 @@ class Pemeriksaan_Lab extends CI_Controller
 	public function tambah()
 	{
 		$id_lab = $this->input->post('id_lab');
-		$id_poli = $this->input->post('id_poli');
+		$diagnosa = $this->input->post('diagnosa');
         $lab = $this->input->post('lab');
         $harga = $this->input->post('harga');
         
@@ -30,13 +44,20 @@ class Pemeriksaan_Lab extends CI_Controller
         } else {
             $act = $this->m_pemeriksaan_lab->create(array(
             	'id_lab' => $id_lab,
-            	'id_poli' => $id_poli,
             	'lab' => $lab,
             	'harga' => $harga
             	));
 	        
-	        if ($act > 0) 
+	        if ($act > 0) {
+	        	foreach ($diagnosa as $d) {
+                    $this->m_lab_diagnosa->create(array(
+                        'id_lab' => $id_lab,
+                        'kode_icd_10' => $d
+                        ));
+                }
+
 	            $this->session->set_flashdata('pesan', '<b>Berhasil!</b> Data pemeriksaan lab telah disimpan.');
+	        }
 	        else
 	            $this->session->set_flashdata('pesan', '<b>Gagal!</b> Data pemeriksaan lab gagal disimpan.');
         }
@@ -47,21 +68,29 @@ class Pemeriksaan_Lab extends CI_Controller
 	public function edit()
 	{
 		$id_lab = $this->input->post('e-id_lab');
-		$id_poli = $this->input->post('e-id_poli');
+		$diagnosa = $this->input->post('e-diagnosa');
 		$lab = $this->input->post('e-lab');
 		$harga = $this->input->post('e-harga');
 
 		$act = $this->m_pemeriksaan_lab->patch(
 			array('id_lab' => $id_lab),
 			array(
-				'id_poli' => $id_poli,
 				'lab' => $lab,
 				'harga' => $harga
 				)
 			);
 
-		if ($act > 0) 
+		if ($act > 0) {
+			$this->m_lab_diagnosa->remove(array('id_lab' => $id_lab));
+			foreach ($diagnosa as $d) {
+                $this->m_lab_diagnosa->create(array(
+                    'id_lab' => $id_lab,
+                    'kode_icd_10' => $d
+                    ));
+            }
+
             $this->session->set_flashdata('pesan', '<b>Berhasil!</b> Data pemeriksaan lab telah diubah.');
+		}
         else
             $this->session->set_flashdata('pesan', '<b>Gagal!</b> Data pemeriksaan lab gagal diubah.');
 

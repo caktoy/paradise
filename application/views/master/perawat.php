@@ -90,18 +90,6 @@
 	                </div>
 
 	                <div class="form-group">
-						<label class="col-sm-2 control-label" for="idpoli">Poli</label>
-						<div class="col-sm-4">
-						    <select id="idpoli" class="form-control select2" name="idpoli" required>
-						    	<option></option>
-						    	<?php foreach ($poli as $p): ?>
-						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
-						    	<?php endforeach ?>
-						    </select>
-						</div>
-					</div>
-
-	                <div class="form-group">
 	                	<label class="col-sm-2 control-label">Bagian</label>
 	                  	<div class="col-sm-3">
 	                    	<select id="bagperawat" name="bagperawat" class="form-control select2" required>
@@ -136,7 +124,6 @@
 				                <tr>
 					                <th>ID Perawat</th>
 	                        		<th>Nama Perawat</th>
-	                        		<th>Poli</th>
 	                        		<th>Bagian</th>
 	                        		<th>Jenis Kelamin</th>
 	                        		<th>Tempat, Tanggal Lahir</th>
@@ -149,7 +136,6 @@
                   				<tr>
                     				<td><?php echo $p->ID_PERAWAT; ?></td>
                     				<td><?php echo $p->NM_PERAWAT; ?></td>
-                    				<td><?php echo $p->NM_POLI; ?></td>
                     				<td><?php echo $p->BAG_PERAWAT; ?></td>
                     				<td><?php echo $p->JK_PERAWAT; ?></td>
                     				<td><?php echo $p->NM_KOTA.', '.date('d-m-Y', strtotime($p->TGL_LHR_PERAWAT)); ?></td>
@@ -255,18 +241,6 @@
 	                </div>
 
 	                <div class="form-group">
-						<label class="col-sm-3 control-label" for="e-idpoli">Poli</label>
-						<div class="col-sm-6">
-						    <select id="e-idpoli" class="form-control select2" name="e-idpoli" style="width: 100%;" required>
-						    	<option></option>
-						    	<?php foreach ($poli as $p): ?>
-						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
-						    	<?php endforeach ?>
-						    </select>
-						</div>
-					</div>
-
-	                <div class="form-group">
 	                	<label class="col-sm-3 control-label">Bagian</label>
 	                  	<div class="col-sm-6">
 	                    	<select id="e-bagperawat" name="e-bagperawat" class="form-control">
@@ -310,7 +284,6 @@
 
 				$('#e-almtperawat').val(result[0].ALAMAT_PERAWAT);
 				$('#e-telpperawat').val(result[0].TELP_PERAWAT);
-				$('#e-idpoli').val(result[0].ID_POLI);
 				$('#e-bagperawat').val(result[0].BAG_PERAWAT);
 			},
 			error: function(xhr, status, error) {

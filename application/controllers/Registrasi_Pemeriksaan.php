@@ -154,6 +154,7 @@ class Registrasi_Pemeriksaan extends CI_Controller
 								                <th width="25px">No.</th>
 								                <th>Pasien</th>
 								                <th>Status</th>
+								                <th>StatusNo</th>
 								                <th style="width:20%;">Aksi</th>
 								            </tr>
 							            </thead>
@@ -167,18 +168,25 @@ class Registrasi_Pemeriksaan extends CI_Controller
 				                    				<td>#'.$antri->ID_PASIEN.' - '.$antri->NM_PASIEN.'</td>';
 
 				                    				$label_type = "label-info";
-				                    				if($antri->STATUS_ANTRIAN == "Menunggu")
+				                    				$status_no = 2;
+				                    				if($antri->STATUS_ANTRIAN == "Menunggu") {
 				                    					$label_type = "label-info";
-				                    				elseif($antri->STATUS_ANTRIAN == "Selesai")
+				                    					$status_no = 2;
+				                    				} elseif($antri->STATUS_ANTRIAN == "Selesai") {
 				                    					$label_type = "label-success";
-				                    				elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung")
+				                    					$status_no = 3;
+				                    				} elseif($antri->STATUS_ANTRIAN == "Sedang Berlangsung") {
 				                    					$label_type = "label-warning";
-				                    				elseif($antri->STATUS_ANTRIAN == "Batal")
+				                    					$status_no = 1;
+				                    				} elseif($antri->STATUS_ANTRIAN == "Batal") {
 				                    					$label_type = "label-danger";
+				                    					$status_no = 4;
+				                    				}
 
 				                    				$hasil .= '<td align="center">
 				                    					<span class="label '.$label_type.'">'.$antri->STATUS_ANTRIAN.'</span>
 			                    					</td>
+			                    					<td>'.$status_no.'</td>
 				                    				<td align="center">';
 				                    					if ($antri->STATUS_ANTRIAN == "Menunggu") {
 					                    					$hasil .= '<a href="'.base_url().'antrian/push/'.$antri->ID_ANTRIAN.'/'.$antri->ID_PASIEN.'/'.$antri->ID_POLI.'" class="btn btn-flat btn-info btn-xs">
@@ -215,7 +223,13 @@ class Registrasi_Pemeriksaan extends CI_Controller
 
 		foreach ($poli as $p) {
 			$hasil .= '<script>';
-			$hasil .= '$("#table-'.$p->ID_POLI.'").DataTable();';
+			$hasil .= '$("#table-'.$p->ID_POLI.'").DataTable({
+				"order": [[3, "asc"]],
+				"columnDefs": [
+					{"visible": false, "targets": 3},
+					{"searchable": false, "orderable": false, "targets": [0, 1, 2, 4]}
+				]
+			});';
 			$hasil .= '</script>';
 		}
 

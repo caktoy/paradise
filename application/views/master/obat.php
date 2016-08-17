@@ -25,7 +25,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Jenis Obat</label>
 						<div class="col-sm-4">
-						    <select class="form-control" name="id_jenis_obat" required autofocus>
+						    <select class="form-control select2" name="id_jenis_obat" data-placeholder="Pilih jenis obat" required autofocus>
 						    	<option></option>
 						    	<?php foreach ($jenis_obat as $jo): ?>
 						    	<option value="<?php echo $jo->ID_JENIS_OBAT; ?>"><?php echo $jo->NM_JENIS_OBAT; ?></option>
@@ -45,6 +45,17 @@
 						<label class="col-sm-2 control-label">Jumlah Obat</label>
 						<div class="col-sm-4">
 						    <input type="number" class="form-control" name="jml_obat" min="0">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="diagnosa">Diagnosa</label>
+						<div class="col-sm-4">
+						    <select id="diagnosa" class="form-control select2" multiple="multiple" name="diagnosa[]" required>
+						    	<?php foreach ($diagnosa as $d): ?>
+						    	<option value="<?php echo $d->KODE_ICD_10 ?>"><?php echo $d->NM_ICD_10 ?></option>
+						    	<?php endforeach ?>
+						    </select>
 						</div>
 					</div>
 
@@ -95,24 +106,39 @@
 					                <th>Harga Obat</th>
 					                <th>Jumlah</th>
 					                <th>Satuan</th>
-					                <th style="width:15%;">Aksi</th>
+					                <th>Diagnosa</th>
+					                <th style="width:75px;">Aksi</th>
 					            </tr>
 				            </thead>
 				        	<tbody>
 				        		<?php foreach ($obat as $o): ?>
                   				<tr>
-                    				<td><?php echo $o->ID_OBAT; ?></td>
-                    				<td><?php echo $o->NM_OBAT; ?></td>
-                    				<td><?php echo $o->NM_JENIS_OBAT; ?></td>
-                    				<td>Rp<?php echo number_format($o->HRG_OBAT, 2, ",", "."); ?></td>
-                    				<td><?php echo $o->JML_OBAT; ?></td>
-                    				<td><?php echo $o->SATUAN; ?></td>
+                    				<td><?php echo $o->obat->ID_OBAT; ?></td>
+                    				<td><?php echo $o->obat->NM_OBAT; ?></td>
+                    				<td><?php echo $o->obat->NM_JENIS_OBAT; ?></td>
+                    				<td align="right">Rp<?php echo number_format($o->obat->HRG_OBAT, 2, ",", "."); ?></td>
+                    				<td><?php echo $o->obat->JML_OBAT; ?></td>
+                    				<td><?php echo $o->obat->SATUAN; ?></td>
+                    				<td>
+                    					<?php 
+                    					$idx = 1;
+                    					$dg_select = "";
+                    					if (count($o->diagnosa) > 0) {
+	                    					foreach ($o->diagnosa as $dg) {
+	                    						echo $dg->NM_ICD_10;
+	                    						echo $idx==count($o->diagnosa)?".":", ";
+	                    						$dg_select .= $dg->KODE_ICD_10.";";
+	                    						$idx++;
+	                    					}
+                    					} 
+                    					?>
+                    				</td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
-                    						data-target="#myModal" onclick="edit('<?php echo $o->ID_OBAT; ?>', 
-                    						'<?php echo $o->ID_JENIS_OBAT; ?>', '<?php echo $o->NM_OBAT; ?>', 
-                    						'<?php echo $o->JML_OBAT; ?>', '<?php echo $o->HRG_OBAT; ?>', 
-                    						'<?php echo $o->SATUAN; ?>')">
+                    						data-target="#myModal" onclick="edit('<?php echo $o->obat->ID_OBAT; ?>', 
+                    						'<?php echo $o->obat->ID_JENIS_OBAT; ?>', '<?php echo $o->obat->NM_OBAT; ?>', 
+                    						'<?php echo $o->obat->JML_OBAT; ?>', '<?php echo $o->obat->HRG_OBAT; ?>', 
+                    						'<?php echo $o->obat->SATUAN; ?>', '<?php echo $dg_select; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
                 					</td>
@@ -129,7 +155,7 @@
 </div>
 
 <!--MODAL-->
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myModalLabel">
+<div class="modal fade" role="dialog" id="myModal" aria-labelledby="myModalLabel">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -147,7 +173,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Jenis Obat</label>
 						<div class="col-sm-6">
-						    <select class="form-control" name="e-id_jenis_obat" id="e-id_jenis_obat" required>
+						    <select class="form-control" name="e-id_jenis_obat" id="e-id_jenis_obat" style="width:100%;" required>
 						    	<option></option>
 						    	<?php foreach ($jenis_obat as $jo): ?>
 						    	<option value="<?php echo $jo->ID_JENIS_OBAT; ?>"><?php echo $jo->NM_JENIS_OBAT; ?></option>
@@ -167,6 +193,17 @@
 						<label class="col-sm-2 control-label">Jumlah Obat</label>
 						<div class="col-sm-3">
 						    <input type="number" class="form-control" name="e-jml_obat" id="e-jml_obat" min="0">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="e-diagnosa">Diagnosa</label>
+						<div class="col-sm-8">
+						    <select id="e-diagnosa" class="form-control select2" multiple="multiple" name="e-diagnosa[]" style="width: 100%" required>
+						    	<?php foreach ($diagnosa as $d): ?>
+						    	<option value="<?php echo $d->KODE_ICD_10 ?>"><?php echo $d->NM_ICD_10 ?></option>
+						    	<?php endforeach ?>
+						    </select>
 						</div>
 					</div>
 
@@ -201,12 +238,15 @@
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, jenis, nama, jml, hrg, satuan) {
+	function edit(id, jenis, nama, jml, hrg, satuan, diagnosa) {
 		$('#e-id_obat').val(id);
 		$('#e-id_jenis_obat').val(jenis);
 		$('#e-nm_obat').val(nama);
 		$('#e-jml_obat').val(jml);
 		$('#e-hrg_obat').val(hrg);
 		$('#e-satuan').val(satuan);
+		$.each(diagnosa.split(';'), function(i, e) {
+			$("#e-diagnosa option[value='" + e + "']").prop("selected", true);
+		});
 	}
 </script>

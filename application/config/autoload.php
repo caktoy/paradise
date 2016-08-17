@@ -157,4 +157,8 @@ $autoload['model'] = array(
 	'm_status_gigi',
 	'm_terapi',
 	'm_tindakan_icd_9',
+	'm_tindakan_diagnosa',
+	'm_obat_diagnosa',
+	'm_terapi_diagnosa',
+	'm_lab_diagnosa',
 	);

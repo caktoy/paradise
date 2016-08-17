@@ -37,12 +37,11 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-sm-2 control-label" for="id_poli">Poli</label>
+						<label class="col-sm-2 control-label" for="diagnosa">Diagnosa</label>
 						<div class="col-sm-4">
-						    <select id="id_poli" class="form-control select2" name="id_poli" required>
-						    	<option></option>
-						    	<?php foreach ($poli as $p): ?>
-						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    <select id="diagnosa" class="form-control select2" multiple="multiple" name="diagnosa[]" required>
+						    	<?php foreach ($diagnosa as $d): ?>
+						    	<option value="<?php echo $d->KODE_ICD_10 ?>"><?php echo $d->NM_ICD_10 ?></option>
 						    	<?php endforeach ?>
 						    </select>
 						</div>
@@ -79,14 +78,14 @@
 				<div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
 		    		<div class="row">
 			    	<div class="col-sm-12">
-			        	<table id="table1" class="table table-bordered table-striped">
+			        	<table id="example1" class="table table-bordered table-striped">
 				            <thead>
 				                <tr>
 					                <th>Kode</th>
-					                <th>Poli</th>
 					                <th>Tindakan</th>
 					                <th>Keterangan</th>
 					                <th>Harga</th>
+					                <th>Diagnosa</th>
 					                <th style="width:15%;">Aksi</th>
 					            </tr>
 				            </thead>
@@ -94,15 +93,28 @@
 				        		<?php foreach ($tindakan_icd_9 as $icd_9): ?>
                   				<tr>
                     				<td><?php echo $icd_9->KODE_ICD_9; ?></td>
-                    				<td><?php echo $icd_9->NM_POLI; ?></td>
                     				<td><?php echo $icd_9->NM_ICD_9; ?></td>
                     				<td><?php echo $icd_9->KET_ICD_9; ?></td>
-                    				<td>Rp<?php echo number_format($icd_9->HARGA_TINDAKAN, 2, ",", "."); ?></td>
+                    				<td align="right">Rp<?php echo number_format($icd_9->HARGA_TINDAKAN, 2, ",", "."); ?></td>
+                    				<td>
+                    					<?php 
+                    					$idx = 1;
+                    					$dg_select = "";
+                    					if (count($icd_9->DIAGNOSA) > 0) {
+	                    					foreach ($icd_9->DIAGNOSA as $dg) {
+	                    						echo $dg->NM_ICD_10;
+	                    						echo $idx==count($icd_9->DIAGNOSA)?".":", ";
+	                    						$dg_select .= $dg->KODE_ICD_10.";";
+	                    						$idx++;
+	                    					}
+                    					} 
+                    					?>
+                    				</td>
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
                     						data-target="#myModal" onclick="edit('<?php echo $icd_9->KODE_ICD_9; ?>', 
-                    						'<?php echo $icd_9->ID_POLI; ?>', '<?php echo $icd_9->NM_ICD_9; ?>', 
-                    						'<?php echo $icd_9->KET_ICD_9; ?>', '<?php echo $icd_9->HARGA_TINDAKAN; ?>')">
+                    						'<?php echo $icd_9->NM_ICD_9; ?>', '<?php echo $icd_9->KET_ICD_9; ?>', 
+                    						'<?php echo $icd_9->HARGA_TINDAKAN; ?>', '<?php echo $dg_select; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
                 					</td>
@@ -149,12 +161,11 @@
 					</div>
 
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="e-id_poli">Poli</label>
+						<label class="col-sm-3 control-label" for="e-diagnosa">Diagnosa</label>
 						<div class="col-sm-9">
-						    <select id="e-id_poli" class="form-control select2" name="e-id_poli" style="width: 100%;" required>
-						    	<option></option>
-						    	<?php foreach ($poli as $p): ?>
-						    	<option value="<?php echo $p->ID_POLI ?>"><?php echo $p->NM_POLI ?></option>
+						    <select id="e-diagnosa" class="form-control select2" multiple="multiple" name="e-diagnosa[]" style="width: 100%" required>
+						    	<?php foreach ($diagnosa as $d): ?>
+						    	<option value="<?php echo $d->KODE_ICD_10 ?>"><?php echo $d->NM_ICD_10 ?></option>
 						    	<?php endforeach ?>
 						    </select>
 						</div>
@@ -184,47 +195,13 @@
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, poli, nama, ket, harga) {
+	function edit(id, nama, ket, harga, diagnosa) {
 		$('#e-kode_icd_9').val(id);
-		$('#e-id_poli').val(poli);
 		$('#e-nm_icd_9').val(nama);
 		$('#e-ket_icd_9').val(ket);
 		$('#e-harga_tindakan').val(harga);
+		$.each(diagnosa.split(';'), function(i, e) {
+			$("#e-diagnosa option[value='" + e + "']").prop("selected", true);
+		});
 	}
-
-	$(document).ready(function() {
-	    var table = $('#table1').DataTable({
-	        "columnDefs": [
-	            { "visible": false, "targets": 1 }
-	        ],
-	        "order": [[ 1, 'asc' ]],
-	        "displayLength": 25,
-	        "drawCallback": function ( settings ) {
-	            var api = this.api();
-	            var rows = api.rows( {page:'current'} ).nodes();
-	            var last=null;
-	 
-	            api.column(1, {page:'current'} ).data().each( function ( group, i ) {
-	                if ( last !== group ) {
-	                    $(rows).eq( i ).before(
-	                        '<tr class="group" style="background-color: #E0E0E0;font-style: italic;font-weight: bold;"><td colspan="6">'+group+'</td></tr>'
-	                    );
-	 
-	                    last = group;
-	                }
-	            } );
-	        }
-	    } );
-	 
-	    // Order by the grouping
-	    $('#table1 tbody').on( 'click', 'tr.group', function () {
-	        var currentOrder = table.order()[0];
-	        if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
-	            table.order( [ 2, 'desc' ] ).draw();
-	        }
-	        else {
-	            table.order( [ 2, 'asc' ] ).draw();
-	        }
-	    } );
-	} );
 </script>

@@ -293,10 +293,6 @@ class Rekam_Medis extends CI_Controller
 		}
 		$data['hasil_lab'] = $arr_hasil_lab;
 
-		$perawat_terapi = $this->m_security->query("select distinct ID_PERAWAT 
-			from detail_terapi where id_rekam_medis = '".$id_rekam_medis."'");
-		$data['perawat_terapi'] = count($perawat_terapi)>0?$perawat_terapi[0]->ID_PERAWAT:null;
-
 		$data['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
 		$odontogram = $this->m_odontogram->get(array('odontogram.id_rekam_medis' => $id_rekam_medis));
 		$data_odontogram = array();
