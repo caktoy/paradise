@@ -481,5 +481,62 @@ class Rekam_Medis extends CI_Controller
 		else
 			echo "gagal";
 	}
+
+	public function get_tindakan()
+	{
+		$diagnosis = $this->input->post('diagnosis');
+		$arr_detil = array();
+		foreach ($diagnosis as $dg)
+		{
+			$detil = $this->m_tindakan_diagnosa->get(array('tindakan_diagnosa.KODE_ICD_10' => $dg));
+			if (count($detil) > 0) {
+				$obj = (object) [
+					'id' => $detil[0]->KODE_ICD_9,
+					'text' => $detil[0]->NM_ICD_9
+				];
+				array_push($arr_detil, $obj);
+			}
+		}
+		header("Content-Type: application/json");
+		echo json_encode($arr_detil);
+	}
+
+	public function get_terapi()
+	{
+		$diagnosis = $this->input->post('diagnosis');
+		$arr_detil = array();
+		foreach ($diagnosis as $dg)
+		{
+			$detil = $this->m_terapi_diagnosa->get(array('terapi_diagnosa.KODE_ICD_10' => $dg));
+			if (count($detil) > 0) {
+				$obj = (object) [
+					'id' => $detil[0]->ID_TERAPI,
+					'text' => $detil[0]->NM_TERAPI
+				];
+				array_push($arr_detil, $obj);
+			}
+		}
+		header("Content-Type: application/json");
+		echo json_encode($arr_detil);
+	}
+	
+	public function get_pemeriksaan()
+	{
+		$diagnosis = $this->input->post('diagnosis');
+		$arr_detil = array();
+		foreach ($diagnosis as $dg)
+		{
+			$detil = $this->m_lab_diagnosa->get(array('lab_diagnosa.KODE_ICD_10' => $dg));
+			if (count($detil) > 0) {
+				$obj = (object) [
+					'id' => $detil[0]->ID_LAB,
+					'text' => $detil[0]->LAB
+				];
+				array_push($arr_detil, $obj);
+			}
+		}
+		header("Content-Type: application/json");
+		echo json_encode($arr_detil);
+	}
 }
 ?>

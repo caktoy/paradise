@@ -103,20 +103,14 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="tindakan">Tindakan</label>
 									<div class="col-sm-10">
-										<select id="tindakan" name="tindakan[]" class="form-control select2" multiple="multiple" data-placeholder="Tindakan yang dilakukan" style="width: 100%;">
-											<?php foreach ($tindakan as $tindak): ?>
-											<option value="<?php echo $tindak->KODE_ICD_9 ?>" 
-												<?php echo in_array($tindak->KODE_ICD_9, $detil_tindakan)?"selected":""; ?>>
-												<?php echo $tindak->NM_ICD_9 ?>
-											</option>
-											<?php endforeach ?>
-										</select>
+										<select id="tindakan" name="tindakan[]" class="form-control select2" multiple="multiple" data-placeholder="Tindakan yang dilakukan" style="width: 100%;"></select>
 									</div>
 								</div>
 
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="terapi">Terapi</label>
 									<div class="col-sm-10">
+<<<<<<< HEAD
 										<select id="terapi" name="terapi[]" class="form-control select2" multiple="multiple" data-placeholder="Terapi yang perlu dilakukan" style="width: 100%;">
 											<option></option>
 											<?php foreach ($terapi as $ter): ?>
@@ -126,20 +120,16 @@
 											</option>
 											<?php endforeach ?>
 										</select>
+=======
+										<select id="terapi" name="terapi[]" class="form-control select2" multiple="multiple" data-placeholder="Terapi yang perlu dilakukan" style="width: 100%;"></select>	
+>>>>>>> 13ccbc030b8b05256b0f8f243d1e558a25a8f63c
 									</div>
 								</div>
 
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="lab">Pemeriksaan Lab</label>
 									<div class="col-sm-10">
-										<select id="lab" name="lab[]" class="form-control select2" multiple="multiple" data-placeholder="Pemeriksaan lab" style="width: 100%;">
-											<?php foreach ($pemeriksaan_lab as $lab): ?>
-											<option value="<?php echo $lab->ID_LAB ?>" 
-												<?php echo in_array($lab->ID_LAB, $hasil_lab)?"selected":""; ?>>
-												<?php echo $lab->LAB ?>
-											</option>
-											<?php endforeach ?>
-										</select>
+										<select id="lab" name="lab[]" class="form-control select2" multiple="multiple" data-placeholder="Pemeriksaan lab" style="width: 100%;"></select>
 									</div>
 								</div>
 							</div>
@@ -1024,5 +1014,65 @@
 				data: {"id_rekam_medis": rekam_medis, "catatan": catatan}
 			});
 		});
+
+		$("#diagnosis").on('change',function() {
+			var diagnosis = $(this).val();
+			
+			// tindakan
+			$.ajax({
+				url: "<?php echo base_url().'rekam_medis/get_tindakan' ?>",
+				type: "post",
+				dataType: 'json',
+				data: {"diagnosis": diagnosis},
+				success: function(r)
+				{
+					$("#tindakan").select2({
+						data: r
+					});
+				},
+				error: function(r)
+				{
+					alert("Maaf, gagal mengambil data tindakan.");
+				}
+			});
+
+			// terapi
+			$.ajax({
+				url: "<?php echo base_url().'rekam_medis/get_terapi' ?>",
+				type: "post",
+				dataType: 'json',
+				data: {"diagnosis": diagnosis},
+				success: function(r)
+				{
+					$("#terapi").select2({
+						data: r
+					});
+				},
+				error: function(r)
+				{
+					alert("Maaf, gagal mengambil data terapi.");
+				}
+			});
+
+
+			// pemeriksaan lab
+			$.ajax({
+				url: "<?php echo base_url().'rekam_medis/get_pemeriksaan' ?>",
+				type: "post",
+				dataType: 'json',
+				data: {"diagnosis": diagnosis},
+				success: function(r)
+				{
+					$("#lab").select2({
+						data: r
+					});
+				},
+				error: function(r)
+				{
+					alert("Maaf, gagal mengambil data pemeriksaan lab.");
+				}
+			});
+		});
+		
 	})
 </script>
