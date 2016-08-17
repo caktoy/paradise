@@ -961,7 +961,7 @@
 					$("#jumlah").val(null);
 				},
 				error: function(xhr, status, error) {
-					alert('Gagal menambahkan obat.');
+					alert('Maaf, terjadi kesalahan.\nGagal menambahkan obat.');
 					load_resep(rekam_medis);
 				}
 			});

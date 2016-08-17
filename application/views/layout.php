@@ -84,7 +84,11 @@
                         <?php echo $_SESSION['userrole'] ?>
                       </div>
                       <div class="col-xs-6 text-center">
+                      <?php if ($_SESSION['userrole'] == "Dokter"): ?>
                         <?php echo $_SESSION['nmpoli'] ?>
+                      <?php else: ?>
+                        Perawat
+                      <?php endif ?>
                       </div>
                     </div>
                     <!-- /.row -->
