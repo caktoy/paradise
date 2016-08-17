@@ -110,19 +110,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 control-label" for="terapi">Terapi</label>
 									<div class="col-sm-10">
-<<<<<<< HEAD
-										<select id="terapi" name="terapi[]" class="form-control select2" multiple="multiple" data-placeholder="Terapi yang perlu dilakukan" style="width: 100%;">
-											<option></option>
-											<?php foreach ($terapi as $ter): ?>
-											<option value="<?php echo $ter->ID_TERAPI ?>" 
-												<?php echo in_array($ter->ID_TERAPI, $detil_terapi)?"selected":""; ?>>
-												<?php echo $ter->NM_TERAPI ?>
-											</option>
-											<?php endforeach ?>
-										</select>
-=======
-										<select id="terapi" name="terapi[]" class="form-control select2" multiple="multiple" data-placeholder="Terapi yang perlu dilakukan" style="width: 100%;"></select>	
->>>>>>> 13ccbc030b8b05256b0f8f243d1e558a25a8f63c
+										<select id="terapi" name="terapi[]" class="form-control select2" multiple="multiple" data-placeholder="Terapi yang perlu dilakukan" style="width: 100%;"></select>
 									</div>
 								</div>
 
@@ -140,12 +128,7 @@
 					            		<div class="form-group">
 					                  		<label class="col-sm-3 control-label">Obat</label>
 					                    	<div class="col-sm-9">
-					                    		<select id="obat" class="form-control select2" name="obat" data-placeholder="Pilih Obat...">
-													<option></option>
-													<?php foreach ($obat as $o): ?>
-													<option value="<?php echo $o->ID_OBAT ?>"><?php echo $o->NM_OBAT ?></option>
-													<?php endforeach ?>
-												</select>
+					                    		<select id="obat" class="form-control select2" name="obat" data-placeholder="Pilih Obat..."></select>
 					                    	</div>
 			                			</div>
 					            	</div>
@@ -888,26 +871,187 @@
 					"<td>" + obat.ID_OBAT + "</td>" +
 					"<td>" + obat.NM_OBAT + "</td>" +
 					"<td>" + obat.PEMAKAIAN + "</td>" +
-					"<td>" + obat.KUANTITAS_OBAT + " " + obat.SATUAN + "</td>" +
+					"<td>" + obat.QTY_OBAT + " " + obat.SATUAN + "</td>" +
 					"<td align='center'>" + 
-					"<button type='button' class='btn btn-danger btn-xs hapus_obat' data-noresep='" + obat.NO_RESEP + "'>" + 
+					"<button type='button' class='btn btn-danger btn-xs hapus_obat' data-noresep='" + obat.NO_RESEP + "' data-idobat='" + obat.ID_OBAT + "'>" + 
 					"<i class='fa fa-trash'></i> Hapus</button></td>" +
 					"</tr>";
 				$("#tbl-obat > tbody:last-child").append(str_row);
 			});
 			$('.hapus_obat').click(function(e) {
 				var noresep = $(this).data('noresep');
-				delete_resep(noresep);
+				var idobat = $(this).data('idobat');
+				delete_resep(noresep, idobat);
 				$(this).closest('tr').remove();
 			});
 		});
 	}
 
-	function delete_resep(noresep) {
+	function delete_resep(noresep, idobat) {
 		$.ajax({
 			url: "<?php echo base_url().'resep_obat/delete_resep' ?>",
 			type: "post",
-			data: {"noresep": noresep}
+			data: {
+				"noresep": noresep,
+				"idobat": idobat
+			}
+		});
+	}
+
+	function load_diagnosis() {
+		var diagnosis = $("#diagnosis").val();
+
+		$("#tindakan").find('option').remove().end();
+		$("#terapi").find('option').remove().end();
+		$("#lab").find('option').remove().end();
+		$("#obat").find('option').remove().end().append('<option></option>');
+
+		if (diagnosis != null) {
+			
+			var diagnosa = "";
+			var idx = 1;
+			$.each(diagnosis, function(i, e) {
+				diagnosa += "'" + e + "'";
+				if (idx != diagnosis.length) diagnosa += ",";
+				idx++;
+			});
+
+			// tindakan
+			$.ajax({
+				url: "<?php echo base_url().'rekam_medis/get_tindakan' ?>",
+				type: "post",
+				dataType: 'json',
+				data: {"diagnosis": diagnosa},
+				success: function(r)
+				{
+					if (r.length > 0) {
+						$.each(r, function(i, e) {
+							$("#tindakan").append($('<option>', {
+								value: e.id,
+								text: e.text
+							}));
+						});
+					} else {
+						$("#tindakan").find('option').remove().end();
+					}
+				},
+				error: function(xhr, status, error)
+				{
+					$("#tindakan").find('option').remove().end();
+					console.log(error);
+				}
+			});
+
+			// terapi
+			$.ajax({
+				url: "<?php echo base_url().'rekam_medis/get_terapi' ?>",
+				type: "post",
+				dataType: 'json',
+				data: {"diagnosis": diagnosa},
+				success: function(r)
+				{
+					if (r.length > 0) {
+						$.each(r, function(i, e) {
+							$("#terapi").append($('<option>', {
+								value: e.id,
+								text: e.text
+							}));
+						});
+					} else {
+						$("#terapi").find('option').remove().end();
+					}
+				},
+				error: function(xhr, status, error)
+				{
+					$("#terapi").find('option').remove().end();
+					console.log(error);
+				}
+			});
+
+
+			// pemeriksaan lab
+			$.ajax({
+				url: "<?php echo base_url().'rekam_medis/get_lab' ?>",
+				type: "post",
+				dataType: 'json',
+				data: {"diagnosis": diagnosa},
+				success: function(r)
+				{
+					if (r.length > 0) {
+						$.each(r, function(i, e) {
+							$("#lab").append($('<option>', {
+								value: e.id,
+								text: e.text
+							}));
+						});
+					} else {
+						$("#lab").find('option').remove().end();
+					}
+				},
+				error: function(xhr, status, error)
+				{
+					$("#lab").find('option').remove().end();
+					console.log(error);
+				}
+			});
+
+			// obat
+			$.ajax({
+				url: "<?php echo base_url().'rekam_medis/get_obat' ?>",
+				type: "post",
+				dataType: 'json',
+				data: {"diagnosis": diagnosa},
+				success: function(r)
+				{
+					if (r.length > 0) {
+						$.each(r, function(i, e) {
+							$("#obat").append($('<option>', {
+								value: e.id,
+								text: e.text
+							}));
+						});
+					} else {
+						$("#obat").find('option').remove().end().append('<option></option>');
+					}
+				},
+				error: function(xhr, status, error)
+				{
+					$("#obat").find('option').remove().end().append('<option></option>');
+					console.log(error);
+				}
+			});
+
+			// cek selected value
+			check_selected_item();
+		} else {
+			$("#tindakan").find('option').remove().end();
+			$("#terapi").find('option').remove().end();
+			$("#lab").find('option').remove().end();
+			$("#obat").find('option').remove().end().append('<option></option>');
+		}
+	}
+
+	function check_selected_item() {
+		var rekam_medis = $("#rekam_medis").val();
+		$.getJSON("<?php echo base_url().'rekam_medis/get_selected_item/'; ?>" + rekam_medis, function(result) {
+			var tindakan = result.tindakan;
+			var terapi = result.terapi;
+			var lab = result.lab;
+
+			$.each(tindakan, function(i, e) {
+				// $("#tindakan option[value='" + e + "']").attr("selected", 1);
+				$("#tindakan").select2("val", e);
+			});
+
+			$.each(terapi, function(i, e) {
+				// $("#terapi option[value='" + e + "']").attr("selected", 1);
+				$("#terapi").select2("val", e);
+			});
+
+			$.each(lab, function(i, e) {
+				// $("#lab option[value='" + e + "']").attr("selected", 1);
+				$("#lab").select2("val", e);
+			});
 		});
 	}
 
@@ -1015,63 +1159,9 @@
 			});
 		});
 
-		$("#diagnosis").on('change',function() {
-			var diagnosis = $(this).val();
-			
-			// tindakan
-			$.ajax({
-				url: "<?php echo base_url().'rekam_medis/get_tindakan' ?>",
-				type: "post",
-				dataType: 'json',
-				data: {"diagnosis": diagnosis},
-				success: function(r)
-				{
-					$("#tindakan").select2({
-						data: r
-					});
-				},
-				error: function(r)
-				{
-					alert("Maaf, gagal mengambil data tindakan.");
-				}
-			});
-
-			// terapi
-			$.ajax({
-				url: "<?php echo base_url().'rekam_medis/get_terapi' ?>",
-				type: "post",
-				dataType: 'json',
-				data: {"diagnosis": diagnosis},
-				success: function(r)
-				{
-					$("#terapi").select2({
-						data: r
-					});
-				},
-				error: function(r)
-				{
-					alert("Maaf, gagal mengambil data terapi.");
-				}
-			});
-
-
-			// pemeriksaan lab
-			$.ajax({
-				url: "<?php echo base_url().'rekam_medis/get_pemeriksaan' ?>",
-				type: "post",
-				dataType: 'json',
-				data: {"diagnosis": diagnosis},
-				success: function(r)
-				{
-					$("#lab").select2({
-						data: r
-					});
-				},
-				error: function(r)
-				{
-					alert("Maaf, gagal mengambil data pemeriksaan lab.");
-				}
-			});
+		load_diagnosis();
+		$("#diagnosis").change(function() {
+			load_diagnosis();
 		});
 		
 	})

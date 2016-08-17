@@ -183,13 +183,13 @@ class Page extends CI_Controller
 	{
 		$arr_data = array();
 		for ($i=1; $i <= 12; $i++) { 
-			$resep_obat = $this->m_security->query("select sum(kuantitas_obat) as JUMLAH 
-				from resep_obat 
-					left join rekam_medis on resep_obat.id_rekam_medis = rekam_medis.id_rekam_medis
-					left join obat on resep_obat.id_obat = obat.id_obat 
+			$resep_obat = $this->m_security->query("select sum(qty_jual) as JUMLAH 
+				from detail_penjualan 
+					inner join penjualan on detail_penjualan.id_jual = penjualan.id_jual
+					left join obat on detail_penjualan.id_obat = obat.id_obat 
 				where 
-					month(rekam_medis.tgl_periksa) = '".$i."' and 
-					year(rekam_medis.tgl_periksa) = '".date('Y')."'");
+					month(penjualan.tgl_jual) = '".$i."' and 
+					year(penjualan.tgl_jual) = '".date('Y')."'");
 			if ($resep_obat[0]->JUMLAH == null) 
 				$jumlah = 0;
 			else 

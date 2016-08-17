@@ -99,7 +99,6 @@ $sub_total_resep = 0;
 			                <tr>
 				                <th>Kode</th>
 				                <th>Terapi</th>
-				                <th>Perawat</th>
 				                <th>Keterangan</th>
 				                <th style="width: 200px;">Biaya</th>
 				            </tr>
@@ -110,18 +109,17 @@ $sub_total_resep = 0;
 			        		<tr>
 			        			<td><?php echo $det_tp->ID_TERAPI ?></td>
 			        			<td><?php echo $det_tp->NM_TERAPI ?></td>
-			        			<td><?php echo $det_tp->NM_PERAWAT ?></td>
 			        			<td><?php echo $det_tp->KET_TERAPI ?></td>
 			        			<td style="text-align: right;">Rp<?php echo number_format($det_tp->BAYAR_TERAPI, 2, ",", ".") ?></td>
 			        		</tr>
 			        		<?php $sub_total_terapi += $det_tp->BAYAR_TERAPI; ?>
 			        		<?php endforeach ?>
 			        		<tr>
-			        			<td style="text-align: right" colspan="4">SUB TOTAL</td>
+			        			<td style="text-align: right" colspan="3">SUB TOTAL</td>
 			        			<td style="text-align: right"><?php echo 'Rp'.number_format($sub_total_terapi, 2, ",", "."); ?></td>
 			        		</tr>
 			        		<?php else: ?>
-			        		<tr><td colspan="5">Tidak ada data yang ditampilkan.</td></tr>
+			        		<tr><td colspan="4">Tidak ada data yang ditampilkan.</td></tr>
 			        		<?php endif ?>
 	                   	</tbody>
             		</table>
@@ -146,14 +144,14 @@ $sub_total_resep = 0;
 			        			<td><?php echo $ro->ID_OBAT ?></td>
 			        			<td><?php echo $ro->NM_OBAT ?></td>
 			        			<td><?php echo 'Rp'.number_format($ro->HRG_OBAT, 2, ",", ".") ?></td>
-			        			<td><?php echo $ro->KUANTITAS_OBAT ?></td>
+			        			<td align="right"><?php echo $ro->QTY_JUAL.' '.$ro->SATUAN ?></td>
 			        			<td align="center">
-			        			<button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#myModal" onclick="edit('<?php echo $ro->NO_RESEP ?>', '<?php echo $ro->NM_OBAT ?>', '<?php echo $ro->KUANTITAS_OBAT ?>')"><i class="fa fa-edit"></i> Ubah</button>
-			        			<a href="<?php echo base_url().'pembayaran/remove_resep/'.$rekam_medis[0]->ID_REKAM_MEDIS.'/'.$ro->NO_RESEP ?>" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')"><i class="fa fa-remove"></i> Hapus</a>
+			        			<button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#myModal" onclick="edit('<?php echo $ro->ID_JUAL ?>', '<?php echo $ro->NO_RESEP ?>', '<?php echo $ro->ID_OBAT ?>', '<?php echo $ro->NM_OBAT ?>', '<?php echo $ro->QTY_JUAL ?>')"><i class="fa fa-edit"></i> Ubah</button>
+			        			<a href="<?php echo base_url().'pembayaran/remove_resep/'.$rekam_medis[0]->ID_REKAM_MEDIS.'/'.$ro->ID_JUAL.'/'.$ro->NO_RESEP.'/'.$ro->ID_OBAT ?>" class="btn btn-xs btn-danger" onclick="return confirm('Anda yakin?')"><i class="fa fa-remove"></i> Hapus</a>
 			        			</td>
-			        			<td style="text-align: right;">Rp<?php echo number_format($ro->SUB_TOTAL_RESEP, 2, ",", ".") ?></td>
+			        			<td style="text-align: right;">Rp<?php echo number_format($ro->SUB_TOTAL, 2, ",", ".") ?></td>
 			        		</tr>
-			        		<?php $sub_total_resep += $ro->SUB_TOTAL_RESEP; ?>
+			        		<?php $sub_total_resep += $ro->SUB_TOTAL; ?>
 			        		<?php endforeach ?>
 			        		<tr>
 			        			<td style="text-align: right" colspan="5">SUB TOTAL</td>
@@ -229,25 +227,22 @@ $sub_total_resep = 0;
 			</div>
 			<div class="modal-body">     
 				<form method="POST" action="<?php echo base_url(); ?>pembayaran/ubah_resep" class="form-horizontal">
-					<input type="hidden" name="rekam_medis" value="<?php echo $rekam_medis[0]->ID_REKAM_MEDIS; ?>">
-					<div class="form-group">
-	              		<label for="message-text" class="col-sm-3 control-label">No. Resep</label>
-	              		<div class="col-sm-9">
-	                		<input type="text" class="form-control" name="editkode" id="editkode" readonly required>
-	                    </div>
-	            	</div>
-
+					<input type="hidden" id="id_rekam_medis" name="id_rekam_medis" value="<?php echo $rekam_medis[0]->ID_REKAM_MEDIS; ?>">
+					<input type="hidden" id="id_jual" name="id_jual">
+					<input type="hidden" id="no_resep" name="no_resep">
+					<input type="hidden" id="id_obat" name="id_obat">
+					
 	            	<div class="form-group">
-	              		<label for="message-text" class="col-sm-3 control-label">Nama Obat</label>
+	              		<label for="message-text" class="col-sm-3 control-label" for="nm_obat">Nama Obat</label>
 	              		<div class="col-sm-9">
-	                		<input type="text" class="form-control" name="editnama" id="editnama" readonly required>
+	                		<input type="text" class="form-control" name="nm_obat" id="nm_obat" readonly required>
 	              		</div>
 	            	</div>
 
 	            	<div class="form-group">
-	              		<label for="message-text" class="col-sm-3 control-label">Kuantitas</label>
+	              		<label for="message-text" class="col-sm-3 control-label" for="qty_jual">Kuantitas</label>
 	              		<div class="col-sm-9">
-	                		<input type="number" class="form-control" name="editkuantitas" id="editkuantitas" required>
+	                		<input type="number" class="form-control" name="qty_jual" id="qty_jual" required>
 	              		</div>
 	            	</div>
 	        
@@ -263,10 +258,12 @@ $sub_total_resep = 0;
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, nama, kuantitas) {
-		$('#editkode').val(id);
-		$('#editnama').val(nama);
-		$('#editkuantitas').val(kuantitas);
+	function edit(jual, resep, obat, nama_obat, qty) {
+		$('#id_jual').val(jual);
+		$('#no_resep').val(resep);
+		$('#id_obat').val(obat);
+		$('#nm_obat').val(nama_obat);
+		$('#qty_jual').val(qty);
 	}
 
 	$(function() {

@@ -275,17 +275,14 @@ class Laporan extends CI_Controller
 		        $data['judul'] = 'Laporan Pengeluaran Obat';
 		        $data['subjudul'] = 'Periode Bulan '.$nama_bulan[$bulan - 1].' '.$tahun;
 		        
-		        $data['data'] = $this->m_security->query("select *
-		        	from 
-		        		rekam_medis
-		        		left join resep_obat on rekam_medis.id_rekam_medis = resep_obat.id_rekam_medis 
-		        		left join obat on resep_obat.id_obat = obat.id_obat
-		        		left join pembayaran on rekam_medis.id_rekam_medis = pembayaran.id_rekam_medis 
-		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien 
-		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        $data['data'] = $this->m_security->query("select 
+		        	penjualan.*, detail_penjualan.ID_OBAT, obat.NM_OBAT, obat.SATUAN, detail_penjualan.QTY_JUAL, detail_penjualan.SUB_TOTAL 
+		        	from penjualan
+					inner join detail_penjualan ON detail_penjualan.ID_JUAL = penjualan.ID_JUAL 
+					inner join obat ON detail_penjualan.ID_OBAT = obat.ID_OBAT
 		        	where 
-		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
-		        		year(rekam_medis.tgl_periksa) = '".$tahun."'");
+		        		month(penjualan.tgl_jual) = '".$bulan."' and 
+		        		year(penjualan.tgl_jual) = '".$tahun."'");
 		        
 		        // $this->pdfgenerator->generate('laporan/pengeluaran_obat_lihat', 'pengeluaran_obat_'.$nama_bulan[$bulan - 1].'_'.$tahun, 'portrait', 'a4', $data);
 				$this->load->view('laporan/pengeluaran_obat_lihat', $data);
@@ -307,17 +304,14 @@ class Laporan extends CI_Controller
 		        $data['bulan'] = $bulan;
 		        $data['tahun'] = $tahun;
 
-		        $data['data'] = $this->m_security->query("select *
-		        	from 
-		        		rekam_medis
-		        		left join resep_obat on rekam_medis.id_rekam_medis = resep_obat.id_rekam_medis 
-		        		left join obat on resep_obat.id_obat = obat.id_obat
-		        		left join pembayaran on rekam_medis.id_rekam_medis = pembayaran.id_rekam_medis 
-		        		left join pasien on rekam_medis.id_pasien = pasien.id_pasien 
-		        		left join dokter on rekam_medis.id_dokter = dokter.id_dokter 
+		        $data['data'] = $this->m_security->query("select 
+		        	penjualan.*, detail_penjualan.ID_OBAT, obat.NM_OBAT, obat.SATUAN, detail_penjualan.QTY_JUAL, detail_penjualan.SUB_TOTAL 
+		        	from penjualan
+					inner join detail_penjualan ON detail_penjualan.ID_JUAL = penjualan.ID_JUAL 
+					inner join obat ON detail_penjualan.ID_OBAT = obat.ID_OBAT
 		        	where 
-		        		month(rekam_medis.tgl_periksa) = '".$bulan."' and 
-		        		year(rekam_medis.tgl_periksa) = '".$tahun."'");
+		        		month(penjualan.tgl_jual) = '".$bulan."' and 
+		        		year(penjualan.tgl_jual) = '".$tahun."'");
 		        $data['cetak'] = base_url().'laporan/pengeluaran_obat/cetak';
 
 		        $this->load->view('layout', $data);
@@ -360,9 +354,9 @@ class Laporan extends CI_Controller
 		        	'month(rekam_medis.tgl_periksa)' => $bulan,
 		        	'year(rekam_medis.tgl_periksa)' => $tahun
 		        	));
-				$data['data_obat'] = $this->m_resep_obat->get(array(
-		        	'month(rekam_medis.tgl_periksa)' => $bulan,
-		        	'year(rekam_medis.tgl_periksa)' => $tahun
+				$data['data_obat'] = $this->m_detail_penjualan->get(array(
+		        	'month(penjualan.tgl_jual)' => $bulan,
+		        	'year(penjualan.tgl_jual)' => $tahun
 		        	));
 		        
 		        // $this->pdfgenerator->generate('laporan/pendapatan_lihat', 'pengeluaran_obat_'.$nama_bulan[$bulan - 1].'_'.$tahun, 'portrait', 'a4', $data);
@@ -397,9 +391,9 @@ class Laporan extends CI_Controller
 		        	'month(rekam_medis.tgl_periksa)' => $bulan,
 		        	'year(rekam_medis.tgl_periksa)' => $tahun
 		        	));
-				$data['data_obat'] = $this->m_resep_obat->get(array(
-		        	'month(rekam_medis.tgl_periksa)' => $bulan,
-		        	'year(rekam_medis.tgl_periksa)' => $tahun
+				$data['data_obat'] = $this->m_detail_penjualan->get(array(
+		        	'month(penjualan.tgl_jual)' => $bulan,
+		        	'year(penjualan.tgl_jual)' => $tahun
 		        	));
 
 		        $data['cetak'] = base_url().'laporan/pendapatan/cetak';
@@ -501,7 +495,7 @@ class Laporan extends CI_Controller
         	$arr_data1['diagnosa'] = $this->m_detail_diagnosa->get(array('detail_diagnosa.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
         	$arr_data1['tindakan'] = $this->m_detail_tindakan->get(array('detail_tindakan.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
         	$arr_data1['terapi'] = $this->m_detail_terapi->get(array('detail_terapi.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
-        	$arr_data1['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
+        	$arr_data1['resep_obat'] = $this->m_detail_resep_obat->get(array('resep_obat.id_rekam_medis' => $rm->ID_REKAM_MEDIS));
 
         	array_push($arr_data, $arr_data1);
         }

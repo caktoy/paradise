@@ -37,7 +37,7 @@ class Rekam_Medis extends CI_Controller
 		$diagnosa = $this->m_detail_diagnosa->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$tindakan = $this->m_detail_tindakan->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$terapi = $this->m_detail_terapi->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
-		$resep_obat = $this->m_resep_obat->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
+		$resep_obat = $this->m_detail_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
 		$hasil_lab = $this->m_hasil_lab->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$odontogram = $this->m_odontogram->get(array('rekam_medis.id_rekam_medis' => $id_rekam_medis));
 		$pasien = $this->m_pasien->get(array('pasien.id_pasien' => $rekam_medis[0]->ID_PASIEN));
@@ -152,7 +152,7 @@ class Rekam_Medis extends CI_Controller
 					<td style='padding: 2px;'>".$ro->ID_OBAT."</td>
 					<td style='padding: 2px;'>".$ro->NM_OBAT."</td>
 					<td style='padding: 2px;' align='center'>".$ro->PEMAKAIAN."</td>
-					<td style='padding: 2px;' align='right'>".$ro->KUANTITAS_OBAT." ".$ro->SATUAN."</td>
+					<td style='padding: 2px;' align='right'>".$ro->QTY_OBAT." ".$ro->SATUAN."</td>
 					</tr>";
 			}
 			$hasil .= "</tbody></table>";
@@ -184,7 +184,11 @@ class Rekam_Medis extends CI_Controller
 		if (count($hasil_lab) > 0 && $is_cetak != "ya") {
 			$hasil .= "<h4>Hasil Lab:</h4>";
 			foreach ($hasil_lab as $hl) {
-				$hasil .= "<a href='".base_url()."/assets/images/hasil_lab/".$hl->FILE_HASIL."' target='_blank'>".$hl->FILE_HASIL."</a><br>";
+				if (is_null($hl->FILE_HASIL)) {
+					$hasil .= "<i>File hasil pemeriksaan lab belum di-upload atau belum dilakukan pemeriksaan.</i>";
+				} else {
+					$hasil .= "<a href='".base_url()."/assets/images/hasil_lab/".$hl->FILE_HASIL."' target='_blank'>".$hl->FILE_HASIL."</a><br>";
+				}
 			}
 		}
 
@@ -264,34 +268,12 @@ class Rekam_Medis extends CI_Controller
 		$data['dokter'] = $dokter;
 		$data['pasien'] = $this->m_pasien->get(array('id_pasien' => $rekam_medis[0]->ID_PASIEN));
 
-		#detil
 		$arr_detil_diagnosis = array();
 		$detil_diagnosis = $this->m_detail_diagnosa->get(array('detail_diagnosa.id_rekam_medis' => $id_rekam_medis));
 		foreach ($detil_diagnosis as $diagnosa) {
 			array_push($arr_detil_diagnosis, $diagnosa->KODE_ICD_10);
 		}
 		$data['detil_diagnosis'] = $arr_detil_diagnosis;
-
-		$arr_detil_tindakan = array();
-		$detil_tindakan = $this->m_detail_tindakan->get(array('detail_tindakan.id_rekam_medis' => $id_rekam_medis));
-		foreach ($detil_tindakan as $tindakan) {
-			array_push($arr_detil_tindakan, $tindakan->KODE_ICD_9);
-		}
-		$data['detil_tindakan'] = $arr_detil_tindakan;
-
-		$arr_detil_terapi = array();
-		$detil_terapi = $this->m_detail_terapi->get(array('detail_terapi.id_rekam_medis' => $id_rekam_medis));
-		foreach ($detil_terapi as $terapi) {
-			array_push($arr_detil_terapi, $terapi->ID_TERAPI);
-		}
-		$data['detil_terapi'] = $arr_detil_terapi;
-
-		$arr_hasil_lab = array();
-		$hasil_lab = $this->m_hasil_lab->get(array('hasil_lab.id_rekam_medis' => $id_rekam_medis));
-		foreach ($hasil_lab as $lab) {
-			array_push($arr_hasil_lab, $lab->ID_LAB);
-		}
-		$data['hasil_lab'] = $arr_hasil_lab;
 
 		$data['resep_obat'] = $this->m_detail_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
 		$odontogram = $this->m_odontogram->get(array('odontogram.id_rekam_medis' => $id_rekam_medis));
@@ -301,13 +283,43 @@ class Rekam_Medis extends CI_Controller
 		$data['odontogram'] = $data_odontogram;
 
 		$data['pemeriksaan_lab'] = $this->m_pemeriksaan_lab->get(array());
-		$data['diagnosis'] = $this->m_diagnosa_icd_10->get(array());
+		$data['diagnosis'] = $this->m_diagnosa_icd_10->get(array('diagnosa_icd_10.id_poli' => $dokter[0]->ID_POLI));
 		$data['tindakan'] = $this->m_tindakan_icd_9->get(array());
 		$data['terapi'] = $this->m_terapi->get(array());
 		$data['obat'] = $this->m_obat->get(array());
 		$data['status_gigi'] = $this->m_status_gigi->get(array());
 
 		$this->load->view('layout', $data);
+	}
+
+	public function get_selected_item($id_rekam_medis)
+	{
+		$arr_detil_tindakan = array();
+		$detil_tindakan = $this->m_detail_tindakan->get(array('detail_tindakan.id_rekam_medis' => $id_rekam_medis));
+		foreach ($detil_tindakan as $tindakan) {
+			array_push($arr_detil_tindakan, $tindakan->KODE_ICD_9);
+		}
+
+		$arr_detil_terapi = array();
+		$detil_terapi = $this->m_detail_terapi->get(array('detail_terapi.id_rekam_medis' => $id_rekam_medis));
+		foreach ($detil_terapi as $terapi) {
+			array_push($arr_detil_terapi, $terapi->ID_TERAPI);
+		}
+
+		$arr_hasil_lab = array();
+		$hasil_lab = $this->m_hasil_lab->get(array('hasil_lab.id_rekam_medis' => $id_rekam_medis));
+		foreach ($hasil_lab as $lab) {
+			array_push($arr_hasil_lab, $lab->ID_LAB);
+		}
+
+		$obj = (object) [
+			'tindakan' => $arr_detil_tindakan,
+			'terapi' => $arr_detil_terapi,
+			'lab' => $arr_hasil_lab
+		];
+
+		header("Content-Type: application/json");
+		echo json_encode($obj);
 	}
 
 	public function cancel_proses($id, $pasien, $poli)
@@ -416,7 +428,6 @@ class Rekam_Medis extends CI_Controller
 					'id_dokter' => $id_dokter,
 					'id_pasien' => $id_pasien,
 					'id_terapi' => $ter[0]->ID_TERAPI,
-					'id_perawat' => $perawat,
 					'bayar_terapi' => $ter[0]->HARGA_TERAPI
 					));
 			}
@@ -434,7 +445,6 @@ class Rekam_Medis extends CI_Controller
 		}
 
 		$dokter = $this->m_dokter->get(array('dokter.id_dokter' => $id_dokter));
-
 		if (count($dokter) > 0) {
 			$this->m_antrian->patch(
 				array(
@@ -485,18 +495,31 @@ class Rekam_Medis extends CI_Controller
 	public function get_tindakan()
 	{
 		$diagnosis = $this->input->post('diagnosis');
+		
 		$arr_detil = array();
-		foreach ($diagnosis as $dg)
-		{
-			$detil = $this->m_tindakan_diagnosa->get(array('tindakan_diagnosa.KODE_ICD_10' => $dg));
-			if (count($detil) > 0) {
+		// $detil = $this->m_tindakan_diagnosa->get(array('tindakan_diagnosa.KODE_ICD_10' => $dg));
+		$detil = $this->m_security->query("select distinct 
+			tindakan_diagnosa.KODE_ICD_9, tindakan_icd_9.NM_ICD_9 
+			from tindakan_diagnosa 
+			left join tindakan_icd_9 ON tindakan_diagnosa.KODE_ICD_9 = tindakan_icd_9.KODE_ICD_9 
+			left join diagnosa_icd_10 ON tindakan_diagnosa.KODE_ICD_10 = diagnosa_icd_10.KODE_ICD_10
+			where tindakan_diagnosa.KODE_ICD_10 in (".$diagnosis.")");
+		if (count($detil) > 0) {
+			foreach ($detil as $d) {
 				$obj = (object) [
-					'id' => $detil[0]->KODE_ICD_9,
-					'text' => $detil[0]->NM_ICD_9
+					'id' => $d->KODE_ICD_9,
+					'text' => $d->NM_ICD_9
 				];
 				array_push($arr_detil, $obj);
 			}
+		} else {
+			$obj = (object) [
+				'id' => null,
+				'text' => null
+			];
+			array_push($arr_detil, $obj);
 		}
+
 		header("Content-Type: application/json");
 		echo json_encode($arr_detil);
 	}
@@ -504,37 +527,92 @@ class Rekam_Medis extends CI_Controller
 	public function get_terapi()
 	{
 		$diagnosis = $this->input->post('diagnosis');
+		
 		$arr_detil = array();
-		foreach ($diagnosis as $dg)
-		{
-			$detil = $this->m_terapi_diagnosa->get(array('terapi_diagnosa.KODE_ICD_10' => $dg));
-			if (count($detil) > 0) {
+		// $detil = $this->m_terapi_diagnosa->get(array('terapi_diagnosa.KODE_ICD_10' => $dg));
+		$detil = $this->m_security->query("select distinct 
+			terapi_diagnosa.ID_TERAPI, 
+			terapi.NM_TERAPI 
+			from terapi_diagnosa 
+			left join terapi ON terapi_diagnosa.ID_TERAPI = terapi.ID_TERAPI
+			where terapi_diagnosa.KODE_ICD_10 in (".$diagnosis.")");
+		if (count($detil) > 0) {
+			foreach ($detil as $d) {
 				$obj = (object) [
-					'id' => $detil[0]->ID_TERAPI,
-					'text' => $detil[0]->NM_TERAPI
+					'id' => $d->ID_TERAPI,
+					'text' => $d->NM_TERAPI
 				];
 				array_push($arr_detil, $obj);
 			}
+		} else {
+			$obj = (object) [
+				'id' => null,
+				'text' => null
+			];
+			array_push($arr_detil, $obj);
 		}
+
 		header("Content-Type: application/json");
 		echo json_encode($arr_detil);
 	}
 	
-	public function get_pemeriksaan()
+	public function get_lab()
 	{
 		$diagnosis = $this->input->post('diagnosis');
+		
 		$arr_detil = array();
-		foreach ($diagnosis as $dg)
-		{
-			$detil = $this->m_lab_diagnosa->get(array('lab_diagnosa.KODE_ICD_10' => $dg));
-			if (count($detil) > 0) {
+		// $detil = $this->m_lab_diagnosa->get(array('lab_diagnosa.KODE_ICD_10' => $dg));
+		$detil = $this->m_security->query("select distinct 
+			lab_diagnosa.ID_LAB, pemeriksaan_lab.LAB 
+			from lab_diagnosa 
+			left join pemeriksaan_lab ON lab_diagnosa.ID_LAB = pemeriksaan_lab.ID_LAB
+			where lab_diagnosa.KODE_ICD_10 in (".$diagnosis.")");
+		if (count($detil) > 0) {
+			foreach ($detil as $d) {
 				$obj = (object) [
-					'id' => $detil[0]->ID_LAB,
-					'text' => $detil[0]->LAB
+					'id' => $d->ID_LAB,
+					'text' => $d->LAB
 				];
 				array_push($arr_detil, $obj);
 			}
+		} else {
+			$obj = (object) [
+				'id' => null,
+				'text' => null
+			];
+			array_push($arr_detil, $obj);
 		}
+
+		header("Content-Type: application/json");
+		echo json_encode($arr_detil);
+	}
+
+	public function get_obat()
+	{
+		$diagnosis = $this->input->post('diagnosis');
+		
+		$arr_detil = array();
+		$detil = $this->m_security->query("select distinct 
+			obat_diagnosa.ID_OBAT, obat.NM_OBAT 
+			from obat_diagnosa 
+			left join obat ON obat_diagnosa.ID_OBAT = obat.ID_OBAT
+			where obat_diagnosa.KODE_ICD_10 in (".$diagnosis.")");
+		if (count($detil) > 0) {
+			foreach ($detil as $d) {
+				$obj = (object) [
+					'id' => $d->ID_OBAT,
+					'text' => $d->NM_OBAT
+				];
+				array_push($arr_detil, $obj);
+			}
+		} else {
+			$obj = (object) [
+				'id' => null,
+				'text' => null
+			];
+			array_push($arr_detil, $obj);
+		}
+
 		header("Content-Type: application/json");
 		echo json_encode($arr_detil);
 	}

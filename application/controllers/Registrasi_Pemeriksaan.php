@@ -228,7 +228,24 @@ class Registrasi_Pemeriksaan extends CI_Controller
 				"columnDefs": [
 					{"visible": false, "targets": 3},
 					{"searchable": false, "orderable": false, "targets": [0, 1, 2, 4]}
-				]
+				],
+				"filter": false,
+				"language": {
+					"lengthMenu": "Menampilkan _MENU_ data per halaman",
+					"zeroRecords": "Maaf, tidak ada data yang ditampilkan.",
+					"info": "Halaman _PAGE_ dari _PAGES_",
+					"infoEmpty": "Tidak ada data yang tersedia",
+					"search": "Cari:",
+					"decimal": ",",
+					"thousands": ".",
+					"paginate": {
+						"previous": "<",
+						"next": ">",
+						"first": "<<",
+						"last": ">>"
+					},
+					"infoFiltered": "(Penyaringan dari _MAX_ total data)"
+				}
 			});';
 			$hasil .= '</script>';
 		}

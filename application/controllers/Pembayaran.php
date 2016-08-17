@@ -41,6 +41,39 @@ class Pembayaran extends CI_Controller
 				));
 
 			if ($act > 0) {
+				$id_jual = $this->m_security->gen_non_ai_id(date("ymd")."-", "penjualan", "id_jual", 3);
+				$act = $this->m_penjualan->create(array(
+					'id_jual' => $id_jual,
+					'id_perawat' => $id_perawat,
+					'id_bayar' => $id_bayar,
+					'id_dokter' => $rekam_medis[0]->ID_DOKTER,
+					'id_pasien' => $rekam_medis[0]->ID_PASIEN,
+					'id_rekam_medis' => $id_rekam_medis,
+					'tgl_jual' => date('Y-m-d')
+					));
+
+				if ($act > 0) {
+					# get detail resep obat
+					$detail_resep = $this->m_security->query("select 
+						detail_resep_obat.*, resep_obat.ID_DOKTER, resep_obat.ID_PASIEN, 
+						resep_obat.ID_REKAM_MEDIS, (detail_resep_obat.QTY_OBAT * obat.HRG_OBAT) as SUB_TOTAL 
+						from detail_resep_obat 
+						inner join resep_obat on detail_resep_obat.NO_RESEP = resep_obat.NO_RESEP 
+						INNER JOIN obat ON detail_resep_obat.ID_OBAT = obat.ID_OBAT 
+						where resep_obat.id_rekam_medis = '".$id_rekam_medis."'");
+					if (count($detail_resep) > 0) {
+						foreach ($detail_resep as $resep) {
+							$this->m_detail_penjualan->create(array(
+								'id_jual' => $id_jual,
+								'no_resep' => $resep->NO_RESEP,
+								'id_obat' => $resep->ID_OBAT,
+								'qty_jual' => $resep->QTY_OBAT,
+								'sub_total' => $resep->SUB_TOTAL
+								));
+						}
+					}
+				}
+
 				redirect('pembayaran/edit/'.$id_rekam_medis);
 			} else {
 				$this->session->set_flashdata('pesan', '<strong>Gagal!</strong> Proses pembayaran gagal dilakukan.');
@@ -68,8 +101,16 @@ class Pembayaran extends CI_Controller
 			$data['detil_diagnosis'] = $this->m_detail_diagnosa->get(array('detail_diagnosa.id_rekam_medis' => $id_rekam_medis));
 			$data['detil_tindakan'] = $this->m_detail_tindakan->get(array('detail_tindakan.id_rekam_medis' => $id_rekam_medis));
 			$data['detil_terapi'] = $this->m_detail_terapi->get(array('detail_terapi.id_rekam_medis' => $id_rekam_medis));
-			$data['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
 			$data['hasil_lab'] = $this->m_hasil_lab->get(array('hasil_lab.id_rekam_medis' => $id_rekam_medis));
+			
+			// $data['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
+			$data['resep_obat'] = $this->m_security->query("select *
+				from detail_penjualan 
+				inner join detail_resep_obat on detail_penjualan.NO_RESEP = detail_resep_obat.NO_RESEP 
+					and detail_penjualan.ID_OBAT = detail_resep_obat.ID_OBAT 
+				inner join resep_obat ON detail_resep_obat.NO_RESEP = resep_obat.NO_RESEP 
+				inner join obat ON detail_resep_obat.ID_OBAT = obat.ID_OBAT 
+				where resep_obat.ID_REKAM_MEDIS = '".$id_rekam_medis."'");
 	        
 	        $this->load->view('layout', $data);
 		} else {
@@ -79,31 +120,60 @@ class Pembayaran extends CI_Controller
 	}
 	public function ubah_resep()
 	{
-		$rekam_medis = $this->input->post('rekam_medis');
-		$no_resep = $this->input->post('editkode');
-		$kuantitas = $this->input->post('editkuantitas');
+		$id_rekam_medis = $this->input->post('id_rekam_medis');
+		$id_jual = $this->input->post('id_jual');
+		$no_resep = $this->input->post('no_resep');
+		$id_obat = $this->input->post('id_obat');
+		$qty_jual = $this->input->post('qty_jual');
 
-		$resep_obat = $this->m_resep_obat->get(array('resep_obat.no_resep' => $no_resep, 'resep_obat.id_rekam_medis' => $rekam_medis));
-		if (count($resep_obat) > 0) {
-			$sub_total = $kuantitas * $resep_obat[0]->HRG_OBAT;
-			$this->m_resep_obat->patch(
-				array('resep_obat.no_resep' => $no_resep, 'resep_obat.id_rekam_medis' => $rekam_medis),
-				array('resep_obat.kuantitas_obat' => $kuantitas, 'resep_obat.sub_total_resep' => $sub_total)
+		$detail_penjualan = $this->m_detail_penjualan->get(array(
+			'detail_penjualan.id_jual' => $id_jual, 
+			'detail_penjualan.no_resep' => $no_resep,
+			'detail_penjualan.id_obat' => $id_obat
+			));
+		if (count($detail_penjualan) > 0) {
+			$obat = $this->m_obat->get(array('obat.id_obat' => $id_obat));
+			if (count($obat)) {
+				if (isset($obat[0]->HRG_OBAT) && !is_null($obat[0]->HRG_OBAT))
+					$harga_obat = $obat[0]->HRG_OBAT;
+				else 
+					$harga_obat = 0;
+			} else {
+				$harga_obat = 0;
+			}
+			$sub_total = $qty_jual * $harga_obat;
+			$this->m_detail_penjualan->patch(
+				array(
+					'detail_penjualan.id_jual' => $id_jual, 
+					'detail_penjualan.no_resep' => $no_resep,
+					'detail_penjualan.id_obat' => $id_obat
+					),
+				array(
+					'detail_penjualan.qty_jual' => $qty_jual, 
+					'detail_penjualan.sub_total' => $sub_total
+					)
 				);
 		}
 
-		redirect('pembayaran/edit/'.$rekam_medis);
+		redirect('pembayaran/edit/'.$id_rekam_medis);
 	}
 
-	public function remove_resep($rekam_medis, $no_resep)
+	public function remove_resep($id_rekam_medis, $id_jual, $no_resep, $id_obat)
 	{
-		$resep_obat = $this->m_resep_obat->get(array('resep_obat.no_resep' => $no_resep, 'resep_obat.id_rekam_medis' => $rekam_medis));
-		if (count($resep_obat) > 0) {
-			$sub_total = $kuantitas * $resep_obat[0]->HRG_OBAT;
-			$this->m_resep_obat->remove(array('resep_obat.no_resep' => $no_resep, 'resep_obat.id_rekam_medis' => $rekam_medis));
+		$detail_penjualan = $this->m_detail_penjualan->get(array(
+			'detail_penjualan.id_jual' => $id_jual, 
+			'detail_penjualan.no_resep' => $no_resep,
+			'detail_penjualan.id_obat' => $id_obat
+			));
+		if (count($detail_penjualan) > 0) {
+			$this->m_detail_penjualan->remove(array(
+				'detail_penjualan.id_jual' => $id_jual, 
+				'detail_penjualan.no_resep' => $no_resep,
+				'detail_penjualan.id_obat' => $id_obat
+				));
 		}
 
-		redirect('pembayaran/edit/'.$rekam_medis);
+		redirect('pembayaran/edit/'.$id_rekam_medis);
 	}
 
 	public function simpan()
@@ -143,8 +213,24 @@ class Pembayaran extends CI_Controller
 		$data['detil_diagnosis'] = $this->m_detail_diagnosa->get(array('detail_diagnosa.id_rekam_medis' => $id_rekam_medis));
 		$data['detil_tindakan'] = $this->m_detail_tindakan->get(array('detail_tindakan.id_rekam_medis' => $id_rekam_medis));
 		$data['detil_terapi'] = $this->m_detail_terapi->get(array('detail_terapi.id_rekam_medis' => $id_rekam_medis));
-		$data['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
 		$data['hasil_lab'] = $this->m_hasil_lab->get(array('hasil_lab.id_rekam_medis' => $id_rekam_medis));
+
+		// $data['resep_obat'] = $this->m_resep_obat->get(array('resep_obat.id_rekam_medis' => $id_rekam_medis));
+		$data['resep_obat'] = $this->m_security->query("select *
+				from detail_penjualan 
+				inner join detail_resep_obat on detail_penjualan.NO_RESEP = detail_resep_obat.NO_RESEP 
+					and detail_penjualan.ID_OBAT = detail_resep_obat.ID_OBAT 
+				inner join resep_obat ON detail_resep_obat.NO_RESEP = resep_obat.NO_RESEP 
+				inner join obat ON detail_resep_obat.ID_OBAT = obat.ID_OBAT 
+				where resep_obat.ID_REKAM_MEDIS = '".$id_rekam_medis."'");
+		$data['penjualan'] = $this->m_security->query("select * 
+			from penjualan 
+			inner join pembayaran on penjualan.ID_PERAWAT = pembayaran.ID_PERAWAT 
+			and penjualan.ID_BAYAR = pembayaran.ID_BAYAR 
+			and penjualan.ID_DOKTER = pembayaran.ID_DOKTER 
+			and penjualan.ID_PASIEN = pembayaran.ID_PASIEN 
+			and penjualan.ID_REKAM_MEDIS = pembayaran.ID_REKAM_MEDIS
+			where pembayaran.id_rekam_medis = '".$id_rekam_medis."'");
         
         $this->load->view('laporan/pembayaran_pemeriksaan', $data);
         // $this->pdfgenerator->generate('laporan/pembayaran_pemeriksaan', 'pembayaran_'.$id_rekam_medis, 'portrait', 'a5', $data);

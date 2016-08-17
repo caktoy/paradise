@@ -227,10 +227,10 @@
                                             <?php echo $d->NM_OBAT; ?>
                                         </td>
                                         <td style="text-align: right;">
-                                            <?php echo "Rp".number_format($d->HRG_OBAT, 2, ",", "."); ?>
+                                            <?php echo "Rp".number_format($d->SUB_TOTAL, 2, ",", "."); ?>
                                         </td>
                                     </tr>
-                                    <?php $no++; $total_obat += $d->HRG_OBAT; ?>
+                                    <?php $no++; $total_obat += $d->SUB_TOTAL; ?>
                                     <?php endforeach ?>
                                     <tr style="font-weight: bold;">
                                         <td align="right" colspan="4">TOTAL</td>

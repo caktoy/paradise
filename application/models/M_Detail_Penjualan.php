@@ -8,8 +8,8 @@ class M_Detail_Penjualan extends CI_Model
 	{
 		$this->db->select("*");
 		$this->db->from("detail_penjualan");
-		$this->db->join("detail_resep_obat", "detail_penjualan.no_resep = detail_resep_obat.no_resep", "left");
-		$this->db->join("obat", "detail_resep_obat.id_obat = obat.id_obat", "left");
+		// $this->db->join("detail_resep_obat", "detail_penjualan.no_resep = detail_resep_obat.no_resep", "left");
+		$this->db->join("obat", "detail_penjualan.id_obat = obat.id_obat", "left");
 		$this->db->join("jenis_obat", "obat.id_jenis_obat = jenis_obat.id_jenis_obat", "left");
 		$this->db->join("penjualan", "detail_penjualan.id_jual = penjualan.id_jual", "left");
 		$this->db->where($cond);
