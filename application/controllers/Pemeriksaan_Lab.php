@@ -7,11 +7,12 @@ class Pemeriksaan_Lab extends CI_Controller
 	public function index()
 	{
 		$data['aktif'] = "maintenance";
-		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Maintenance", "Master Pemeriksaan Lab");
+		$data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Maintenance", "Master Lab", "Master Pemeriksaan Lab");
 		$data['judul'] = "Maintenance Master Pemeriksaan Lab";
 		$data['konten'] = "master/pemeriksaan_lab";
 		$data['kodepemeriksaan_lab'] = $this->m_security->gen_non_ai_id("LAB", "pemeriksaan_lab", "id_lab", 4);
 		$data['diagnosa'] = $this->m_diagnosa_icd_10->get(array());
+		$data['jenis_lab'] = $this->m_jenis_lab->get(array());
 
         $arr_lab = array();
         $lab = $this->m_pemeriksaan_lab->get(array());
@@ -34,6 +35,7 @@ class Pemeriksaan_Lab extends CI_Controller
 	public function tambah()
 	{
 		$id_lab = $this->input->post('id_lab');
+		$id_jenis = $this->input->post('jenis');
 		$diagnosa = $this->input->post('diagnosa');
         $lab = $this->input->post('lab');
         $harga = $this->input->post('harga');
@@ -44,6 +46,7 @@ class Pemeriksaan_Lab extends CI_Controller
         } else {
             $act = $this->m_pemeriksaan_lab->create(array(
             	'id_lab' => $id_lab,
+            	'id_jenis_lab' => $id_jenis,
             	'lab' => $lab,
             	'harga' => $harga
             	));
@@ -68,6 +71,7 @@ class Pemeriksaan_Lab extends CI_Controller
 	public function edit()
 	{
 		$id_lab = $this->input->post('e-id_lab');
+		$id_jenis = $this->input->post('e-jenis');
 		$diagnosa = $this->input->post('e-diagnosa');
 		$lab = $this->input->post('e-lab');
 		$harga = $this->input->post('e-harga');
@@ -75,6 +79,7 @@ class Pemeriksaan_Lab extends CI_Controller
 		$act = $this->m_pemeriksaan_lab->patch(
 			array('id_lab' => $id_lab),
 			array(
+				'id_jenis_lab' => $id_jenis,
 				'lab' => $lab,
 				'harga' => $harga
 				)

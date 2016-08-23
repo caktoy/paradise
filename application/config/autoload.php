@@ -149,6 +149,7 @@ $autoload['model'] = array(
 	'm_odontogram',
 	'm_pasien',
 	'm_pembayaran',
+	'm_jenis_lab',
 	'm_pemeriksaan_lab',
 	'm_perawat',
 	'm_poli',

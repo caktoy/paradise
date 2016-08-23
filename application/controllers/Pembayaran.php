@@ -7,6 +7,8 @@ class Pembayaran extends CI_Controller
 	
 	public function index()
 	{
+		date_default_timezone_set("Asia/Jakarta");
+		
 		$data['aktif'] = "transaksi";
         $data['breadcrumb'] = array("<i class='fa fa-home'></i> Home", "Transaksi", "Pembayaran");
         $data['judul'] = "Pembayaran";

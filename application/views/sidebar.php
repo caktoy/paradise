@@ -19,7 +19,13 @@
         <li><a href="<?php echo base_url().'jenis_obat' ?>">Master Jenis Obat</a></li>
         <li><a href="<?php echo base_url().'obat' ?>">Master Obat</a></li>
         <li><a href="<?php echo base_url().'terapi' ?>">Master Terapi</a></li>
-        <li><a href="<?php echo base_url().'pemeriksaan_lab' ?>">Master Pemeriksaan Lab</a></li>
+        <li>
+          <a href="javascript:;">Master Lab</a>
+          <ul class="treeview-menu">
+            <li><a href="<?php echo base_url().'jenis_lab' ?>">Master Jenis Lab</a></li>
+            <li><a href="<?php echo base_url().'pemeriksaan_lab' ?>">Master Pemeriksaan Lab</a></li>
+          </ul>
+        </li>
         <li>
           <a href="javascript:;">Master Odontogram</a>
           <ul class="treeview-menu">

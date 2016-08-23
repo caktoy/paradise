@@ -30,6 +30,18 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-2 control-label" for="jenis">Jenis</label>
+						<div class="col-sm-4">
+						    <select id="jenis" class="form-control select2" name="jenis" style="width: 100%;" required>
+						    	<option></option>
+						    	<?php foreach ($jenis_lab as $jl): ?>
+						    	<option value="<?php echo $jl->ID_JENIS_LAB ?>"><?php echo $jl->NM_LAB ?></option>
+						    	<?php endforeach ?>
+						    </select>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-2 control-label" for="diagnosa">Diagnosa</label>
 						<div class="col-sm-4">
 						    <select id="diagnosa" class="form-control select2" multiple="multiple" name="diagnosa[]" required>
@@ -76,6 +88,7 @@
 				                <tr>
 					                <th>Kode Lab</th>
 					                <th>Nama Lab</th>
+					                <th>Jenis Lab</th>
 					                <th>Harga Pemeriksaan</th>
 					                <th>Diagnosa</th>
 					                <th style="width:75px;">Aksi</th>
@@ -86,6 +99,7 @@
                   				<tr>
                     				<td><?php echo $pl->lab->ID_LAB; ?></td>
                     				<td><?php echo $pl->lab->LAB; ?></td>
+                    				<td><?php echo $pl->lab->NM_LAB; ?></td>
                     				<td><?php echo number_format($pl->lab->HARGA, 2, ",", "."); ?></td>
                     				<td>
                     					<?php 
@@ -104,7 +118,7 @@
                     				<td align="center">
                     					<button type="submit" class="btn btn-flat btn-warning btn-xs" data-toggle="modal" 
                     						data-target="#myModal" onclick="edit('<?php echo $pl->lab->ID_LAB; ?>', 
-                    						'<?php echo $pl->lab->LAB; ?>', <?php echo $pl->lab->HARGA; ?>, '<?php echo $dg_select; ?>')">
+                    						'<?php echo $pl->lab->LAB; ?>', '<?php echo $pl->lab->NM_LAB; ?>', <?php echo $pl->lab->HARGA; ?>, '<?php echo $dg_select; ?>')">
                     						<i class="fa fa-edit"></i> Ubah 
                     					</button>
                 					</td>
@@ -121,7 +135,7 @@
 </div>
 
 <!--MODAL-->
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal" aria-labelledby="myModalLabel">
+<div class="modal fade" role="dialog" id="myModal" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -140,6 +154,18 @@
 						<label class="col-sm-3 control-label" for="e-lab">Nama Lab</label>
 						<div class="col-sm-9">
 						    <input type="type" id="e-lab" class="form-control" name="e-lab" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="e-jenis">Jenis</label>
+						<div class="col-sm-9">
+						    <select id="e-jenis" class="form-control select2" name="e-jenis" style="width: 100%;" required>
+						    	<option></option>
+						    	<?php foreach ($jenis_lab as $jl): ?>
+						    	<option value="<?php echo $jl->ID_JENIS_LAB ?>"><?php echo $jl->NM_LAB ?></option>
+						    	<?php endforeach ?>
+						    </select>
 						</div>
 					</div>
 
@@ -178,9 +204,10 @@
 <!--END MODAL-->
 
 <script type="text/javascript">
-	function edit(id, nama, harga, diagnosa) {
+	function edit(id, nama, jenis, harga, diagnosa) {
 		$('#e-id_lab').val(id);
 		$('#e-lab').val(nama);
+		$('#e-jenis').select2("val", jenis);
 		$('#e-harga').val(harga);
 		$.each(diagnosa.split(';'), function(i, e) {
 			$("#e-diagnosa option[value='" + e + "']").prop("selected", true);

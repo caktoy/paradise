@@ -117,7 +117,7 @@
 	        		<tr>
 	        			<td><?php echo $ro->NM_OBAT ?></td>
 	        			<td style="text-align: right;"><?php echo 'Rp'.number_format($ro->HRG_OBAT, 2, ",", ".") ?></td>
-	        			<td style="text-align: right;"><?php echo $ro->QTY_OBAT ?></td>
+	        			<td style="text-align: right;"><?php echo $ro->QTY_JUAL ?></td>
 	        			<td style="text-align: right;">Rp<?php echo number_format($ro->SUB_TOTAL, 2, ",", ".") ?></td>
 	        		</tr>
 	        		<?php $sub_total_resep += $ro->SUB_TOTAL; ?>
