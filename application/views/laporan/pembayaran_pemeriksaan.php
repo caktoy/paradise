@@ -60,6 +60,7 @@
 			$sub_total_tindakan = 0;
 			$sub_total_terapi = 0;
 			$sub_total_resep = 0;
+			$sub_total_lab = 0;
 			?>
 			<table>
 				<tr>
@@ -112,6 +113,18 @@
 	        		<?php endforeach ?>
 	        		<?php endif ?>
 
+	        		<?php if (count($hasil_lab) > 0): ?>
+	        		<?php foreach ($hasil_lab as $hl): ?>
+	        		<tr>
+	        			<td><?php echo $hl->LAB ?></td>
+	        			<td style="text-align: right;"><?php echo 'Rp'.number_format($hl->HARGA, 2, ",", ".") ?></td>
+	        			<td style="text-align: right;">1</td>
+	        			<td style="text-align: right;">Rp<?php echo number_format($hl->HARGA, 2, ",", ".") ?></td>
+	        		</tr>
+	        		<?php $sub_total_lab += $hl->HARGA; ?>
+	        		<?php endforeach ?>
+	        		<?php endif ?>
+
 	        		<?php if (count($resep_obat) > 0): ?>
 	        		<?php foreach ($resep_obat as $ro): ?>
 	        		<tr>
@@ -126,7 +139,7 @@
 
 	        		<tr>
 	        			<td colspan="3" align="right">SUB TOTAL</td>
-	        			<td align="right"><?php echo 'Rp'.number_format(($sub_total_tindakan + $sub_total_terapi + $sub_total_resep), 2, ",", "."); ?></td>
+	        			<td align="right"><?php echo 'Rp'.number_format(($sub_total_tindakan + $sub_total_terapi + $sub_total_resep + $sub_total_lab), 2, ",", "."); ?></td>
 	        		</tr>
 	        		<tr>
 	        			<td colspan="3" align="right">BAYAR</td>

@@ -10,6 +10,7 @@
 $sub_total_tindakan = 0;
 $sub_total_terapi = 0;
 $sub_total_resep = 0;
+$sub_total_lab = 0;
 ?>
 <div class="row">
 	<div class="col-xs-12">
@@ -125,6 +126,36 @@ $sub_total_resep = 0;
             		</table>
 				</fieldset>
 				<fieldset>
+					<legend>Pemeriksaan Lab</legend>
+					<table id="tbl-terapi" class="table table-bordered table-striped" style="margin-top: 10px;">
+			            <thead>
+			                <tr>
+				                <th>Kode</th>
+				                <th>Lab</th>
+				                <th style="width: 200px;">Biaya</th>
+				            </tr>
+			            </thead>
+			        	<tbody>
+			        		<?php if (count($hasil_lab) > 0): ?>
+			        		<?php foreach ($hasil_lab as $hl): ?>
+			        		<tr>
+			        			<td><?php echo $hl->ID_LAB ?></td>
+			        			<td><?php echo $hl->LAB ?></td>
+			        			<td style="text-align: right;">Rp<?php echo number_format($hl->HARGA, 2, ",", ".") ?></td>
+			        		</tr>
+			        		<?php $sub_total_lab += $hl->HARGA; ?>
+			        		<?php endforeach ?>
+			        		<tr>
+			        			<td style="text-align: right" colspan="2">SUB TOTAL</td>
+			        			<td style="text-align: right"><?php echo 'Rp'.number_format($sub_total_lab, 2, ",", "."); ?></td>
+			        		</tr>
+			        		<?php else: ?>
+			        		<tr><td colspan="4">Tidak ada data yang ditampilkan.</td></tr>
+			        		<?php endif ?>
+	                   	</tbody>
+            		</table>
+				</fieldset>
+				<fieldset>
 					<legend>Resep Obat</legend>
 					<table id="tbl-obat" class="table table-bordered table-striped" style="margin-top: 10px;">
 			            <thead>
@@ -172,8 +203,11 @@ $sub_total_resep = 0;
 							<tr>
 								<td style="text-align: right;width: 80%;font-weight: bold;">TOTAL KESELURUHAN</td>
 			        			<td style="text-align: right;width: 20%;font-weight: bold;">
-			        				<?php echo 'Rp'.number_format(($sub_total_tindakan + $sub_total_terapi + $sub_total_resep), 2, ",", "."); ?>
-			        				<input type="hidden" id="txt_total" name="txt_total" value="<?php echo ($sub_total_tindakan + $sub_total_terapi + $sub_total_resep) ?>">
+			        				<?php 
+			        				$total_all = $sub_total_tindakan + $sub_total_terapi + $sub_total_resep + $sub_total_lab;
+			        				echo 'Rp'.number_format($total_all, 2, ",", "."); 
+			        				?>
+			        				<input type="hidden" id="txt_total" name="txt_total" value="<?php echo $total_all ?>">
 			        			</td>
 							</tr>
 							<tr>
@@ -189,7 +223,7 @@ $sub_total_resep = 0;
 			        					<?php 
 			        					if($pembayaran[0]->UANG_BAYAR!=null || $pembayaran[0]->UANG_BAYAR!=0) {
 			        						$uang_bayar = $pembayaran[0]->UANG_BAYAR; 
-			        						$total_all = $sub_total_tindakan + $sub_total_terapi + $sub_total_resep;
+			        						// $total_all = $sub_total_tindakan + $sub_total_terapi + $sub_total_resep + $sub_total_lab;
 			        						echo number_format(($uang_bayar - $total_all), 2, ",", ".");
 			        					} else { 
 			        						echo number_format(0, 2, ",", "."); 
@@ -271,7 +305,7 @@ $sub_total_resep = 0;
 		var total_bayar = $('#txt_total').val();
 		var kembalian = bayar - total_bayar;
 		$('#lbl_kembali').html('Rp' + kembalian);
-		$('#txt_bayar').change(function() {
+		$('#txt_bayar').on('change paste keyup', function() {
 			var bayar = $(this).val();
 			var total_bayar = $('#txt_total').val();
 			var kembalian = bayar - total_bayar;
